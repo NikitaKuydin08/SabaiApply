@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SabaiApply — Apply once. Go anywhere.</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: #F5C200;
+    }
+
+    .nav-tag {
+      background: #FFF8CC;
+      color: #8a6f00;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #FFF8CC;
+      color: #8a6f00;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      color: #1a1a1a;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 span {
+      color: #F5C200;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #555;
+      line-height: 1.7;
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 10px;
+      max-width: 460px;
+      margin: 0 auto 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .email-form input {
+      flex: 1;
+      min-width: 220px;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .email-form input:focus {
+      border-color: #F5C200;
+    }
+
+    .email-form button {
+      padding: 0.75rem 1.5rem;
+      background: #F5C200;
+      color: #1a1a1a;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .email-form button:hover {
+      background: #e0b000;
+    }
+
+    .email-form button:active {
+      transform: scale(0.98);
+    }
+
+    .form-note {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 4rem;
+    }
+
+    .success-msg {
+      display: none;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+      max-width: 460px;
+      margin: 0 auto 4rem;
+    }
+
+    .how-it-works {
+      background: #fafafa;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 3rem;
+      color: #1a1a1a;
+    }
+
+    .steps {
+      display: flex;
+      gap: 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .step {
+      background: #ffffff;
+      border: 1px solid #efefef;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      flex: 1;
+      min-width: 220px;
+      max-width: 260px;
+      text-align: left;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      background: #F5C200;
+      color: #1a1a1a;
+      font-weight: 800;
+      font-size: 0.9rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1a1a1a;
+    }
+
+    .step p {
+      font-size: 0.88rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .for-who {
+      padding: 4rem 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .audience-cards {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+
+    .audience-card {
+      background: #fff;
+      border: 1px solid #efefef;
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      flex: 1;
+      min-width: 200px;
+      max-width: 240px;
+      text-align: left;
+    }
+
+    .audience-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .audience-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #1a1a1a;
+    }
+
+    .audience-card p {
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .cta-section {
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-section h2 span {
+      color: #F5C200;
+    }
+
+    .cta-section p {
+      color: #aaa;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .cta-section .email-form input {
+      background: #2a2a2a;
+      border-color: #444;
+      color: #fff;
+    }
+
+    .cta-section .email-form input::placeholder {
+      color: #777;
+    }
+
+    .cta-section .email-form input:focus {
+      border-color: #F5C200;
+    }
+
+    footer {
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #aaa;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    footer a {
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2rem; }
+      .steps, .audience-cards { flex-direction: column; align-items: center; }
+      .step, .audience-card { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Sabai<span>Apply</span></div>
+    <div class="nav-tag">Coming Soon</div>
+  </nav>
+
+  <section class="hero">
+    <div class="badge">Thailand's First Unified University Application Platform</div>
+    <h1>Apply once.<br><span>Go anywhere.</span></h1>
+    <p class="subtitle">
+      One profile. One application form. Every Thai university.
+      Built for Thai students and international applicants — in multiple languages.
+    </p>
+
+    <form class="email-form" id="waitlistForm">
+      <input type="email" id="emailInput" placeholder="Enter your email" required />
+      <button type="submit">Join Waitlist</button>
+    </form>
+    <div class="success-msg" id="successMsg">
+      You're on the list! We'll let you know when SabaiApply launches.
+    </div>
+    <p class="form-note">Be the first to know when we launch. No spam, ever.</p>
+  </section>
+
+  <section class="how-it-works">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Applying to university just got easier</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Create your profile</h3>
+        <p>Fill in your information and upload your documents once. That's it.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Browse universities</h3>
+        <p>Explore Thai universities, compare fees, scholarships, and requirements in one place.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Apply everywhere</h3>
+        <p>Submit to multiple universities with one click. Add extra documents only if a specific university needs them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="for-who">
+    <p class="section-label">Who it's for</p>
+    <h2 class="section-title">Built for every student</h2>
+    <div class="audience-cards">
+      <div class="audience-card">
+        <div class="audience-icon">🇹🇭</div>
+        <h3>Thai Students</h3>
+        <p>Stop filling out the same form for every university. Apply everywhere from one place.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🌍</div>
+        <h3>International Students</h3>
+        <p>Applying to Thailand from abroad? We make it simple, clear, and available in your language.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🏫</div>
+        <h3>Universities</h3>
+        <p>Receive standardized applications from a wider pool of students — less admin, more applicants.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Choosing a university is hard.<br><span>Applying shouldn't be.</span></h2>
+    <p>Join the waitlist and be first to experience SabaiApply.</p>
+    <form class="email-form" id="waitlistForm2" style="justify-content:center;">
+      <input type="email" id="emailInput2" placeholder="Enter your email" required />
+      <button type="submit">Join Waitlist</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 SabaiApply &nbsp;·&nbsp; <a href="mailto:hello@sabaiapply.com">hello@sabaiapply.com</a> &nbsp;·&nbsp; Bangkok, Thailand</p>
+  </footer>
+
+  <script>
+    function handleSubmit(emailId, formId, successId) {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById(emailId).value;
+        if (!email) return;
+        if (successId) {
+          form.style.display = 'none';
+          document.getElementById(successId).style.display = 'block';
+        } else {
+          const btn = form.querySelector('button');
+          btn.textContent = 'Done!';
+          btn.style.background = '#4ade80';
+          setTimeout(() => {
+            btn.textContent = 'Join Waitlist';
+            btn.style.background = '#F5C200';
+            form.reset();
+          }, 3000);
+        }
+      });
+    }
+
+    handleSubmit('emailInput', 'waitlistForm', 'successMsg');
+    handleSubmit('emailInput2', 'waitlistForm2', null);
+  </script>
+
+</body>
+</html>
