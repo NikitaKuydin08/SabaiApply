@@ -1,65 +1,110 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <nav className="flex justify-between items-center px-8 py-6 border-b border-[#f0f0f0]">
+        <div className="text-[1.4rem] font-bold tracking-tight text-[#1a1a1a]">
+          Sabai<span className="text-[#F4C430]">Apply</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="bg-[#FFF8CC] text-[#8a6f00] text-xs font-semibold px-3 py-1 rounded-full tracking-wide">
+          Coming Soon
         </div>
-      </main>
-    </div>
+      </nav>
+
+      <section className="max-w-[720px] mx-auto px-8 pt-20 pb-16 text-center">
+        <div className="inline-block bg-[#FFF8CC] text-[#8a6f00] text-[0.78rem] font-semibold px-3.5 py-1.5 rounded-full mb-6 tracking-wide">
+          Thailand&apos;s First Unified University Application Platform
+        </div>
+        <h1 className="text-[clamp(2.2rem,5vw,3.2rem)] font-extrabold leading-[1.15] tracking-tight text-[#1a1a1a] mb-5">
+          Apply once.<br />
+          <span className="text-[#F4C430]">Go anywhere.</span>
+        </h1>
+        <p className="text-lg text-[#555] leading-relaxed max-w-[540px] mx-auto">
+          One profile. One application form. Every Thai university.
+          Built for Thai students and international applicants — in multiple languages.
+        </p>
+      </section>
+
+      <section className="bg-[#fafafa] py-16 px-8 text-center">
+        <p className="text-xs font-bold tracking-[1.5px] uppercase text-[#999] mb-3">
+          How it works
+        </p>
+        <h2 className="text-3xl font-extrabold tracking-tight text-[#1a1a1a] mb-12">
+          Applying to university got easier
+        </h2>
+        <div className="flex gap-8 max-w-[860px] mx-auto flex-wrap justify-center">
+          <div className="bg-white border border-[#efefef] rounded-2xl p-8 flex-1 min-w-[220px] max-w-[260px] text-left">
+            <div className="w-9 h-9 bg-[#F4C430] text-[#1a1a1a] font-extrabold text-sm rounded-full flex items-center justify-center mb-4">
+              1
+            </div>
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-2">Create your profile</h3>
+            <p className="text-sm text-[#666] leading-relaxed">
+              Fill in your information and upload your documents once. That&apos;s it.
+            </p>
+          </div>
+          <div className="bg-white border border-[#efefef] rounded-2xl p-8 flex-1 min-w-[220px] max-w-[260px] text-left">
+            <div className="w-9 h-9 bg-[#F4C430] text-[#1a1a1a] font-extrabold text-sm rounded-full flex items-center justify-center mb-4">
+              2
+            </div>
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-2">Browse universities</h3>
+            <p className="text-sm text-[#666] leading-relaxed">
+              Explore Thai universities, compare fees, scholarships, and requirements in one place.
+            </p>
+          </div>
+          <div className="bg-white border border-[#efefef] rounded-2xl p-8 flex-1 min-w-[220px] max-w-[260px] text-left">
+            <div className="w-9 h-9 bg-[#F4C430] text-[#1a1a1a] font-extrabold text-sm rounded-full flex items-center justify-center mb-4">
+              3
+            </div>
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-2">Apply everywhere</h3>
+            <p className="text-sm text-[#666] leading-relaxed">
+              Submit to multiple universities with one click. Add extra documents only if a specific university needs them.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-8 max-w-[860px] mx-auto text-center">
+        <p className="text-xs font-bold tracking-[1.5px] uppercase text-[#999] mb-3">
+          Who it is for
+        </p>
+        <h2 className="text-3xl font-extrabold tracking-tight text-[#1a1a1a] mb-10">
+          Built for every student
+        </h2>
+        <div className="flex gap-6 justify-center flex-wrap">
+          <div className="bg-white border border-[#efefef] rounded-2xl py-7 px-6 flex-1 min-w-[200px] max-w-[240px] text-left">
+            <div className="text-3xl mb-3">&#x1F1F9;&#x1F1ED;</div>
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-1.5">Thai Students</h3>
+            <p className="text-sm text-[#777] leading-relaxed">
+              Stop filling out the same form for every university. Apply everywhere from one place.
+            </p>
+          </div>
+          <div className="bg-white border border-[#efefef] rounded-2xl py-7 px-6 flex-1 min-w-[200px] max-w-[240px] text-left">
+            <div className="text-3xl mb-3">&#x1F30D;</div>
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-1.5">International Students</h3>
+            <p className="text-sm text-[#777] leading-relaxed">
+              Applying to Thailand from abroad? We make it simple, clear, and available in your language.
+            </p>
+          </div>
+          <div className="bg-white border border-[#efefef] rounded-2xl py-7 px-6 flex-1 min-w-[200px] max-w-[240px] text-left">
+            <div className="text-3xl mb-3">&#x1F3EB;</div>
+            <h3 className="text-base font-bold text-[#1a1a1a] mb-1.5">Universities</h3>
+            <p className="text-sm text-[#777] leading-relaxed">
+              Receive standardized applications from a wider pool of students — less admin, more applicants.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#1a1a1a] text-white py-16 px-8 text-center">
+        <h2 className="text-3xl font-extrabold tracking-tight mb-3">
+          Choosing a university is hard.<br />
+          <span className="text-[#F4C430]">Applying shouldn&apos;t be.</span>
+        </h2>
+        <p className="text-[#aaa] text-base">Make your experience sabai sabai.</p>
+      </section>
+
+      <footer className="py-8 text-center text-sm text-[#aaa] border-t border-[#f0f0f0]">
+        <p>&copy; 2026 SabaiApply &middot; Bangkok, Thailand</p>
+      </footer>
+    </>
   );
 }
