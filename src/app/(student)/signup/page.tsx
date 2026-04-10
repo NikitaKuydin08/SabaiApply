@@ -35,6 +35,7 @@ export default function SignUpPage() {
       password,
       options: {
         data: { role: "student" },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
