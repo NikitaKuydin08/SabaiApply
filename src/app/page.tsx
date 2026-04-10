@@ -5,8 +5,19 @@ export default function Home() {
         <div className="text-[1.4rem] font-bold tracking-tight text-[#1a1a1a]">
           Sabai<span className="text-[#F4C430]">Apply</span>
         </div>
-        <div className="bg-[#FFF8CC] text-[#8a6f00] text-xs font-semibold px-3 py-1 rounded-full tracking-wide">
-          Coming Soon
+        <div className="flex items-center gap-3">
+          <a
+            href="/login"
+            className="text-sm font-medium text-[#1a1a1a] hover:underline"
+          >
+            Log in
+          </a>
+          <a
+            href="/signup"
+            className="bg-[#F4C430] text-[#1a1a1a] text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#e6b82a] transition-colors"
+          >
+            Sign up
+          </a>
         </div>
       </nav>
 
