@@ -35,7 +35,9 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/admin") &&
     !pathname.startsWith("/admin/login") &&
-    !pathname.startsWith("/admin/register")
+    !pathname.startsWith("/admin/invite") &&
+    !pathname.startsWith("/admin/forgot-password") &&
+    !pathname.startsWith("/admin/reset-password")
   ) {
     if (!user) {
       const loginUrl = new URL("/admin/login", request.url);
@@ -58,7 +60,7 @@ export async function middleware(request: NextRequest) {
   // If logged-in admin visits login/register, redirect to dashboard
   if (
     user &&
-    (pathname === "/admin/login" || pathname === "/admin/register")
+    pathname === "/admin/login"
   ) {
     const { data: profile } = await supabase
       .from("profiles")

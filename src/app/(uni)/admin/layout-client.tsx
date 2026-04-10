@@ -1,7 +1,8 @@
 "use client";
 
 import { AdminSidebar } from "@/components/admin-sidebar";
-import { Button } from "@/components/ui/button";
+import { LanguageToggle } from "@/components/language-toggle";
+import { LocaleProvider } from "@/lib/locale-context";
 import { signOut } from "./actions";
 
 interface AdminLayoutClientProps {
@@ -16,23 +17,29 @@ export function AdminLayoutClient({
   email,
 }: AdminLayoutClientProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AdminSidebar fullName={fullName} email={email} />
+    <LocaleProvider>
+      <div className="min-h-screen bg-[#fafafa]">
+        <AdminSidebar fullName={fullName} email={email} />
 
-      {/* Top bar */}
-      <div className="ml-64">
-        <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
-          <div />
-          <form action={signOut}>
-            <Button variant="ghost" size="sm" type="submit">
-              Sign Out
-            </Button>
-          </form>
-        </header>
+        <div className="ml-64">
+          <header className="flex items-center justify-between border-b border-[#e0e0e0] bg-white px-6 py-3">
+            <div />
+            <div className="flex items-center gap-3">
+              <LanguageToggle />
+              <form action={signOut}>
+                <button
+                  type="submit"
+                  className="rounded-lg px-4 py-2 text-base text-[#666] hover:bg-[#fafafa] hover:text-[#1a1a1a] transition-colors"
+                >
+                  Sign Out
+                </button>
+              </form>
+            </div>
+          </header>
 
-        {/* Page content */}
-        <main className="p-6">{children}</main>
+          <main className="p-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </LocaleProvider>
   );
 }

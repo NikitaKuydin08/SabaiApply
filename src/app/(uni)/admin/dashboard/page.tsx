@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -8,7 +7,6 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Get counts for overview
   const [
     { count: programCount },
     { count: applicationCount },
@@ -24,44 +22,26 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="mt-1 text-gray-500">
+      <h1 className="text-3xl font-bold text-[#1a1a1a]">Dashboard</h1>
+      <p className="mt-2 text-base text-[#666]">
         Welcome back, {user?.email}
       </p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              Programs
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{programCount ?? 0}</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-xl border border-[#e8e8e8] bg-white p-6">
+          <p className="text-base font-medium text-[#999]">Programs</p>
+          <p className="text-3xl font-bold text-[#1a1a1a] mt-2">{programCount ?? 0}</p>
+        </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              Total Applications
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{applicationCount ?? 0}</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-xl border border-[#e8e8e8] bg-white p-6">
+          <p className="text-base font-medium text-[#999]">Total Applications</p>
+          <p className="text-3xl font-bold text-[#1a1a1a] mt-2">{applicationCount ?? 0}</p>
+        </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              Pending Review
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">{pendingCount ?? 0}</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-xl border border-[#e8e8e8] bg-white p-6">
+          <p className="text-base font-medium text-[#999]">Pending Review</p>
+          <p className="text-3xl font-bold text-[#F4C430] mt-2">{pendingCount ?? 0}</p>
+        </div>
       </div>
     </div>
   );
