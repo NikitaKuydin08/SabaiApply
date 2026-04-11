@@ -142,8 +142,8 @@ export default function DashboardClient({ user, profile }: Props) {
       {/* ── Left Sidebar ── */}
       <aside className="flex w-[280px] shrink-0 flex-col border-r border-[#e8e8e8] bg-white">
         <div className="border-b border-[#f0f0f0] px-6 py-5">
-          <div className="flex items-center gap-2">
-            <img src="/logo-lotus.png" alt="" className="h-[7em] w-auto -mx-16 -my-5" />
+          <div className="flex items-center">
+            <img src="/logo-lotus.png" alt="" className="mr-2 h-9 w-9 object-contain" />
             <span className="text-4xl font-bold tracking-tight text-[#1a1a1a]">
               Sabai<span className="text-[#F4C430]">Apply</span>
             </span>
