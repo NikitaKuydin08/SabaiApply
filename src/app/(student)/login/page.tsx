@@ -44,12 +44,12 @@ export default function LoginPage() {
           <LangToggle locale={locale} setLocale={setLocale} />
         </div>
 
-        <div className="mb-10 -my-10 text-center">
-          <Link href="/" className="inline-flex items-center text-4xl font-bold tracking-tight text-[#1a1a1a]">
-            <img src="/logo-lotus.png" alt="" className="h-[4em] w-auto -mx-18 -my-5" />
+        <div className="mb-8 text-center">
+          <Link href="/" className="inline-flex items-center text-5xl font-bold tracking-tight text-[#1a1a1a]">
+            <img src="/logo-lotus.png" alt="" className="mr-2 h-10 w-10 object-contain" />
             Sabai<span className="text-[#F4C430]">Apply</span>
           </Link>
-          <h1 className="-mt-7 text-3xl font-bold text-[#1a1a1a]">{t("login.title")}</h1>
+          <h1 className="mt-4 text-3xl font-bold text-[#1a1a1a]">{t("login.title")}</h1>
           <p className="mt-2 text-base text-[#666]">{t("login.subtitle")}</p>
         </div>
 
