@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
+import { thaiUniversities, searchUniversities, type ThaiUniversity } from "../data/thai-universities";
 import {
   LayoutDashboard,
   Search,
@@ -32,22 +33,10 @@ interface Props {
 type SectionStatus = "completed" | "in_progress" | "not_started";
 type View = "dashboard" | "university-search" | "my-universities";
 
-interface University {
-  id: string;
-  name: string;
-  location: string;
-}
+// Re-export for use in sub-components
+type University = ThaiUniversity;
 
-const SAMPLE_UNIVERSITIES: University[] = [
-  { id: "1", name: "Chulalongkorn University", location: "Bangkok" },
-  { id: "2", name: "Mahidol University", location: "Nakhon Pathom" },
-  { id: "3", name: "Thammasat University", location: "Bangkok" },
-  { id: "4", name: "Kasetsart University", location: "Bangkok" },
-  { id: "5", name: "Chiang Mai University", location: "Chiang Mai" },
-  { id: "6", name: "King Mongkut's Institute of Technology Ladkrabang", location: "Bangkok" },
-  { id: "7", name: "Silpakorn University", location: "Nakhon Pathom" },
-  { id: "8", name: "Khon Kaen University", location: "Khon Kaen" },
-];
+const STORAGE_KEY = "sabaiapply-added-universities";
 
 export default function DashboardClient({ user, profile }: Props) {
   const { locale, setLocale, t } = useStudentLocale();
@@ -57,6 +46,17 @@ export default function DashboardClient({ user, profile }: Props) {
   const [currentView, setCurrentView] = useState<View>("dashboard");
   const [uniSearch, setUniSearch] = useState("");
   const [addedUniversityIds, setAddedUniversityIds] = useState<Set<string>>(new Set());
+
+  // Load saved universities after hydration to avoid SSR mismatch
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const ids = JSON.parse(saved) as string[];
+        if (ids.length > 0) setAddedUniversityIds(new Set(ids));
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   const applicationRef = useRef<HTMLDivElement>(null);
   const universitiesRef = useRef<HTMLDivElement>(null);
@@ -113,13 +113,9 @@ export default function DashboardClient({ user, profile }: Props) {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const filteredUniversities = SAMPLE_UNIVERSITIES.filter(
-    (u) =>
-      u.name.toLowerCase().includes(uniSearch.toLowerCase()) ||
-      u.location.toLowerCase().includes(uniSearch.toLowerCase()),
-  );
+  const filteredUniversities = searchUniversities(uniSearch);
 
-  const addedUniversities = SAMPLE_UNIVERSITIES.filter((u) =>
+  const addedUniversities = thaiUniversities.filter((u) =>
     addedUniversityIds.has(u.id),
   );
 
@@ -131,6 +127,7 @@ export default function DashboardClient({ user, profile }: Props) {
       } else {
         next.add(id);
       }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
       return next;
     });
   }
@@ -171,7 +168,7 @@ export default function DashboardClient({ user, profile }: Props) {
               </button>
 
               {addedUniversities.length > 0 && (
-                <div className="mt-3 space-y-0.5">
+                <div className="mt-3 max-h-[320px] space-y-0.5 overflow-y-auto">
                   {addedUniversities.map((uni) => (
                     <div key={uni.id} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#444]">
                       <ChevronDown size={14} className="-rotate-90 text-[#ccc]" />
@@ -216,7 +213,7 @@ export default function DashboardClient({ user, profile }: Props) {
               >
                 <Search size={20} />
                 {t("nav.chooseUni")}
-                {currentView !== "university-search" && (
+                {currentView !== "university-search" && addedUniversityIds.size === 0 && (
                   <span className="absolute right-3 h-2.5 w-2.5 animate-pulse rounded-full bg-[#F4C430]" />
                 )}
               </button>
@@ -450,7 +447,7 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F4C430]/20 text-sm font-bold text-[#1a1a1a]">{uni.name[0]}</div>
                         <div>
                           <p className="text-[15px] font-medium text-[#1a1a1a]">{uni.name}</p>
-                          <p className="text-xs text-[#888]">{uni.location}</p>
+                          <p className="text-xs text-[#888]">{uni.name_th}</p>
                         </div>
                       </div>
                     ))}
@@ -517,8 +514,8 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
         </div>
       </div>
 
-      <div className="mt-3 flex-1 overflow-y-auto px-8 pb-6">
-        <div className="divide-y divide-[#f0f0f0] rounded-xl border border-[#e8e8e8] bg-white">
+      <div className="mt-3 px-8 pb-6">
+        <div className="max-h-[calc(100vh-320px)] divide-y divide-[#f0f0f0] overflow-y-auto rounded-xl border border-[#e8e8e8] bg-white">
           {filteredUniversities.map((uni) => {
             const isAdded = addedUniversityIds.has(uni.id);
             return (
@@ -527,7 +524,7 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#F4C430]/20 text-base font-bold text-[#1a1a1a]">{uni.name[0]}</div>
                   <div>
                     <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
-                    <p className="text-sm text-[#888]">{uni.location}</p>
+                    <p className="text-sm text-[#888]">{uni.name_th}</p>
                   </div>
                 </div>
                 {isAdded ? (
@@ -628,14 +625,14 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, onAddMor
               <div className="border-b border-[#f0f0f0] px-6 py-3.5">
                 <h2 className="text-lg font-bold text-[#1a1a1a]">{t("uni.yourUnis")}</h2>
               </div>
-              <div className="divide-y divide-[#f0f0f0]">
+              <div className="max-h-[480px] divide-y divide-[#f0f0f0] overflow-y-auto">
                 {addedUniversities.map((uni) => (
                   <div key={uni.id} className="flex items-center justify-between px-6 py-4">
                     <div className="flex items-center gap-4">
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#F4C430]/20 text-base font-bold text-[#1a1a1a]">{uni.name[0]}</div>
                       <div>
                         <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
-                        <p className="text-sm text-[#888]">{uni.location}</p>
+                        <p className="text-sm text-[#888]">{uni.name_th}</p>
                       </div>
                     </div>
                     <span className="rounded-full bg-[#f0f0f0] px-3 py-1 text-xs font-medium text-[#666]">{t("uni.notStarted")}</span>

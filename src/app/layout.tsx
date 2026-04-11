@@ -15,10 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SabaiApply — One Form. Multiple Universities.",
   description: "One profile. One application form. Every Thai university. Built for Thai students and international applicants.",
-  icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
-  },
 };
 
 export default function RootLayout({
