@@ -78,6 +78,7 @@ export default function EducationSection({ education, studentId, onClose }: Prop
 
   const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
   const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
+  const star = <span className="ml-0.5 text-red-500">*</span>;
 
   return (
     <SectionPanel title="Education" onClose={onClose} onSave={handleSave} saving={saving}>
@@ -95,11 +96,11 @@ export default function EducationSection({ education, studentId, onClose }: Prop
               <input type="text" value={schoolProvince} onChange={(e) => setSchoolProvince(e.target.value)} placeholder="e.g. Bangkok, Chiang Mai" className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>School Name</label>
+              <label className={labelCls}>School Name {star}</label>
               <input type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} placeholder="School name" className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Curriculum Type</label>
+              <label className={labelCls}>Curriculum Type {star}</label>
               <div className="flex gap-2 flex-wrap">
                 {CURRICULUM_TYPES.map((type) => (
                   <button
@@ -134,7 +135,7 @@ export default function EducationSection({ education, studentId, onClose }: Prop
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelCls}>GPA</label>
+                <label className={labelCls}>GPA {star}</label>
                 <input type="number" step="0.01" min="0" max="4.00" value={gpa} onChange={(e) => setGpa(e.target.value)} placeholder="0.00 - 4.00" className={inputCls} />
               </div>
               <div>
@@ -143,7 +144,7 @@ export default function EducationSection({ education, studentId, onClose }: Prop
               </div>
             </div>
             <div>
-              <label className={labelCls}>Current Grade Level</label>
+              <label className={labelCls}>Current Grade Level {star}</label>
               <div className="flex gap-2 flex-wrap">
                 {GRADE_LEVELS.map((g) => (
                   <button key={g} type="button" onClick={() => setCurrentGradeLevel(g)} className={pillCls(currentGradeLevel === g)}>
