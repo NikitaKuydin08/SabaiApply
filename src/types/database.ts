@@ -26,14 +26,20 @@ export type ScoreType =
   | "O-NET"
   | "SAT"
   | "IELTS"
-  | "TOEFL";
+  | "TOEFL"
+  | "A-Level";
 
 export type DocType =
   | "transcript"
   | "id_copy"
   | "photo"
   | "certificate"
-  | "portfolio";
+  | "portfolio"
+  | "passport_copy"
+  | "student_id_card"
+  | "name_change_cert"
+  | "score_certificate"
+  | "recommendation_letter";
 
 export type PortfolioSource =
   | "sabaiapply"
@@ -49,6 +55,16 @@ export type InterviewSlotStatus =
 
 export type AdmissionRound = "1" | "2" | "4";
 
+export type PortfolioItemType =
+  | "project"
+  | "activity"
+  | "competition"
+  | "camp"
+  | "course"
+  | "language_test"
+  | "award"
+  | "other";
+
 // ---- TABLE TYPES ----
 
 export interface Profile {
@@ -63,6 +79,7 @@ export interface Profile {
 export interface StudentProfile {
   id: string;
   user_id: string;
+  prefix: string | null;
   first_name: string | null;
   last_name: string | null;
   first_name_th: string | null;
@@ -74,6 +91,9 @@ export interface StudentProfile {
   line_id: string | null;
   address: string | null;
   photo_url: string | null;
+  id_type: string | null;
+  id_number: string | null;
+  contact_email: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -82,6 +102,10 @@ export interface StudentEducation {
   id: string;
   student_id: string;
   school_name: string;
+  school_province: string | null;
+  curriculum_type: string | null;
+  study_plan: string | null;
+  current_grade_level: string | null;
   gpa: number | null;
   graduation_year: number | null;
   transcript_url: string | null;
@@ -93,8 +117,13 @@ export interface StudentScore {
   id: string;
   student_id: string;
   score_type: ScoreType;
+  sub_type: string | null;
   score_value: number;
+  total_possible: number | null;
   test_date: string | null;
+  cefr_level: string | null;
+  certificate_url: string | null;
+  certificate_file_name: string | null;
   created_at: string;
 }
 
@@ -105,6 +134,8 @@ export interface StudentDocument {
   file_url: string;
   file_name: string;
   file_size: number | null;
+  description: string | null;
+  metadata_json: Record<string, unknown>;
   created_at: string;
 }
 
@@ -116,8 +147,91 @@ export interface StudentPortfolio {
   content_json: Record<string, unknown>;
   external_url: string | null;
   pdf_url: string | null;
+  essay: string | null;
+  is_snapshot: boolean;
+  parent_portfolio_id: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface StudentFamily {
+  id: string;
+  student_id: string;
+  father_prefix: string | null;
+  father_first_name: string | null;
+  father_last_name: string | null;
+  father_first_name_th: string | null;
+  father_last_name_th: string | null;
+  father_occupation: string | null;
+  father_education_level: string | null;
+  father_phone: string | null;
+  mother_prefix: string | null;
+  mother_first_name: string | null;
+  mother_last_name: string | null;
+  mother_first_name_th: string | null;
+  mother_last_name_th: string | null;
+  mother_occupation: string | null;
+  mother_education_level: string | null;
+  mother_phone: string | null;
+  has_guardian: boolean;
+  guardian_relationship: string | null;
+  guardian_prefix: string | null;
+  guardian_first_name: string | null;
+  guardian_last_name: string | null;
+  guardian_first_name_th: string | null;
+  guardian_last_name_th: string | null;
+  guardian_occupation: string | null;
+  guardian_education_level: string | null;
+  guardian_phone: string | null;
+  household_income: string | null;
+  number_of_siblings: number | null;
+  sibling_order: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StudentSubjectScore {
+  id: string;
+  student_id: string;
+  score_system: string;
+  subject_name: string;
+  score_value: number;
+  total_possible: number | null;
+  grade: string | null;
+  created_at: string;
+}
+
+export interface PortfolioItem {
+  id: string;
+  student_id: string;
+  portfolio_id: string;
+  item_type: PortfolioItemType;
+  title: string;
+  description: string | null;
+  organizer: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  competition_level: string | null;
+  result: string | null;
+  test_type: string | null;
+  test_score: number | null;
+  test_total: number | null;
+  cefr_level: string | null;
+  details_json: Record<string, unknown>;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PortfolioItemFile {
+  id: string;
+  item_id: string;
+  file_url: string;
+  file_name: string;
+  file_type: string | null;
+  file_size: number | null;
+  sort_order: number;
+  created_at: string;
 }
 
 export interface University {
@@ -283,6 +397,20 @@ export type InsertStudentPortfolio = Omit<
   "id" | "created_at" | "updated_at"
 >;
 
+export type InsertStudentFamily = Omit<
+  StudentFamily,
+  "id" | "created_at" | "updated_at"
+>;
+
+export type InsertStudentSubjectScore = Omit<StudentSubjectScore, "id" | "created_at">;
+
+export type InsertPortfolioItem = Omit<
+  PortfolioItem,
+  "id" | "created_at" | "updated_at"
+>;
+
+export type InsertPortfolioItemFile = Omit<PortfolioItemFile, "id" | "created_at">;
+
 export type InsertUniversity = Omit<
   University,
   "id" | "created_at" | "updated_at"
@@ -312,6 +440,14 @@ export type UpdateStudentProfile = Partial<
 
 export type UpdateStudentEducation = Partial<
   Omit<StudentEducation, "id" | "student_id" | "created_at" | "updated_at">
+>;
+
+export type UpdateStudentFamily = Partial<
+  Omit<StudentFamily, "id" | "student_id" | "created_at" | "updated_at">
+>;
+
+export type UpdatePortfolioItem = Partial<
+  Omit<PortfolioItem, "id" | "student_id" | "portfolio_id" | "created_at" | "updated_at">
 >;
 
 export type UpdateApplication = Partial<

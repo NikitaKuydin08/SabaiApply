@@ -23,15 +23,26 @@ import {
   PlusCircle,
 } from "lucide-react";
 import AccountSettingsModal from "./account-settings-modal";
+import PersonalInfoSection from "./sections/personal-info-section";
+import FamilySection from "./sections/family-section";
+import EducationSection from "./sections/education-section";
+import TestScoresSection from "./sections/test-scores-section";
+import DocumentsSection from "./sections/documents-section";
 import { useStudentLocale } from "../i18n/context";
 import type { TranslationKey } from "../i18n/translations";
+import type { StudentFamily, StudentEducation, StudentScore, StudentDocument } from "@/types/database";
 
 interface Props {
   user: { email: string; id: string };
   profile: StudentProfile | null;
+  family: StudentFamily | null;
+  education: StudentEducation | null;
+  scores: StudentScore[];
+  documents: StudentDocument[];
 }
 
 type SectionStatus = "completed" | "in_progress" | "not_started";
+type AppSection = "personal" | "family" | "education" | "testScores" | "documents" | null;
 type View = "dashboard" | "university-search" | "my-universities";
 
 // Re-export for use in sub-components
@@ -39,9 +50,10 @@ type University = ThaiUniversity;
 
 const STORAGE_KEY = "sabaiapply-added-universities";
 
-export default function DashboardClient({ user, profile }: Props) {
+export default function DashboardClient({ user, profile, family, education, scores, documents }: Props) {
   const { locale, setLocale, t } = useStudentLocale();
   const [showSettings, setShowSettings] = useState(false);
+  const [activeSection, setActiveSection] = useState<AppSection>(null);
   const [applicationExpanded, setApplicationExpanded] = useState(true);
   const [universitiesExpanded, setUniversitiesExpanded] = useState(true);
   const [currentView, setCurrentView] = useState<View>("dashboard");
@@ -88,15 +100,34 @@ export default function DashboardClient({ user, profile }: Props) {
         ? "in_progress"
         : "not_started";
 
-  const sectionKeys: { key: TranslationKey; status: SectionStatus }[] = [
-    { key: "app.personal", status: personalStatus },
-    { key: "app.family", status: "not_started" },
-    { key: "app.education", status: "not_started" },
-    { key: "app.testScores", status: "not_started" },
-    { key: "app.documents", status: "not_started" },
+  // Calculate status for each section
+  const familyStatus: SectionStatus = family
+    ? (family.father_first_name && family.mother_first_name ? "completed" : "in_progress")
+    : "not_started";
+
+  const educationStatus: SectionStatus = education
+    ? (education.school_name && education.gpa ? "completed" : "in_progress")
+    : "not_started";
+
+  const scoresStatus: SectionStatus = scores.length > 0 ? "completed" : "not_started";
+
+  const requiredDocs = ["transcript", "id_copy", "photo"];
+  const uploadedDocTypes = documents.map((d) => d.doc_type);
+  const docsStatus: SectionStatus = requiredDocs.every((t) => uploadedDocTypes.includes(t as any))
+    ? "completed"
+    : documents.length > 0
+      ? "in_progress"
+      : "not_started";
+
+  const sectionKeys: { key: TranslationKey; status: SectionStatus; action: AppSection }[] = [
+    { key: "app.personal", status: personalStatus, action: "personal" },
+    { key: "app.family", status: familyStatus, action: "family" },
+    { key: "app.education", status: educationStatus, action: "education" },
+    { key: "app.testScores", status: scoresStatus, action: "testScores" },
+    { key: "app.documents", status: docsStatus, action: "documents" },
   ];
 
-  const sections = sectionKeys.map((s) => ({ label: t(s.key), status: s.status }));
+  const sections = sectionKeys.map((s) => ({ label: t(s.key), status: s.status, action: s.action }));
 
   const completedCount = sections.filter((s) => s.status === "completed").length;
   const inProgressCount = sections.filter((s) => s.status === "in_progress").length;
@@ -265,6 +296,7 @@ export default function DashboardClient({ user, profile }: Props) {
             addedUniversities={addedUniversities}
             onSearchUniversities={() => setCurrentView("university-search")}
             onViewMyUniversities={() => setCurrentView("my-universities")}
+            onSectionClick={(action: AppSection) => setActiveSection(action)}
             t={t}
           />
         )}
@@ -296,6 +328,23 @@ export default function DashboardClient({ user, profile }: Props) {
       <HelpSidebar locale={locale} t={t} />
 
       {showSettings && <AccountSettingsModal onClose={() => setShowSettings(false)} />}
+
+      {/* ── Section Panels ── */}
+      {activeSection === "personal" && (
+        <PersonalInfoSection profile={profile} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} userEmail={user.email} />
+      )}
+      {activeSection === "family" && (
+        <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
+      )}
+      {activeSection === "education" && (
+        <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
+      )}
+      {activeSection === "testScores" && (
+        <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
+      )}
+      {activeSection === "documents" && (
+        <DocumentsSection documents={documents} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
+      )}
     </div>
   );
 }
@@ -338,13 +387,13 @@ function BottomSection({ onSettings, onSignOut, user, profile, t }: {
 
 /* ══════════════════════════════════════════════ */
 
-function DashboardView({ greeting, firstName, locale, setLocale, applicationExpanded, setApplicationExpanded, universitiesExpanded, setUniversitiesExpanded, applicationRef, universitiesRef, sections, progress, addedUniversities, onSearchUniversities, onViewMyUniversities, t }: {
+function DashboardView({ greeting, firstName, locale, setLocale, applicationExpanded, setApplicationExpanded, universitiesExpanded, setUniversitiesExpanded, applicationRef, universitiesRef, sections, progress, addedUniversities, onSearchUniversities, onViewMyUniversities, onSectionClick, t }: {
   greeting: string; firstName: string; locale: string; setLocale: (l: "en" | "th") => void;
   applicationExpanded: boolean; setApplicationExpanded: (v: boolean) => void;
   universitiesExpanded: boolean; setUniversitiesExpanded: (v: boolean) => void;
   applicationRef: React.RefObject<HTMLDivElement | null>; universitiesRef: React.RefObject<HTMLDivElement | null>;
-  sections: { label: string; status: SectionStatus }[]; progress: number;
-  addedUniversities: University[]; onSearchUniversities: () => void; onViewMyUniversities: () => void; t: TFn;
+  sections: { label: string; status: SectionStatus; action: AppSection }[]; progress: number;
+  addedUniversities: University[]; onSearchUniversities: () => void; onViewMyUniversities: () => void; onSectionClick: (action: AppSection) => void; t: TFn;
 }) {
   return (
     <>
@@ -375,7 +424,7 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
               </div>
               <div className="space-y-0">
                 {sections.map((section) => (
-                  <button key={section.label} className="group flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors hover:bg-[#FFFBF0]">
+                  <button key={section.label} onClick={() => onSectionClick(section.action)} className="group flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors hover:bg-[#FFFBF0]">
                     <div className="flex items-center gap-4">
                       <StatusDot status={section.status} />
                       <span className="text-base font-medium text-[#1a1a1a]">{section.label}</span>
