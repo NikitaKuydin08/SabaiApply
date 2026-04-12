@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
 import { thaiUniversities, searchUniversities, type ThaiUniversity } from "../data/thai-universities";
+import { faqCategories, searchFAQ, type FAQCategory } from "../data/faq";
 import {
   LayoutDashboard,
   Search,
@@ -292,35 +293,7 @@ export default function DashboardClient({ user, profile }: Props) {
       </main>
 
       {/* ── Right Sidebar ── */}
-      <aside className="flex w-[300px] shrink-0 flex-col border-l border-[#e8e8e8] bg-[#F8F9FB]">
-        <div className="border-b border-[#e8e8e8] px-5 py-5">
-          <div className="mb-4 flex items-center gap-2">
-            <HelpCircle size={20} className="text-[#666]" />
-            <h2 className="text-lg font-bold text-[#1a1a1a]">{t("help.title")}</h2>
-          </div>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder={t("help.searchPlaceholder")}
-              className="w-full rounded-lg border border-[#e0e0e0] bg-white py-2.5 pl-4 pr-10 text-[15px] outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
-            />
-            <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999]" />
-          </div>
-          <p className="mt-2 text-sm text-[#999]">{t("help.searchHint")}</p>
-        </div>
-        <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
-          <FAQItem question={t("help.faq1q")} answer={t("help.faq1a")} t={t} />
-          <FAQItem question={t("help.faq2q")} answer={t("help.faq2a")} t={t} />
-          <FAQItem question={t("help.faq3q")} answer={t("help.faq3a")} t={t} />
-          <FAQItem question={t("help.faq4q")} answer={t("help.faq4a")} t={t} />
-        </div>
-        <div className="border-t border-[#e8e8e8] px-5 py-4">
-          <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#1a1a1a] px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-[#333]">
-            <MessageCircle size={18} />
-            {t("help.chat")}
-          </button>
-        </div>
-      </aside>
+      <HelpSidebar locale={locale} t={t} />
 
       {showSettings && <AccountSettingsModal onClose={() => setShowSettings(false)} />}
     </div>
@@ -678,15 +651,171 @@ function StatusDot({ status }: { status: SectionStatus }) {
   return <div className="h-6 w-6 rounded-full border-2 border-[#ddd]" />;
 }
 
-function FAQItem({ question, answer, t }: { question: string; answer: string; t: TFn }) {
-  const [expanded, setExpanded] = useState(false);
+function HelpSidebar({ locale, t }: { locale: string; t: TFn }) {
+  const [faqSearch, setFaqSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<FAQCategory | "all">("all");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showChatModal, setShowChatModal] = useState(false);
+
+  const searchResults = searchFAQ(faqSearch, locale as "en" | "th");
+  const filtered = activeCategory === "all"
+    ? searchResults
+    : searchResults.filter((e) => e.category === activeCategory);
+
   return (
-    <div>
-      <h3 className="text-[15px] font-semibold leading-snug text-[#1a1a1a]">{question}</h3>
-      <p className="mt-1.5 text-sm leading-relaxed text-[#666]">{expanded ? answer : answer.slice(0, 70) + "..."}</p>
-      <button onClick={() => setExpanded(!expanded)} className="mt-1 text-sm font-medium text-[#F4C430] hover:text-[#e6b82a]">
-        {expanded ? t("help.showLess") : t("help.readMore")}
+    <>
+      <aside className="flex w-[300px] shrink-0 flex-col border-l border-[#e8e8e8] bg-[#F8F9FB]">
+        {/* Header + Search */}
+        <div className="border-b border-[#e8e8e8] px-5 py-4">
+          <div className="mb-3 flex items-center gap-2">
+            <HelpCircle size={18} className="text-[#666]" />
+            <h2 className="text-base font-bold text-[#1a1a1a]">{t("help.title")}</h2>
+          </div>
+          <div className="relative">
+            <input
+              type="text"
+              value={faqSearch}
+              onChange={(e) => setFaqSearch(e.target.value)}
+              placeholder={t("help.searchPlaceholder")}
+              className="w-full rounded-lg border border-[#e0e0e0] bg-white py-2 pl-3 pr-9 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+            />
+            <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999]" />
+          </div>
+        </div>
+
+        {/* Category tabs */}
+        <CategoryTabs locale={locale} activeCategory={activeCategory} setActiveCategory={setActiveCategory} t={t} />
+
+        {/* FAQ list */}
+        <div className="max-h-[637px] overflow-y-auto px-5 py-4">
+          {filtered.length === 0 ? (
+            <p className="py-4 text-center text-sm text-[#999]">{t("help.noResults")}</p>
+          ) : (
+            <div className="space-y-3">
+              {filtered.map((entry) => {
+                const question = locale === "th" ? entry.question_th : entry.question_en;
+                const answer = locale === "th" ? entry.answer_th : entry.answer_en;
+                const isExpanded = expandedId === entry.id;
+                return (
+                  <div key={entry.id}>
+                    <h3 className="text-sm font-semibold leading-snug text-[#1a1a1a]">{question}</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-[#666]">
+                      {isExpanded ? answer : answer.slice(0, 70) + "..."}
+                    </p>
+                    <button
+                      onClick={() => setExpandedId(isExpanded ? null : entry.id)}
+                      className="mt-0.5 text-xs font-medium text-[#F4C430] hover:text-[#e6b82a]"
+                    >
+                      {isExpanded ? t("help.showLess") : t("help.readMore")}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Chat button */}
+        <div className="border-t border-[#e8e8e8] px-5 py-3">
+          <button
+            onClick={() => setShowChatModal(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#1a1a1a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#333]"
+          >
+            <MessageCircle size={16} />
+            {t("help.chat")}
+          </button>
+        </div>
+      </aside>
+
+      {/* Chat Coming Soon Modal */}
+      {showChatModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowChatModal(false)} />
+          <div className="relative mx-4 w-full max-w-sm rounded-xl bg-white px-8 py-8 text-center shadow-xl">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F4C430]/20">
+              <MessageCircle size={28} className="text-[#F4C430]" />
+            </div>
+            <h3 className="mb-2 text-xl font-bold text-[#1a1a1a]">{t("help.chatComingSoon")}</h3>
+            <p className="mb-6 text-sm leading-relaxed text-[#666]">{t("help.chatComingSoonDesc")}</p>
+            <button
+              onClick={() => setShowChatModal(false)}
+              className="rounded-lg bg-[#F4C430] px-6 py-2.5 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function CategoryTabs({ locale, activeCategory, setActiveCategory, t }: {
+  locale: string; activeCategory: FAQCategory | "all"; setActiveCategory: (c: FAQCategory | "all") => void; t: TFn;
+}) {
+  const [open, setOpen] = useState(false);
+  const defaultVisible: FAQCategory[] = ["account", "applying"];
+
+  // If active category is not "all" and not in default visible, swap it in
+  const visibleKeys: FAQCategory[] = activeCategory !== "all" && !defaultVisible.includes(activeCategory)
+    ? [activeCategory, defaultVisible[0]]
+    : [...defaultVisible];
+
+  const hiddenCats = faqCategories.filter((c) => !visibleKeys.includes(c.key));
+  const isOtherActive = hiddenCats.some((c) => c.key === activeCategory);
+
+  return (
+    <div className="relative flex gap-1 border-b border-[#e8e8e8] px-4 py-2">
+      <button
+        onClick={() => setActiveCategory("all")}
+        className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+          activeCategory === "all" ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:bg-[#f0f0f0]"
+        }`}
+      >
+        {t("help.allCategories")}
       </button>
+      {faqCategories.filter((c) => visibleKeys.includes(c.key)).map((cat) => (
+        <button
+          key={cat.key}
+          onClick={() => setActiveCategory(cat.key)}
+          className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+            activeCategory === cat.key ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:bg-[#f0f0f0]"
+          }`}
+        >
+          {locale === "th" ? cat.label_th : cat.label_en}
+        </button>
+      ))}
+      {hiddenCats.length > 0 && (
+        <div className="relative">
+          <button
+            onClick={() => setOpen(!open)}
+            className={`flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              isOtherActive ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:bg-[#f0f0f0]"
+            }`}
+          >
+            {locale === "th" ? "อื่นๆ" : "Others"}
+            <ChevronDown size={12} className={`transition-transform ${open ? "rotate-180" : ""}`} />
+          </button>
+          {open && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+              <div className="absolute left-0 top-full z-20 mt-1 w-40 rounded-lg border border-[#e8e8e8] bg-white py-1 shadow-lg">
+                {hiddenCats.map((cat) => (
+                  <button
+                    key={cat.key}
+                    onClick={() => { setActiveCategory(cat.key); setOpen(false); }}
+                    className={`flex w-full px-4 py-2 text-left text-xs font-medium transition-colors ${
+                      activeCategory === cat.key ? "bg-[#FFF3D0] text-[#1a1a1a]" : "text-[#444] hover:bg-[#f5f5f5]"
+                    }`}
+                  >
+                    {locale === "th" ? cat.label_th : cat.label_en}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
