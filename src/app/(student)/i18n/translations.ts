@@ -111,18 +111,13 @@ const translations = {
   // ── Help & Support ──
   "help.title": { en: "Help & support", th: "ช่วยเหลือและสนับสนุน" },
   "help.searchPlaceholder": { en: "Search FAQs", th: "ค้นหาคำถามที่พบบ่อย" },
-  "help.searchHint": { en: "Search takes you to the student solution center", th: "ค้นหาจะพาคุณไปยังศูนย์ช่วยเหลือนักศึกษา" },
+  "help.noResults": { en: "No results found. Try a different search.", th: "ไม่พบผลลัพธ์ ลองค้นหาด้วยคำอื่น" },
+  "help.allCategories": { en: "All", th: "ทั้งหมด" },
   "help.chat": { en: "24/7 Support Chat", th: "แชทสนับสนุน 24/7" },
   "help.readMore": { en: "Read full answer", th: "อ่านคำตอบเต็ม" },
   "help.showLess": { en: "Show less", th: "แสดงน้อยลง" },
-  "help.faq1q": { en: "How can I add a university to my list?", th: "ฉันจะเพิ่มมหาวิทยาลัยในรายการได้อย่างไร?" },
-  "help.faq1a": { en: "Select Choose University from the sidebar and browse available programs. Click the + button on any university you're interested in.", th: "เลือก \"เลือกมหาวิทยาลัย\" จากแถบด้านข้าง แล้วกดปุ่ม + ที่มหาวิทยาลัยที่คุณสนใจ" },
-  "help.faq2q": { en: "What documents do I need to apply?", th: "ฉันต้องใช้เอกสารอะไรบ้างในการสมัคร?" },
-  "help.faq2a": { en: "Most programs require transcripts, ID copy, test scores, and a portfolio. Check each program's specific requirements page for details.", th: "หลักสูตรส่วนใหญ่ต้องการสำเนาผลการเรียน สำเนาบัตรประชาชน คะแนนสอบ และพอร์ตฟอลิโอ ตรวจสอบข้อกำหนดของแต่ละหลักสูตร" },
-  "help.faq3q": { en: "Can I edit my application after submitting?", th: "ฉันสามารถแก้ไขใบสมัครหลังจากส่งได้ไหม?" },
-  "help.faq3a": { en: "You can edit your application until the program's deadline. After that, changes are locked and your submission is final.", th: "คุณสามารถแก้ไขใบสมัครได้จนถึงกำหนดเส้นตาย หลังจากนั้นการเปลี่ยนแปลงจะถูกล็อค" },
-  "help.faq4q": { en: "How many universities can I apply to?", th: "ฉันสามารถสมัครได้กี่มหาวิทยาลัย?" },
-  "help.faq4a": { en: "You may add and apply to multiple programs across different universities. There is no limit, but check each round's rules for restrictions.", th: "คุณสามารถเพิ่มและสมัครได้หลายหลักสูตรในหลายมหาวิทยาลัย ไม่จำกัดจำนวน แต่ตรวจสอบกฎของแต่ละรอบ" },
+  "help.chatComingSoon": { en: "Coming soon!", th: "เร็วๆ นี้!" },
+  "help.chatComingSoonDesc": { en: "Our AI-powered 24/7 support chat is under development. In the meantime, email us at support@sabaiapply.com", th: "แชทสนับสนุน AI 24/7 กำลังพัฒนา ในระหว่างนี้ อีเมลเราที่ support@sabaiapply.com" },
 
   // ── Settings Modal ──
   "settings.title": { en: "Account Settings", th: "ตั้งค่าบัญชี" },
