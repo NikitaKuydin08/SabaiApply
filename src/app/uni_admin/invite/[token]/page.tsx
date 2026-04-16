@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Invite } from "@/types/database";
+import { PasswordInput } from "@/components/password-input";
 
 export default function AcceptInvitePage() {
   const params = useParams();
@@ -203,9 +204,8 @@ export default function AcceptInvitePage() {
             <label htmlFor="password" className="block text-base font-medium text-[#1a1a1a]">
               Password
             </label>
-            <input
+            <PasswordInput
               id="password"
-              type="password"
               placeholder="At least 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -218,9 +218,8 @@ export default function AcceptInvitePage() {
             <label htmlFor="confirmPassword" className="block text-base font-medium text-[#1a1a1a]">
               Confirm Password
             </label>
-            <input
+            <PasswordInput
               id="confirmPassword"
-              type="password"
               placeholder="Confirm your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
