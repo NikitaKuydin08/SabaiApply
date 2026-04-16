@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { useStudentLocale } from "../i18n/context";
 
@@ -16,7 +15,6 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const router = useRouter();
   const { locale, setLocale, t } = useStudentLocale();
 
   const passwordRules = useMemo(() => [
@@ -69,7 +67,7 @@ export default function SignUpPage() {
       return;
     }
 
-    router.push("/dashboard");
+    window.location.href = `/check-email?email=${encodeURIComponent(email)}`;
   }
 
   return (
