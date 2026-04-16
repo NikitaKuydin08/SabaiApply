@@ -3,18 +3,22 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Eye, EyeOff, X } from "lucide-react";
 import { useStudentLocale } from "../i18n/context";
+import { Suspense } from "react";
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { locale, setLocale, t } = useStudentLocale();
+  const isFromSignup = searchParams.get("confirmed") === "pending";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,6 +47,17 @@ export default function LoginPage() {
         <div className="mb-6 flex justify-end">
           <LangToggle locale={locale} setLocale={setLocale} />
         </div>
+
+        {isFromSignup && showBanner && (
+          <div className="mb-5 flex items-center justify-between rounded-lg bg-[#DBEAFE] px-4 py-3">
+            <p className="text-sm font-medium text-[#1E40AF]">
+              Confirmation email sent. Please check your inbox.
+            </p>
+            <button onClick={() => setShowBanner(false)} className="ml-3 shrink-0 p-0.5 text-[#1E40AF]/60 hover:text-[#1E40AF]">
+              <X size={16} />
+            </button>
+          </div>
+        )}
 
         <div className="mb-8 text-center">
           <Link href="/" className="inline-flex items-center text-5xl font-bold tracking-tight text-[#1a1a1a]">
@@ -139,5 +154,17 @@ function LangToggle({ locale, setLocale }: { locale: string; setLocale: (l: "en"
         TH
       </button>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-[#FFF9EC]">
+        <p className="text-[#666]">Loading...</p>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
