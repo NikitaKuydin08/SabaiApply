@@ -6,7 +6,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { PasswordInput } from "@/components/password-input";
 
-
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
