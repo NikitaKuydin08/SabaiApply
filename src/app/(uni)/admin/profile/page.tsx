@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useLocale } from "@/lib/locale-context";
 import { t } from "@/lib/i18n";
+import { PasswordInput } from "@/components/password-input";
 
 export default function ProfilePage() {
   const { locale } = useLocale();
@@ -305,9 +306,8 @@ export default function ProfilePage() {
               <label htmlFor="currentPassword" className="block text-base font-medium text-[#1a1a1a]">
                 {locale === "th" ? "รหัสผ่านปัจจุบัน" : "Current Password"}
               </label>
-              <input
+              <PasswordInput
                 id="currentPassword"
-                type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder={locale === "th" ? "กรอกรหัสผ่านปัจจุบัน" : "Enter current password"}
@@ -320,9 +320,8 @@ export default function ProfilePage() {
               <label htmlFor="newPassword" className="block text-base font-medium text-[#1a1a1a]">
                 {t("new_password", locale)}
               </label>
-              <input
+              <PasswordInput
                 id="newPassword"
-                type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder={t("min_6_chars", locale)}
@@ -335,9 +334,8 @@ export default function ProfilePage() {
               <label htmlFor="confirmNewPassword" className="block text-base font-medium text-[#1a1a1a]">
                 {t("confirm_new_password", locale)}
               </label>
-              <input
+              <PasswordInput
                 id="confirmNewPassword"
-                type="password"
                 value={confirmNewPassword}
                 onChange={(e) => setConfirmNewPassword(e.target.value)}
                 placeholder={t("confirm_password", locale)}
