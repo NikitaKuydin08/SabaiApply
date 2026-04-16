@@ -1,7 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function proxy(request: NextRequest) {
+const protectedRoutes = ["/dashboard", "/profile", "/portfolio", "/programs", "/applications"];
+const authRoutes = ["/login", "/signup"];
+
+export default async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -36,7 +39,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
-  // Protect /admin routes (except login and register)
+  // ── Admin route protection ──
   if (
     pathname.startsWith("/admin") &&
     !pathname.startsWith("/admin/login") &&
@@ -49,7 +52,6 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
-    // Check role — only faculty_admin and uni_admin allowed
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -62,11 +64,8 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // If logged-in admin visits login/register, redirect to dashboard
-  if (
-    user &&
-    pathname === "/admin/login"
-  ) {
+  // If logged-in admin visits login, redirect to admin dashboard
+  if (user && pathname === "/admin/login") {
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -77,6 +76,20 @@ export async function proxy(request: NextRequest) {
       const dashboardUrl = new URL("/admin/dashboard", request.url);
       return NextResponse.redirect(dashboardUrl);
     }
+  }
+
+  // ── Student route protection ──
+  if (!user && protectedRoutes.some((route) => pathname.startsWith(route))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect authenticated students away from auth pages
+  if (user && authRoutes.some((route) => pathname.startsWith(route))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
   }
 
   return supabaseResponse;
