@@ -1,8 +1,32 @@
-export default function DashboardPage() {
+import { createClient } from "@/lib/supabase/server";
+import { DashboardClient } from "./dashboard-client";
+
+export default async function DashboardPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [
+    { count: programCount },
+    { count: applicationCount },
+    { count: pendingCount },
+  ] = await Promise.all([
+    supabase.from("programs").select("*", { count: "exact", head: true }),
+    supabase.from("applications").select("*", { count: "exact", head: true }),
+    supabase
+      .from("applications")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "submitted"),
+  ]);
+
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">Applications Dashboard</h1>
-      <p className="text-gray-500 mt-2">University admin panel</p>
-    </div>
+    <DashboardClient
+      email={user?.email}
+      programCount={programCount ?? 0}
+      applicationCount={applicationCount ?? 0}
+      pendingCount={pendingCount ?? 0}
+    />
   );
 }
