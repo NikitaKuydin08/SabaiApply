@@ -14,7 +14,7 @@ export default function Home() {
             href="/admin/login"
             className="text-sm text-[#999] hover:text-[#666] transition-colors"
           >
-            University Admin
+            Admin Portal
           </a>
           <a
             href="/login"

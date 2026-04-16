@@ -233,3 +233,4 @@ stop and return to the checklist above.
    comparison in the frontend or in a Next.js API route. Do not rely on Founder B for this.
 5. **All student file uploads go to Supabase Storage.** Use signed URLs for secure access.
    Never expose raw storage bucket paths publicly.
+6. **Maintain Documentation.** All API, Database schemas, and architectural docs are located in the `docs/` directory (e.g., `docs/db/index.md` for schemas, `docs/api/` for endpoints). BEFORE making backend or database changes, READ these docs to ensure consistency. WHENEVER you make changes to the API endpoints, Server Actions, or Database schema, you MUST update the corresponding markdown documentation in the `docs/` folder.

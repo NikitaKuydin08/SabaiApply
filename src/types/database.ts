@@ -374,6 +374,20 @@ export interface ApplicationForFaculty extends Application {
   portfolio: StudentPortfolio | null;
 }
 
+// ---- INVITE ----
+
+export interface Invite {
+  id: string;
+  email: string;
+  role: UserRole;
+  faculty_id: string | null;
+  invited_by: string;
+  token: string;
+  accepted_at: string | null;
+  expires_at: string;
+  created_at: string;
+}
+
 // ---- INSERT TYPES ----
 
 export type InsertProfile = Omit<Profile, "created_at" | "updated_at">;
@@ -431,6 +445,8 @@ export type InsertApplication = Omit<
 >;
 
 export type InsertInterviewSlot = Omit<InterviewSlot, "id" | "created_at">;
+
+export type InsertInvite = Omit<Invite, "id" | "token" | "accepted_at" | "expires_at" | "created_at">;
 
 // ---- UPDATE TYPES ----
 

@@ -32,16 +32,55 @@ export default async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
 
-  // Redirect unauthenticated users away from protected routes
+  // ── Admin route protection (uni side) ──
+  if (
+    pathname.startsWith("/admin") &&
+    !pathname.startsWith("/admin/login") &&
+    !pathname.startsWith("/admin/invite") &&
+    !pathname.startsWith("/admin/forgot-password") &&
+    !pathname.startsWith("/admin/reset-password")
+  ) {
+    if (!user) {
+      const loginUrl = new URL("/admin/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile || profile.role === "student") {
+      const loginUrl = new URL("/admin/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // If logged-in admin visits login, redirect to admin dashboard
+  if (user && pathname === "/admin/login") {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile && profile.role !== "student") {
+      const dashboardUrl = new URL("/admin/dashboard", request.url);
+      return NextResponse.redirect(dashboardUrl);
+    }
+  }
+
+  // ── Student route protection ──
   if (!user && protectedRoutes.some((route) => pathname.startsWith(route))) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // Redirect authenticated users away from auth pages
+  // Redirect authenticated students away from auth pages
   if (user && authRoutes.some((route) => pathname.startsWith(route))) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
