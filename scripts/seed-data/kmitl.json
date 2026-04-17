@@ -1,0 +1,978 @@
+{
+  "_meta": {
+    "source": "office.kmitl.ac.th/oaq/curriculum/ + TCAS69 (tuition)",
+    "scraped_at": "2026-04-16T13:12:05.936Z",
+    "total_faculties": 18,
+    "total_programs": 122,
+    "note": "Bachelor programs only (for MVP Round 1 admissions)"
+  },
+  "university": {
+    "name": "King Mongkut's Institute of Technology Ladkrabang",
+    "name_th": "สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",
+    "website": "https://www.kmitl.ac.th"
+  },
+  "faculties": [
+    {
+      "name": "School of Engineering",
+      "name_th": "คณะวิศวกรรมศาสตร์",
+      "programs": [
+        {
+          "name": "B.Eng. Food Engineering",
+          "name_th": "วศ.บ. วิศวกรรมอาหาร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Information Engineering",
+          "name_th": "วศ.บ. วิศวกรรมสารสนเทศ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. IoT and Information Systems Engineering",
+          "name_th": "วศ.บ. วิศวกรรมไอโอทีและสารสนเทศ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Agricultural Engineering",
+          "name_th": "วศ.บ. วิศวกรรมเกษตร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Smart Agricultural Engineering",
+          "name_th": "วศ.บ. วิศวกรรมเกษตรอัจฉริยะ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Mechanical Engineering",
+          "name_th": "วศ.บ. วิศวกรรมเครื่องกล",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Chemical Engineering",
+          "name_th": "วศ.บ. วิศวกรรมเคมี",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Control Engineering",
+          "name_th": "วศ.บ. วิศวกรรมการวัดคุม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Mechatronics and Automation",
+          "name_th": "วศ.บ. วิศวกรรมเมคคาทรอนิกส์และระบบวัดคุม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Petrochemical Engineering",
+          "name_th": "วศ.บ. วิศวกรรมปิโตรเคมี",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Civil Engineering",
+          "name_th": "วศ.บ. วิศวกรรมโยธา",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Industrial Engineering",
+          "name_th": "วศ.บ. วิศวกรรมอุตสาหการ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Computer Engineering",
+          "name_th": "วศ.บ. วิศวกรรมคอมพิวเตอร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Electrical Engineering",
+          "name_th": "วศ.บ. วิศวกรรมไฟฟ้า",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Electronics Engineering",
+          "name_th": "วศ.บ. วิศวกรรมอิเล็กทรอนิกส์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Telecommunications Engineering",
+          "name_th": "วศ.บ. วิศวกรรมโทรคมนาคมและโครงข่าย",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Integrated Manufacturing Engineering",
+          "name_th": "วศ.บ. วิศวกรรมการผลิตเชิงบูรณาการ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 37000
+        },
+        {
+          "name": "B.Eng. Aerospace and Geospatial Engineering",
+          "name_th": "วศ.บ. วิศวกรรมอวกาศและภูมิสารสนเทศ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Computer Engineering and Cybersecurity",
+          "name_th": "วศ.บ. วิศวกรรมคอมพิวเตอร์และความปลอดภัยไซเบอร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 50000
+        },
+        {
+          "name": "B.Eng. Railway Transport Engineering",
+          "name_th": "วศ.บ. วิศวกรรมขนส่งทางราง",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Robotics and AI (International)",
+          "name_th": "วศ.บ. วิศวกรรมหุ่นยนต์และปัญญาประดิษฐ์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Civil Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมโยธา (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Electrical Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมไฟฟ้า (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Energy Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมพลังงาน (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Software Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมซอฟต์แวร์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Biomedical Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมชีวการแพทย์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Mechanical Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมเครื่องกล (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Chemical Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมเคมี (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Computer Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมคอมพิวเตอร์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Financial Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมการเงิน (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Engineering Management and Entrepreneurship (International)",
+          "name_th": "วศ.บ. การจัดการวิศวกรรมและการเป็นผู้ประกอบการ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. AI and Entrepreneurship Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมปัญญาประดิษฐ์และการเป็นผู้ประกอบการ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Mechatronics Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมแมคคาทรอนิกส์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Industrial and Digital Systems Management (International)",
+          "name_th": "วศ.บ. วิศวกรรมอุตสาหการและระบบการจัดการเชิงดิจิทัล (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Industrial Engineering and Logistics Management (International)",
+          "name_th": "วศ.บ. วิศวกรรมอุตสาหการและการจัดการโลจิสติกส์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "School of Architecture, Art and Design",
+      "name_th": "คณะสถาปัตยกรรม ศิลปะและการออกแบบ",
+      "programs": [
+        {
+          "name": "B.L.A. Landscape Architecture (5 years)",
+          "name_th": "ภ.สถ.บ. ภูมิสถาปัตยกรรมศาสตร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Arch. Architecture (5 years)",
+          "name_th": "สถ.บ. สถาปัตยกรรมหลัก",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 29000
+        },
+        {
+          "name": "B.F.A. Industrial Design",
+          "name_th": "ศ.บ. ศิลปอุตสาหกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Fine Arts, Media Arts and Illustration",
+          "name_th": "ศ.บ. ศิลปกรรม มีเดียอาตส์ และอิลลัสเตชันอาร์ต",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Film and Digital Media",
+          "name_th": "ศ.บ. ภาพยนตร์และดิจิทัลมีเดีย",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Printmaking and Illustration",
+          "name_th": "ศ.บ. ภาพพิมพ์และอิลลัสเตชั่น",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Sculpture and Public Sculpture",
+          "name_th": "ศ.บ. ประติมากรรมและประติมากรรมเพื่อสังคม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Curatorial Studies",
+          "name_th": "ศ.บ. นิเทศศิลป์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Painting and Media Arts",
+          "name_th": "ศ.บ. จิตรกรรมและมีเดียอาตส์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. 3D Information Design",
+          "name_th": "ศ.บ. การออกแบบสนเทศสามมิติ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Photography",
+          "name_th": "ศ.บ. การถ่ายภาพ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Experience Design for Integrated Media",
+          "name_th": "ศ.บ. การออกแบบประสบการณ์สำหรับสื่อบูรณาการ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 29000
+        },
+        {
+          "name": "B.Arch. Design Intelligence for Creative Economy (International)",
+          "name_th": "สถ.บ. ปัญญาออกแบบเพื่อเศรษฐกิจสร้างสรรค์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Arch. Architecture (International)",
+          "name_th": "สถ.บ. สถาปัตยกรรม (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.F.A. Creative Arts and Heritage Studies (International)",
+          "name_th": "ศ.บ. ศิลปะสร้างสรรค์และภัณฑารักษาศึกษา (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "Faculty of Industrial Education and Technology",
+      "name_th": "คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี",
+      "programs": [
+        {
+          "name": "B.I.Ed. Architecture",
+          "name_th": "ค.อ.บ. สถาปัตยกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Interior Environment Design",
+          "name_th": "ค.อ.บ. การออกแบบสภาพแวดล้อมภายใน",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Design Education",
+          "name_th": "ค.อ.บ. ครุศาสตร์การออกแบบ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Innovation and Design Technology",
+          "name_th": "ค.อ.บ. นวัตกรรมและเทคโนโลยีการออกแบบ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Engineering Education",
+          "name_th": "ค.อ.บ. ครุศาสตร์วิศวกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Agricultural Education",
+          "name_th": "ค.อ.บ. ครุศาสตร์เกษตร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Learning Management Science",
+          "name_th": "ค.อ.บ. วิทยาการจัดการเรียนรู้",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.I.Ed. Computer Technology",
+          "name_th": "ค.อ.บ. เทคโนโลยีคอมพิวเตอร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "Faculty of Agricultural Technology",
+      "name_th": "คณะเทคโนโลยีการเกษตร",
+      "programs": [
+        {
+          "name": "B.Sc. Fishery Science",
+          "name_th": "วท.บ. วิทยาศาสตร์การประมง",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Aquaculture and Fishery Resource Innovation",
+          "name_th": "วท.บ. นวัตกรรมการผลิตสัตว์น้ำและการจัดการทรัพยากรประมง",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 18000
+        },
+        {
+          "name": "B.Sc. Landscape Design and Environmental Management",
+          "name_th": "วท.บ. การออกแบบและการจัดการภูมิทัศน์เพื่อสิ่งแวดล้อม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Agricultural Development",
+          "name_th": "วท.บ. พัฒนาการเกษตร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Smart Farm Management",
+          "name_th": "วท.บ. การจัดการสมาร์ตฟาร์ม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Sc. Animal Science",
+          "name_th": "วท.บ. สัตวศาสตร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 18000
+        },
+        {
+          "name": "B.Sc. Livestock Production and Meat Science",
+          "name_th": "วท.บ. เทคโนโลยีการผลิตสัตว์และวิทยาศาสตร์เนื้อสัตว์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Agronomy",
+          "name_th": "วท.บ. เกษตรศาสตร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Crop Production Technology",
+          "name_th": "วท.บ. เทคโนโลยีการผลิตพืช",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Horticultural Innovation",
+          "name_th": "วท.บ. นวัตกรรมพืชสวน",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.Sc. Companion Animal Care and Pet Business",
+          "name_th": "วท.บ. การพยาบาลสัตว์และการจัดการธุรกิจสัตว์เลี้ยง",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        }
+      ]
+    },
+    {
+      "name": "School of Science",
+      "name_th": "คณะวิทยาศาสตร์",
+      "programs": [
+        {
+          "name": "B.Sc. Industrial Physics",
+          "name_th": "วท.บ. ฟิสิกส์อุตสาหกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Applied Mathematics",
+          "name_th": "วท.บ. คณิตศาสตร์ประยุกต์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Computer Science",
+          "name_th": "วท.บ. วิทยาการคอมพิวเตอร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Applied Statistics and Data Analysis",
+          "name_th": "วท.บ. สถิติประยุกต์และการวิเคราะห์ข้อมูล",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Industrial Chemistry",
+          "name_th": "วท.บ. เคมีอุตสาหกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Environmental Technology and Sustainable Management",
+          "name_th": "วท.บ. เทคโนโลยีสิ่งแวดล้อมและการจัดการอย่างยั่งยืน",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Industrial Biotechnology",
+          "name_th": "วท.บ. เทคโนโลยีชีวภาพอุตสาหกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Industrial Microbiology",
+          "name_th": "วท.บ. จุลชีววิทยาอุตสาหกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Digital Technology and Integrated Innovation (International)",
+          "name_th": "วท.บ. เทคโนโลยีดิจิทัลและนวัตกรรมเชิงบูรณาการ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "Faculty of Information Technology",
+      "name_th": "คณะเทคโนโลยีสารสนเทศ",
+      "programs": [
+        {
+          "name": "B.Sc. Information Technology",
+          "name_th": "วท.บ. เทคโนโลยีสารสนเทศ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 32000
+        },
+        {
+          "name": "B.Sc. Data Science and Business Analytics",
+          "name_th": "วท.บ. วิทยาการข้อมูลและการวิเคราะห์เชิงธุรกิจ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 32000
+        },
+        {
+          "name": "B.Sc. Artificial Intelligence Technology",
+          "name_th": "วท.บ. เทคโนโลยีปัญญาประดิษฐ์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 32000
+        },
+        {
+          "name": "B.Sc. Business Information Technology (International)",
+          "name_th": "วท.บ. เทคโนโลยีสารสนเทศทางธุรกิจ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "Faculty of Food Industry",
+      "name_th": "คณะอุตสาหกรรมอาหาร",
+      "programs": [
+        {
+          "name": "B.Sc. Food Science and Technology",
+          "name_th": "วท.บ. วิทยาศาสตร์และเทคโนโลยีการอาหาร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Sc. Fermentation Technology in Food Industry",
+          "name_th": "วท.บ. เทคโนโลยีการหมักในอุตสาหกรรมอาหาร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Food Processing Engineering",
+          "name_th": "วศ.บ. วิศวกรรมแปรรูปอาหาร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Culinary Science and Food Service Management (International)",
+          "name_th": "วท.บ. วิทยาศาสตร์การประกอบอาหารและการจัดการการบริการอาหาร (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "KMITL Business School",
+      "name_th": "คณะบริหารธุรกิจ",
+      "programs": [
+        {
+          "name": "B.B.A. Business Administration",
+          "name_th": "บธ.บ. บริหารธุรกิจ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.Econ. Business Economics and Management",
+          "name_th": "ศ.บ. เศรษฐศาสตร์ธุรกิจและการจัดการ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.B.A. Digital Transformation and Technology Management",
+          "name_th": "บธ.บ. การเปลี่ยนแปลงทางดิจิทัลและการจัดการเทคโนโลยี",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 30000
+        },
+        {
+          "name": "B.B.A. Business Administration (International)",
+          "name_th": "บธ.บ. บริหารธุรกิจ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.B.A. Global Entrepreneurship (International)",
+          "name_th": "บธ.บ. การเป็นผู้ประกอบการระดับโลก (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "International Academy of Aviation Industry",
+      "name_th": "วิทยาลัยอุตสาหกรรมการบินนานาชาติ",
+      "programs": [
+        {
+          "name": "B.Eng. Aviation Engineering and Commercial Pilot (International)",
+          "name_th": "วศ.บ. วิศวกรรมการบินและนักบินพาณิชย์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.B.A. Logistics Management (International)",
+          "name_th": "บธ.บ. การจัดการโลจิสติกส์ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Aerospace Engineering (International)",
+          "name_th": "วศ.บ. วิศวกรรมการบินและอวกาศ (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "Faculty of Liberal Arts",
+      "name_th": "คณะศิลปศาสตร์",
+      "programs": [
+        {
+          "name": "B.A. English Language",
+          "name_th": "ศศ.บ. ภาษาอังกฤษ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.A. Japanese Language for Business",
+          "name_th": "ศศ.บ. ภาษาญี่ปุ่นธุรกิจ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.A. Chinese Language for Industry",
+          "name_th": "ศศ.บ. ภาษาจีนเพื่ออุตสาหกรรม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 22000
+        },
+        {
+          "name": "B.A. Tourism and Service Innovation",
+          "name_th": "ศศ.บ. นวัตกรรมการท่องเที่ยวและการบริการ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 26000
+        },
+        {
+          "name": "B.A. Aviation Service Management",
+          "name_th": "ศศ.บ. การจัดการบริการการบิน",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 30000
+        }
+      ]
+    },
+    {
+      "name": "Faculty of Medicine",
+      "name_th": "คณะแพทยศาสตร์",
+      "programs": [
+        {
+          "name": "M.D. Doctor of Medicine",
+          "name_th": "พ.บ. แพทยศาสตรบัณฑิต",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "Institute of Music Science and Engineering",
+      "name_th": "วิทยาลัยวิศวกรรมสังคีต",
+      "programs": [
+        {
+          "name": "B.Eng. Music Engineering and Multimedia",
+          "name_th": "วศ.บ. วิศวกรรมดนตรีและสื่อประสม",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 80000
+        },
+        {
+          "name": "B.Tech. Technology and Creative Arts",
+          "name_th": "ทล.บ. เทคโนโลยีและศิลปะสร้างสรรค์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "School of Dentistry",
+      "name_th": "คณะทันตแพทยศาสตร์",
+      "programs": [
+        {
+          "name": "D.D.S. Doctor of Dental Surgery (International)",
+          "name_th": "ท.บ. ทันตแพทยศาสตรบัณฑิต (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "School of Integrated Innovative Technology",
+      "name_th": "คณะเทคโนโลยีนวัตกรรมบูรณาการ",
+      "programs": [
+        {
+          "name": "B.Eng. Nanomaterial Engineering",
+          "name_th": "วศ.บ. วิศวกรรมวัสดุนาโน",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 25000
+        },
+        {
+          "name": "B.Eng. Smart Material Technology (International)",
+          "name_th": "วศ.บ. เทคโนโลยีวัสดุชาญฉลาด (นานาชาติ)",
+          "degree_type": "bachelor",
+          "is_international": true,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "College of Advanced Manufacturing Innovation",
+      "name_th": "วิทยาลัยนวัตกรรมการผลิตขั้นสูง",
+      "programs": [
+        {
+          "name": "B.Eng. Manufacturing Systems Engineering",
+          "name_th": "วศ.บ. วิศวกรรมระบบการผลิต",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "School of Nursing",
+      "name_th": "คณะพยาบาลศาสตร์",
+      "programs": [
+        {
+          "name": "B.N.S. Nursing Science",
+          "name_th": "พย.บ. พยาบาลศาสตร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "KMITL Prince of Chumphon Campus",
+      "name_th": "วิทยาเขตชุมพรเขตรอุดมศักดิ์ จังหวัดชุมพร",
+      "programs": [
+        {
+          "name": "B.Eng. Mechanical Engineering",
+          "name_th": "วศ.บ. วิศวกรรมเครื่องกล",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.Eng. Electronics Engineering",
+          "name_th": "วศ.บ. วิศวกรรมอิเล็กทรอนิกส์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Computer Engineering",
+          "name_th": "วศ.บ. วิศวกรรมคอมพิวเตอร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.Eng. Energy Engineering",
+          "name_th": "วศ.บ. วิศวกรรมพลังงาน",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Electrical Engineering",
+          "name_th": "วศ.บ. วิศวกรรมไฟฟ้า",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Civil Engineering",
+          "name_th": "วศ.บ. วิศวกรรมโยธา",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.Eng. Robotics and Smart Electronics",
+          "name_th": "วศ.บ. วิศวกรรมหุ่นยนต์และอิเล็กทรอนิกส์อัจฉริยะ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Eng. Industrial Manufacturing Engineering",
+          "name_th": "วศ.บ. วิศวกรรมอุตสาหการและการผลิต",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 20000
+        },
+        {
+          "name": "B.Sc. Animal Science",
+          "name_th": "วท.บ. สัตวศาสตร์",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Fishery and Aquatic Resources Science",
+          "name_th": "วท.บ. วิทยาศาสตร์การประมงและทรัพยากรทางน้ำ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 15000
+        },
+        {
+          "name": "B.Sc. Agricultural Biotechnology and Food",
+          "name_th": "วท.บ. เทคโนโลยีชีวภาพเกษตรและอาหาร",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        },
+        {
+          "name": "B.Sc. Food Innovation and Management",
+          "name_th": "วท.บ. นวัตกรรมอาหารและการจัดการ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 19000
+        },
+        {
+          "name": "B.Sc. Crop Production Technology",
+          "name_th": "วท.บ. เทคโนโลยีการจัดการผลิตพืช",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": 15000
+        },
+        {
+          "name": "B.B.A. Business Administration",
+          "name_th": "บธ.บ. บริหารธุรกิจ",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    },
+    {
+      "name": "KMITL KOSEN Institute",
+      "name_th": "สถาบันโคเซ็นแห่งสถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",
+      "programs": [
+        {
+          "name": "B.Eng. Advanced Innovation Engineering (Continuing)",
+          "name_th": "วศ.บ. วิศวกรรมนวัตกรรมขั้นสูง (ต่อเนื่อง)",
+          "degree_type": "bachelor",
+          "is_international": false,
+          "tuition_per_semester": null
+        }
+      ]
+    }
+  ]
+}

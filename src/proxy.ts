@@ -34,7 +34,12 @@ export default async function proxy(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // ── Admin route protection (uni side) ──
+  // Redirect /admin to /admin/dashboard
+  if (pathname === "/admin") {
+    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+  }
+
+  // ── Admin route protection ──
   if (
     pathname.startsWith("/admin") &&
     !pathname.startsWith("/admin/login") &&
