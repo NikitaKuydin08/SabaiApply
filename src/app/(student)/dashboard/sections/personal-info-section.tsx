@@ -137,16 +137,37 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
   const [addrLine, setAddrLine] = useState(parsedAddr.addressLine);
 
   async function handleSave() {
+
     // Validation
     if (!firstName || !lastName) {
       setError("First name and last name (English) are required.");
       return;
     }
+    
     if (!idNumber) { setError("ID number is required."); return; }
-    if (idType === "Thai ID" && !/^\d{13}$/.test(idNumber)) {
-      setError("Thai ID must be exactly 13 digits.");
-      return;
+    
+    if (idType === "Thai ID") {
+
+        if (!/^\d{13}$/.test(idNumber)) {
+            setError("Thai ID must contains exactly 13 numeric digits.");
+            return;
+        }
+
+        let sum = 0;
+
+        for (let i = 0; i < 12; i++) {
+            sum += parseInt(idNumber[i], 10) * (13 - i);
+        }
+
+        const checkDigit = (11 - (sum % 11)) % 10;
+
+        if (checkDigit !== parseInt(idNumber[12], 10)) {
+            setError("Invalid Thai ID number. Please check your ID number and try again.");
+            return;
+        }
+
     }
+
     if (!dob) { setError("Date of birth is required."); return; }
     if (!nationality) { setError("Nationality is required."); return; }
     if (!gender) { setError("Gender is required."); return; }
