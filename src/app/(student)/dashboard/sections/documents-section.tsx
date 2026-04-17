@@ -11,6 +11,7 @@ interface Props {
   studentId: string;
   userId: string;
   onClose: () => void;
+  inline?: boolean;
 }
 
 interface DocSlot {
@@ -20,18 +21,22 @@ interface DocSlot {
 }
 
 const DOCUMENT_SLOTS: DocSlot[] = [
-  { type: "transcript", label: "Transcript", required: true },
-  { type: "id_copy", label: "ID Card Copy", required: true },
-  { type: "photo", label: "Photo", required: true },
-  { type: "passport_copy", label: "Passport Copy", required: true },
-  { type: "student_id_card", label: "Student ID Card", required: true },
+  { type: "transcript", label: "High School Transcript", required: true },
+  { type: "id_copy", label: "National ID Card / Passport Copy", required: true },
+  { type: "photo", label: "Profile Photo", required: true },
+  { type: "high_school_diploma", label: "High School Diploma", required: true },
+  { type: "student_status_cert", label: "Student Status Certificate (if still studying)", required: false },
+  { type: "high_school_equivalency", label: "High School Equivalency Certificate (GED/IB)", required: false },
+  { type: "gpa_equivalency_cert", label: "GPA Equivalency Certificate", required: false },
+  { type: "score_certificate", label: "Test Score Certificate(s)", required: true },
+  { type: "english_proficiency_cert", label: "English Proficiency Certificate", required: false },
+  { type: "passport_copy", label: "Passport Copy (for non-Thai)", required: false },
   { type: "name_change_cert", label: "Name Change Certificate", required: false },
-  { type: "score_certificate", label: "Score Certificate", required: true },
-  { type: "recommendation_letter", label: "Recommendation Letter", required: true },
-  { type: "certificate", label: "Certificate", required: true },
+  { type: "recommendation_letter", label: "Recommendation Letter", required: false },
+  { type: "certificate", label: "Other Certificate / Award", required: false },
 ];
 
-export default function DocumentsSection({ documents, studentId, userId, onClose }: Props) {
+export default function DocumentsSection({ documents, studentId, userId, onClose, inline }: Props) {
   const [localDocs, setLocalDocs] = useState<StudentDocument[]>(documents);
   const [uploading, setUploading] = useState<DocType | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -127,8 +132,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
     }
   }
 
-  return (
-    <SectionPanel title="Documents" onClose={onClose}>
+  const formContent = (
       <div className="space-y-6">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
@@ -186,6 +190,13 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
         </div>
 
       </div>
+  );
+
+  if (inline) return <div>{formContent}</div>;
+
+  return (
+    <SectionPanel title="Documents" onClose={onClose}>
+      {formContent}
     </SectionPanel>
   );
 }
