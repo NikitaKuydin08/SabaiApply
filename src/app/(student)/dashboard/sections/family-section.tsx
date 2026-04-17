@@ -148,91 +148,6 @@ export default function FamilySection({ family, studentId, onClose }: Props) {
     window.location.reload();
   }
 
-  const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
-  const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
-
-  function PrefixPills({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-    return (
-      <div className="flex gap-2 flex-wrap">
-        {PREFIX_OPTIONS.map((p) => (
-          <button key={p} type="button" onClick={() => onChange(p)} className={pillCls(value === p)}>{p}</button>
-        ))}
-      </div>
-    );
-  }
-
-  function EducationPills({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-    return (
-      <div className="flex gap-2 flex-wrap">
-        {EDUCATION_LEVELS.map((l) => (
-          <button key={l} type="button" onClick={() => onChange(l)} className={pillCls(value === l)}>{l}</button>
-        ))}
-      </div>
-    );
-  }
-
-  function ParentFields({ label, prefix: pfx, setPrefix: setPfx, firstName: fn, setFirstName: setFn, lastName: ln, setLastName: setLn, firstNameTh: fnTh, setFirstNameTh: setFnTh, lastNameTh: lnTh, setLastNameTh: setLnTh, occupation: occ, setOccupation: setOcc, educationLevel: edu, setEducationLevel: setEdu, phoneCode: phCode, setPhoneCode: setPhCode, phoneNumber: phNum, setPhoneNumber: setPhNum }: {
-    label: string;
-    prefix: string; setPrefix: (v: string) => void;
-    firstName: string; setFirstName: (v: string) => void;
-    lastName: string; setLastName: (v: string) => void;
-    firstNameTh: string; setFirstNameTh: (v: string) => void;
-    lastNameTh: string; setLastNameTh: (v: string) => void;
-    occupation: string; setOccupation: (v: string) => void;
-    educationLevel: string; setEducationLevel: (v: string) => void;
-    phoneCode: string; setPhoneCode: (v: string) => void;
-    phoneNumber: string; setPhoneNumber: (v: string) => void;
-  }) {
-    return (
-      <fieldset>
-        <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{label}</legend>
-        <div className="space-y-4">
-          <div>
-            <label className={labelCls}>Prefix</label>
-            <PrefixPills value={pfx} onChange={setPfx} />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelCls}>First Name</label>
-              <input type="text" value={fn} onChange={(e) => setFn(e.target.value)} placeholder="First name" className={inputCls} />
-            </div>
-            <div>
-              <label className={labelCls}>Last Name</label>
-              <input type="text" value={ln} onChange={(e) => setLn(e.target.value)} placeholder="Last name" className={inputCls} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelCls}>ชื่อ (Thai)</label>
-              <input type="text" value={fnTh} onChange={(e) => setFnTh(e.target.value)} placeholder="ชื่อ" className={inputCls} />
-            </div>
-            <div>
-              <label className={labelCls}>นามสกุล (Thai)</label>
-              <input type="text" value={lnTh} onChange={(e) => setLnTh(e.target.value)} placeholder="นามสกุล" className={inputCls} />
-            </div>
-          </div>
-          <div>
-            <label className={labelCls}>Occupation</label>
-            <input type="text" value={occ} onChange={(e) => setOcc(e.target.value)} placeholder="Occupation" className={inputCls} />
-          </div>
-          <div>
-            <label className={labelCls}>Education Level</label>
-            <EducationPills value={edu} onChange={setEdu} />
-          </div>
-          <div>
-            <label className={labelCls}>Phone</label>
-            <div className="flex gap-2">
-              <div className="w-[140px] shrink-0">
-                <PhoneCodeSelect value={phCode} onChange={setPhCode} />
-              </div>
-              <input type="tel" value={phNum} onChange={(e) => setPhNum(e.target.value)} placeholder="Phone number" className={inputCls} />
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    );
-  }
-
   return (
     <SectionPanel title="Family Information" onClose={onClose} onSave={handleSave} saving={saving}>
       <div className="space-y-8">
@@ -332,7 +247,7 @@ export default function FamilySection({ family, studentId, onClose }: Props) {
           <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Household</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Household Income (THB/month)</label>
+              <label className={labelCls}>Household Income (THB/month) {requiredStar}</label>
               <div className="flex gap-2 flex-wrap">
                 {INCOME_RANGES.map((r) => (
                   <button key={r} type="button" onClick={() => setHouseholdIncome(r)} className={pillCls(householdIncome === r)}>{r}</button>
@@ -411,5 +326,95 @@ function PhoneCodeSelect({ value, onChange }: { value: string; onChange: (v: str
         </>
       )}
     </div>
+  );
+}
+
+/* ── Components moved outside to prevent remount on every render ── */
+
+const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
+const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
+const requiredStar = <span className="ml-0.5 text-red-500">*</span>;
+const optionalTag = <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span>;
+
+function PrefixPills({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {PREFIX_OPTIONS.map((p) => (
+        <button key={p} type="button" onClick={() => onChange(p)} className={pillCls(value === p)}>{p}</button>
+      ))}
+    </div>
+  );
+}
+
+function EducationPills({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {EDUCATION_LEVELS.map((l) => (
+        <button key={l} type="button" onClick={() => onChange(l)} className={pillCls(value === l)}>{l}</button>
+      ))}
+    </div>
+  );
+}
+
+function ParentFields({ label, prefix: pfx, setPrefix: setPfx, firstName: fn, setFirstName: setFn, lastName: ln, setLastName: setLn, firstNameTh: fnTh, setFirstNameTh: setFnTh, lastNameTh: lnTh, setLastNameTh: setLnTh, occupation: occ, setOccupation: setOcc, educationLevel: edu, setEducationLevel: setEdu, phoneCode: phCode, setPhoneCode: setPhCode, phoneNumber: phNum, setPhoneNumber: setPhNum }: {
+  label: string;
+  prefix: string; setPrefix: (v: string) => void;
+  firstName: string; setFirstName: (v: string) => void;
+  lastName: string; setLastName: (v: string) => void;
+  firstNameTh: string; setFirstNameTh: (v: string) => void;
+  lastNameTh: string; setLastNameTh: (v: string) => void;
+  occupation: string; setOccupation: (v: string) => void;
+  educationLevel: string; setEducationLevel: (v: string) => void;
+  phoneCode: string; setPhoneCode: (v: string) => void;
+  phoneNumber: string; setPhoneNumber: (v: string) => void;
+}) {
+  return (
+    <fieldset>
+      <legend className="mb-2 text-base font-semibold text-[#1a1a1a]">{label} {optionalTag}</legend>
+      <p className="mb-4 text-xs text-[#999]">Fill in if applicable. At least one parent is required.</p>
+      <div className="space-y-4">
+        <div>
+          <label className={labelCls}>Prefix</label>
+          <PrefixPills value={pfx} onChange={setPfx} />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelCls}>First Name {requiredStar}</label>
+            <input type="text" value={fn} onChange={(e) => setFn(e.target.value)} placeholder="First name" className={inputCls} />
+          </div>
+          <div>
+            <label className={labelCls}>Last Name {requiredStar}</label>
+            <input type="text" value={ln} onChange={(e) => setLn(e.target.value)} placeholder="Last name" className={inputCls} />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelCls}>ชื่อ (Thai)</label>
+            <input type="text" value={fnTh} onChange={(e) => setFnTh(e.target.value)} placeholder="ชื่อ" className={inputCls} />
+          </div>
+          <div>
+            <label className={labelCls}>นามสกุล (Thai)</label>
+            <input type="text" value={lnTh} onChange={(e) => setLnTh(e.target.value)} placeholder="นามสกุล" className={inputCls} />
+          </div>
+        </div>
+        <div>
+          <label className={labelCls}>Occupation</label>
+          <input type="text" value={occ} onChange={(e) => setOcc(e.target.value)} placeholder="Occupation" className={inputCls} />
+        </div>
+        <div>
+          <label className={labelCls}>Education Level</label>
+          <EducationPills value={edu} onChange={setEdu} />
+        </div>
+        <div>
+          <label className={labelCls}>Phone {requiredStar}</label>
+          <div className="flex gap-2">
+            <div className="w-[140px] shrink-0">
+              <PhoneCodeSelect value={phCode} onChange={setPhCode} />
+            </div>
+            <input type="tel" value={phNum} onChange={(e) => setPhNum(e.target.value)} placeholder="Phone number" className={inputCls} />
+          </div>
+        </div>
+      </div>
+    </fieldset>
   );
 }

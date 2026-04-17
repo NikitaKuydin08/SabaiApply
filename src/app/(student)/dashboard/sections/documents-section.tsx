@@ -22,12 +22,12 @@ const DOCUMENT_SLOTS: DocSlot[] = [
   { type: "transcript", label: "Transcript", required: true },
   { type: "id_copy", label: "ID Card Copy", required: true },
   { type: "photo", label: "Photo", required: true },
-  { type: "passport_copy", label: "Passport Copy", required: false },
-  { type: "student_id_card", label: "Student ID Card", required: false },
+  { type: "passport_copy", label: "Passport Copy", required: true },
+  { type: "student_id_card", label: "Student ID Card", required: true },
   { type: "name_change_cert", label: "Name Change Certificate", required: false },
-  { type: "score_certificate", label: "Score Certificate", required: false },
-  { type: "recommendation_letter", label: "Recommendation Letter", required: false },
-  { type: "certificate", label: "Certificate", required: false },
+  { type: "score_certificate", label: "Score Certificate", required: true },
+  { type: "recommendation_letter", label: "Recommendation Letter", required: true },
+  { type: "certificate", label: "Certificate", required: true },
 ];
 
 export default function DocumentsSection({ documents, studentId, onClose }: Props) {
@@ -142,11 +142,11 @@ export default function DocumentsSection({ documents, studentId, onClose }: Prop
           onChange={handleFileChange}
         />
 
-        {/* Required documents */}
+        {/* Documents */}
         <div>
-          <h3 className="mb-3 text-base font-semibold text-[#1a1a1a]">Required Documents</h3>
+          <h3 className="mb-3 text-base font-semibold text-[#1a1a1a]">Documents</h3>
           <div className="space-y-2">
-            {DOCUMENT_SLOTS.filter((s) => s.required).map((slot) => {
+            {DOCUMENT_SLOTS.map((slot) => {
               const doc = getDocForType(slot.type);
               const isUploading = uploading === slot.type;
 
@@ -162,7 +162,10 @@ export default function DocumentsSection({ documents, studentId, onClose }: Prop
                       <FileText size={18} className="shrink-0 text-[#ccc]" />
                     )}
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#1a1a1a]">{slot.label}</p>
+                      <p className="text-sm font-medium text-[#1a1a1a]">
+                        {slot.label}
+                        {slot.required ? <span className="ml-0.5 text-red-500">*</span> : <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span>}
+                      </p>
                       {doc && (
                         <p className="truncate text-xs text-[#888]">{doc.file_name}</p>
                       )}
@@ -181,44 +184,6 @@ export default function DocumentsSection({ documents, studentId, onClose }: Prop
           </div>
         </div>
 
-        {/* Optional documents */}
-        <div>
-          <h3 className="mb-3 text-base font-semibold text-[#1a1a1a]">Optional Documents</h3>
-          <div className="space-y-2">
-            {DOCUMENT_SLOTS.filter((s) => !s.required).map((slot) => {
-              const doc = getDocForType(slot.type);
-              const isUploading = uploading === slot.type;
-
-              return (
-                <div
-                  key={slot.type}
-                  className="flex items-center justify-between rounded-lg border border-[#e0e0e0] px-4 py-3"
-                >
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    {doc ? (
-                      <CheckCircle size={18} className="shrink-0 text-green-500" />
-                    ) : (
-                      <Upload size={18} className="shrink-0 text-[#ccc]" />
-                    )}
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#1a1a1a]">{slot.label}</p>
-                      {doc && (
-                        <p className="truncate text-xs text-[#888]">{doc.file_name}</p>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => triggerUpload(slot.type)}
-                    disabled={isUploading}
-                    className="ml-3 shrink-0 rounded-lg border border-[#e0e0e0] px-3 py-1.5 text-xs font-medium text-[#666] transition-colors hover:bg-[#f5f5f5] disabled:opacity-50"
-                  >
-                    {isUploading ? "Uploading..." : doc ? "Replace" : "Upload"}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
       </div>
     </SectionPanel>
   );
