@@ -21,7 +21,7 @@ export default async function DashboardPage() {
 
   const studentId = profile?.id;
 
-  const [familyRes, educationRes, scoresRes, documentsRes] = await Promise.all([
+  const [familyRes, educationRes, scoresRes, documentsRes, portfolioItemsRes] = await Promise.all([
     studentId
       ? supabase.from("student_family").select("*").eq("student_id", studentId).single()
       : { data: null },
@@ -34,6 +34,9 @@ export default async function DashboardPage() {
     studentId
       ? supabase.from("student_documents").select("*").eq("student_id", studentId)
       : { data: null },
+    studentId
+      ? supabase.from("portfolio_items").select("*").eq("student_id", studentId).order("sort_order")
+      : { data: null },
   ]);
 
   return (
@@ -44,6 +47,7 @@ export default async function DashboardPage() {
       education={educationRes.data}
       scores={scoresRes.data ?? []}
       documents={documentsRes.data ?? []}
+      portfolioItems={portfolioItemsRes.data ?? []}
     />
   );
 }

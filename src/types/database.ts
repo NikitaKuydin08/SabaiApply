@@ -25,9 +25,15 @@ export type ScoreType =
   | "TPAT"
   | "O-NET"
   | "SAT"
+  | "ACT"
   | "IELTS"
   | "TOEFL"
-  | "A-Level";
+  | "Duolingo"
+  | "CU-TEP"
+  | "AAT"
+  | "ATS"
+  | "A-Level"
+  | "IB";
 
 export type DocType =
   | "transcript"
@@ -39,7 +45,12 @@ export type DocType =
   | "student_id_card"
   | "name_change_cert"
   | "score_certificate"
-  | "recommendation_letter";
+  | "recommendation_letter"
+  | "high_school_diploma"
+  | "high_school_equivalency"
+  | "student_status_cert"
+  | "gpa_equivalency_cert"
+  | "english_proficiency_cert";
 
 export type PortfolioSource =
   | "sabaiapply"
@@ -94,6 +105,12 @@ export interface StudentProfile {
   id_type: string | null;
   id_number: string | null;
   contact_email: string | null;
+  religion: string | null;
+  former_name: string | null;
+  nickname: string | null;
+  mailing_address: string | null;
+  first_language: string | null;
+  language_at_home: string | null;
   created_at: string;
   updated_at: string;
 }

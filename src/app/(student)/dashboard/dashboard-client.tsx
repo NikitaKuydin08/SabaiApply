@@ -28,9 +28,10 @@ import FamilySection from "./sections/family-section";
 import EducationSection from "./sections/education-section";
 import TestScoresSection from "./sections/test-scores-section";
 import DocumentsSection from "./sections/documents-section";
+import ActivitiesSection from "./sections/activities-section";
 import { useStudentLocale } from "../i18n/context";
 import type { TranslationKey } from "../i18n/translations";
-import type { StudentFamily, StudentEducation, StudentScore, StudentDocument } from "@/types/database";
+import type { StudentFamily, StudentEducation, StudentScore, StudentDocument, PortfolioItem } from "@/types/database";
 
 interface Props {
   user: { email: string; id: string };
@@ -39,18 +40,19 @@ interface Props {
   education: StudentEducation | null;
   scores: StudentScore[];
   documents: StudentDocument[];
+  portfolioItems: PortfolioItem[];
 }
 
 type SectionStatus = "completed" | "in_progress" | "not_started";
-type AppSection = "personal" | "family" | "education" | "testScores" | "documents" | null;
-type View = "dashboard" | "university-search" | "my-universities";
+type AppSection = "personal" | "family" | "education" | "testScores" | "documents" | "activities" | null;
+type View = "dashboard" | "university-search" | "my-universities" | "application-form";
 
 // Re-export for use in sub-components
 type University = ThaiUniversity;
 
 const STORAGE_KEY = "sabaiapply-added-universities";
 
-export default function DashboardClient({ user, profile, family, education, scores, documents }: Props) {
+export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems }: Props) {
   const { locale, setLocale, t } = useStudentLocale();
   const [showSettings, setShowSettings] = useState(false);
   const [activeSection, setActiveSection] = useState<AppSection>(null);
@@ -125,6 +127,7 @@ export default function DashboardClient({ user, profile, family, education, scor
     { key: "app.education", status: educationStatus, action: "education" },
     { key: "app.testScores", status: scoresStatus, action: "testScores" },
     { key: "app.documents", status: docsStatus, action: "documents" },
+    { key: "app.activities", status: portfolioItems.length > 0 ? "completed" as SectionStatus : "not_started" as SectionStatus, action: "activities" },
   ];
 
   const sections = sectionKeys.map((s) => ({ label: t(s.key), status: s.status, action: s.action }));
@@ -165,6 +168,17 @@ export default function DashboardClient({ user, profile, family, education, scor
   }
 
   const showMyUniSidebar = currentView === "my-universities";
+  const showAppFormSidebar = currentView === "application-form";
+
+  // Default to first incomplete section when entering application form
+  function enterApplicationForm(section?: AppSection) {
+    setCurrentView("application-form");
+    if (section) {
+      setActiveSection(section);
+    } else if (!activeSection) {
+      setActiveSection("personal");
+    }
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -179,7 +193,99 @@ export default function DashboardClient({ user, profile, family, education, scor
           </div>
         </div>
 
-        {showMyUniSidebar ? (
+        {showAppFormSidebar ? (
+          /* ── Application Form Sidebar (Common App style) ── */
+          <div className="flex flex-1 flex-col">
+            {/* Icon strip + sections side by side */}
+            <div className="flex flex-1 overflow-hidden">
+              {/* Icon strip */}
+              <div className="flex w-14 shrink-0 flex-col items-center border-r border-[#f0f0f0] py-3">
+                <button
+                  onClick={() => { setCurrentView("dashboard"); setActiveSection(null); }}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-[#f5f5f5] text-[#444] transition-colors hover:bg-[#e8e8e8]"
+                  title="Dashboard"
+                >
+                  <LayoutDashboard size={18} />
+                </button>
+                <button
+                  onClick={() => enterApplicationForm()}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFF3D0] text-[#1a1a1a]"
+                  title={t("nav.myApplication")}
+                >
+                  <FileText size={18} />
+                </button>
+                <button
+                  onClick={() => setCurrentView("university-search")}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.chooseUni")}
+                >
+                  <Search size={18} />
+                </button>
+                <button
+                  onClick={() => {
+                    if (addedUniversities.length > 0) setCurrentView("my-universities");
+                    else { setCurrentView("dashboard"); setTimeout(() => scrollTo(universitiesRef), 100); }
+                  }}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.myUniversities")}
+                >
+                  <Building2 size={18} />
+                </button>
+                <div className="flex-1" />
+                <button
+                  onClick={() => setShowSettings(true)}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.settings")}
+                >
+                  <Settings size={18} />
+                </button>
+                <button
+                  onClick={handleSignOut}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.signOut")}
+                >
+                  <LogOut size={18} />
+                </button>
+              </div>
+
+              {/* Section list */}
+              <div className="flex-1 overflow-y-auto px-3 py-4">
+                <h3 className="px-3 pb-3 text-base font-bold text-[#1a1a1a]">
+                  {t("app.title")}
+                </h3>
+                {sections.map((section) => (
+                  <button
+                    key={section.label}
+                    onClick={() => setActiveSection(section.action)}
+                    className={`mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                      activeSection === section.action
+                        ? "bg-[#FFF3D0] text-[#1a1a1a]"
+                        : "text-[#444] hover:bg-[#f5f5f5]"
+                    }`}
+                  >
+                    <StatusDot status={section.status} />
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Profile card at bottom */}
+            <div className="border-t border-[#f0f0f0] px-4 py-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F4C430] text-sm font-bold text-[#1a1a1a]">
+                  {(profile?.first_name?.[0] || user.email[0]).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-[#1a1a1a]">
+                    {profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` : user.email.split("@")[0]}
+                  </p>
+                  <p className="truncate text-xs text-[#888]">{user.email}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : showMyUniSidebar ? (
           <>
             <nav className="flex-1 overflow-y-auto px-3 py-4">
               <button
@@ -254,7 +360,7 @@ export default function DashboardClient({ user, profile, family, education, scor
                 <span className="text-xs font-semibold uppercase tracking-wider text-[#999]">{t("nav.apply")}</span>
               </div>
               <button
-                onClick={() => { setCurrentView("dashboard"); setTimeout(() => scrollTo(applicationRef), 100); }}
+                onClick={() => enterApplicationForm()}
                 className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]"
               >
                 <FileText size={20} />
@@ -296,7 +402,7 @@ export default function DashboardClient({ user, profile, family, education, scor
             addedUniversities={addedUniversities}
             onSearchUniversities={() => setCurrentView("university-search")}
             onViewMyUniversities={() => setCurrentView("my-universities")}
-            onSectionClick={(action: AppSection) => setActiveSection(action)}
+            onSectionClick={(action: AppSection) => enterApplicationForm(action)}
             t={t}
           />
         )}
@@ -322,6 +428,36 @@ export default function DashboardClient({ user, profile, family, education, scor
             t={t}
           />
         )}
+        {currentView === "application-form" && (
+          <div className="px-8 pb-8 pt-5">
+            <div className="mb-5 flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-[#1a1a1a]">
+                {sections.find((s) => s.action === activeSection)?.label || t("app.title")}
+              </h1>
+              <LangToggle locale={locale} setLocale={setLocale} />
+            </div>
+            <div className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-8 py-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+              {activeSection === "personal" && (
+                <PersonalInfoSection profile={profile} studentId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} userEmail={user.email} inline />
+              )}
+              {activeSection === "family" && (
+                <FamilySection family={family} studentId={profile?.id || user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "education" && (
+                <EducationSection education={education} studentId={profile?.id || user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "testScores" && (
+                <TestScoresSection scores={scores} studentId={profile?.id || user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "documents" && (
+                <DocumentsSection documents={documents} studentId={profile?.id || user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "activities" && (
+                <ActivitiesSection items={portfolioItems} studentId={profile?.id || user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* ── Right Sidebar ── */}
@@ -329,22 +465,6 @@ export default function DashboardClient({ user, profile, family, education, scor
 
       {showSettings && <AccountSettingsModal onClose={() => setShowSettings(false)} />}
 
-      {/* ── Section Panels ── */}
-      {activeSection === "personal" && (
-        <PersonalInfoSection profile={profile} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} userEmail={user.email} />
-      )}
-      {activeSection === "family" && (
-        <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
-      {activeSection === "education" && (
-        <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
-      {activeSection === "testScores" && (
-        <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
-      {activeSection === "documents" && (
-        <DocumentsSection documents={documents} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
     </div>
   );
 }
@@ -412,19 +532,19 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
             {applicationExpanded ? <ChevronUp size={22} className="text-[#666]" /> : <ChevronDown size={22} className="text-[#666]" />}
           </button>
           {applicationExpanded && (
-            <div className="px-6 pb-5">
-              <div className="mb-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-[15px] text-[#666]">{t("app.progress")}</span>
-                  <span className="text-[15px] font-semibold text-[#1a1a1a]">{progress}%</span>
+            <div className="px-6 pb-4">
+              <div className="mb-3">
+                <div className="mb-1.5 flex items-center justify-between">
+                  <span className="text-sm text-[#666]">{t("app.progress")}</span>
+                  <span className="text-sm font-semibold text-[#1a1a1a]">{progress}%</span>
                 </div>
-                <div className="h-3 w-full overflow-hidden rounded-full bg-[#f0f0f0]">
+                <div className="h-2 w-full overflow-hidden rounded-full bg-[#f0f0f0]">
                   <div className="h-full rounded-full bg-[#F4C430] transition-all duration-500" style={{ width: `${progress}%` }} />
                 </div>
               </div>
               <div className="space-y-0">
                 {sections.map((section) => (
-                  <button key={section.label} onClick={() => onSectionClick(section.action)} className="group flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors hover:bg-[#FFFBF0]">
+                  <button key={section.label} onClick={() => onSectionClick(section.action)} className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#FFFBF0]">
                     <div className="flex items-center gap-4">
                       <StatusDot status={section.status} />
                       <span className="text-base font-medium text-[#1a1a1a]">{section.label}</span>

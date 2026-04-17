@@ -10,6 +10,7 @@ interface Props {
   education: StudentEducation | null;
   studentId: string;
   onClose: () => void;
+  inline?: boolean;
 }
 
 const CURRICULUM_TYPES = ["Thai National", "International", "GED", "Overseas"] as const;
@@ -24,7 +25,7 @@ const pillCls = (active: boolean) =>
       : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
   }`;
 
-export default function EducationSection({ education, studentId, onClose }: Props) {
+export default function EducationSection({ education, studentId, onClose, inline }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -80,8 +81,7 @@ export default function EducationSection({ education, studentId, onClose }: Prop
   const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
   const star = <span className="ml-0.5 text-red-500">*</span>;
 
-  return (
-    <SectionPanel title="Education" onClose={onClose} onSave={handleSave} saving={saving}>
+  const formContent = (
       <div className="space-y-8">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
@@ -169,6 +169,24 @@ export default function EducationSection({ education, studentId, onClose }: Prop
           </fieldset>
         )}
       </div>
+  );
+
+  if (inline) {
+    return (
+      <div>
+        {formContent}
+        <div className="mt-6">
+          <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
+            {saving ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <SectionPanel title="Education" onClose={onClose} onSave={handleSave} saving={saving}>
+      {formContent}
     </SectionPanel>
   );
 }

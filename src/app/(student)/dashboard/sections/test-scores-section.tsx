@@ -10,6 +10,7 @@ interface Props {
   scores: StudentScore[];
   studentId: string;
   onClose: () => void;
+  inline?: boolean;
 }
 
 const SCORE_TYPES: ScoreType[] = [
@@ -19,14 +20,20 @@ const SCORE_TYPES: ScoreType[] = [
   "TPAT",
   "O-NET",
   "SAT",
+  "ACT",
   "IELTS",
   "TOEFL",
+  "Duolingo",
+  "CU-TEP",
+  "AAT",
+  "ATS",
   "A-Level",
+  "IB",
 ];
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
-export default function TestScoresSection({ scores, studentId, onClose }: Props) {
+export default function TestScoresSection({ scores, studentId, onClose, inline }: Props) {
   const [localScores, setLocalScores] = useState<StudentScore[]>(scores);
   const [showAddForm, setShowAddForm] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -41,7 +48,7 @@ export default function TestScoresSection({ scores, studentId, onClose }: Props)
   const [newTestDate, setNewTestDate] = useState("");
   const [newCefrLevel, setNewCefrLevel] = useState("");
 
-  const isLanguageTest = newScoreType === "IELTS" || newScoreType === "TOEFL";
+  const isLanguageTest = newScoreType === "IELTS" || newScoreType === "TOEFL" || newScoreType === "Duolingo" || newScoreType === "CU-TEP";
 
   function resetForm() {
     setNewScoreType("GAT");
@@ -114,8 +121,7 @@ export default function TestScoresSection({ scores, studentId, onClose }: Props)
   const inputCls =
     "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
 
-  return (
-    <SectionPanel title="Test Scores" onClose={onClose}>
+  const formContent = (
       <div className="space-y-6">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
@@ -292,6 +298,13 @@ export default function TestScoresSection({ scores, studentId, onClose }: Props)
           </button>
         )}
       </div>
+  );
+
+  if (inline) return <div>{formContent}</div>;
+
+  return (
+    <SectionPanel title="Test Scores" onClose={onClose}>
+      {formContent}
     </SectionPanel>
   );
 }

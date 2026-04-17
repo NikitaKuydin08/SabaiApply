@@ -11,6 +11,7 @@ interface Props {
   studentId: string;
   onClose: () => void;
   userEmail: string;
+  inline?: boolean;
 }
 
 const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs.", "Master", "Miss"];
@@ -110,7 +111,7 @@ function parsePhone(phone: string | null): { code: string; number: string } {
   return { code: "+66", number: phone };
 }
 
-export default function PersonalInfoSection({ profile, studentId, onClose, userEmail }: Props) {
+export default function PersonalInfoSection({ profile, studentId, onClose, userEmail, inline }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -128,8 +129,20 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
   const [phoneCode, setPhoneCode] = useState(parsedPhone.code);
   const [phoneNumber, setPhoneNumber] = useState(parsedPhone.number);
   const [lineId, setLineId] = useState(profile?.line_id || "");
+  const [religion, setReligion] = useState(profile?.religion || "");
+  const [formerName, setFormerName] = useState(profile?.former_name || "");
+  const [nickname, setNickname] = useState(profile?.nickname || "");
+  const [firstLanguage, setFirstLanguage] = useState(profile?.first_language || "");
+  const [languageAtHome, setLanguageAtHome] = useState(profile?.language_at_home || "");
+  const [sameMailingAddress, setSameMailingAddress] = useState(true);
 
   const parsedAddr = parseAddress(profile?.address ?? null);
+  const parsedMailing = parseAddress(profile?.mailing_address ?? null);
+  const [mailCountry, setMailCountry] = useState(parsedMailing.country);
+  const [mailProvince, setMailProvince] = useState(parsedMailing.province);
+  const [mailCity, setMailCity] = useState(parsedMailing.city);
+  const [mailZipcode, setMailZipcode] = useState(parsedMailing.zipcode);
+  const [mailLine, setMailLine] = useState(parsedMailing.addressLine);
   const [addrCountry, setAddrCountry] = useState(parsedAddr.country);
   const [addrProvince, setAddrProvince] = useState(parsedAddr.province);
   const [addrCity, setAddrCity] = useState(parsedAddr.city);
@@ -166,6 +179,14 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
       addressLine: addrLine,
     });
 
+    const mailingJson = sameMailingAddress ? null : JSON.stringify({
+      country: mailCountry,
+      province: mailProvince,
+      city: mailCity,
+      zipcode: mailZipcode,
+      addressLine: mailLine,
+    });
+
     const data = {
       prefix: prefix || null,
       id_type: idType || null,
@@ -181,6 +202,12 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
       line_id: lineId || null,
       contact_email: userEmail,
       address: addressJson,
+      religion: religion || null,
+      former_name: formerName || null,
+      nickname: nickname || null,
+      mailing_address: mailingJson,
+      first_language: firstLanguage || null,
+      language_at_home: languageAtHome || null,
     };
 
     if (profile) {
@@ -204,8 +231,7 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
   const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
   const requiredStar = <span className="text-red-500 ml-0.5">*</span>;
 
-  return (
-    <SectionPanel title="Personal Information" onClose={onClose} onSave={handleSave} saving={saving} saveLabel="Save">
+  const formContent = (
       <div className="space-y-8">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
@@ -434,7 +460,108 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
             )}
           </div>
         </fieldset>
+
+        {/* Mailing Address */}
+        <fieldset>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Mailing Address</legend>
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 text-sm font-medium text-[#1a1a1a]">
+              <input type="checkbox" checked={sameMailingAddress} onChange={(e) => setSameMailingAddress(e.target.checked)} className="h-4 w-4 accent-[#F4C430]" />
+              Same as permanent address
+            </label>
+            {!sameMailingAddress && (
+              <>
+                <div>
+                  <label className={labelCls}>Country</label>
+                  <SearchableSelect value={mailCountry} onChange={(v) => { setMailCountry(v); if (v !== "Thailand") setMailProvince(""); }} options={COUNTRIES} placeholder="Select country..." />
+                </div>
+                {mailCountry === "Thailand" ? (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelCls}>Province</label>
+                        <SearchableSelect value={mailProvince} onChange={setMailProvince} options={THAI_PROVINCES} placeholder="Select province..." />
+                      </div>
+                      <div>
+                        <label className={labelCls}>City / District</label>
+                        <input type="text" value={mailCity} onChange={(e) => setMailCity(e.target.value)} placeholder="District / Amphoe" className={inputCls} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelCls}>Zip Code</label>
+                        <input type="text" value={mailZipcode} onChange={(e) => setMailZipcode(e.target.value)} placeholder="10100" className={inputCls} maxLength={5} />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Address Line</label>
+                      <textarea value={mailLine} onChange={(e) => setMailLine(e.target.value)} rows={2} placeholder="House number, street, soi..." className={inputCls} />
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <label className={labelCls}>Full Address</label>
+                    <textarea value={mailLine} onChange={(e) => setMailLine(e.target.value)} rows={3} placeholder="Full mailing address" className={inputCls} />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </fieldset>
+
+        {/* Additional Information */}
+        <fieldset>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Additional Information</legend>
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Religion <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span></label>
+              <div className="flex gap-2 flex-wrap">
+                {["Buddhism", "Islam", "Christianity", "Hinduism", "Other"].map((r) => (
+                  <button key={r} type="button" onClick={() => setReligion(r)} className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${religion === r ? "border-[#F4C430] bg-[#FFF3D0] text-[#1a1a1a]" : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"}`}>
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Former Name <span className="ml-1 text-xs font-normal text-[#999]">(if changed)</span></label>
+              <input type="text" value={formerName} onChange={(e) => setFormerName(e.target.value)} placeholder="Previous legal name" className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Nickname / Preferred Name <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span></label>
+              <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="What you prefer to be called" className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>First Language <span className="ml-1 text-xs font-normal text-[#999]">(if not Thai/English)</span></label>
+                <input type="text" value={firstLanguage} onChange={(e) => setFirstLanguage(e.target.value)} placeholder="e.g. Chinese, Japanese" className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Language Spoken at Home</label>
+                <input type="text" value={languageAtHome} onChange={(e) => setLanguageAtHome(e.target.value)} placeholder="e.g. Thai, English" className={inputCls} />
+              </div>
+            </div>
+          </div>
+        </fieldset>
       </div>
+  );
+
+  if (inline) {
+    return (
+      <div>
+        {formContent}
+        <div className="mt-6">
+          <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
+            {saving ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <SectionPanel title="Personal Information" onClose={onClose} onSave={handleSave} saving={saving} saveLabel="Save">
+      {formContent}
     </SectionPanel>
   );
 }
