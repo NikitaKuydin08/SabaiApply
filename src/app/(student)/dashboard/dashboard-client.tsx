@@ -430,6 +430,36 @@ export default function DashboardClient({ user, profile, family, education, scor
             t={t}
           />
         )}
+        {currentView === "application-form" && (
+          <div className="px-8 pb-8 pt-5">
+            <div className="mb-5 flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-[#1a1a1a]">
+                {sections.find((s) => s.action === activeSection)?.label || t("app.title")}
+              </h1>
+              <LangToggle locale={locale} setLocale={setLocale} />
+            </div>
+            <div className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-8 py-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+              {activeSection === "personal" && (
+                <PersonalInfoSection profile={profile} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} userEmail={user.email} inline />
+              )}
+              {activeSection === "family" && (
+                <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "education" && (
+                <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "testScores" && (
+                <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "documents" && (
+                <DocumentsSection documents={documents} studentId={profile?.id ?? ""} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+              {activeSection === "activities" && (
+                <ActivitiesSection items={portfolioItems} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+              )}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* ── Right Sidebar ── */}
@@ -437,22 +467,7 @@ export default function DashboardClient({ user, profile, family, education, scor
 
       {showSettings && <AccountSettingsModal onClose={() => setShowSettings(false)} />}
 
-      {/* ── Section Panels ── */}
-      {activeSection === "personal" && (
-        <PersonalInfoSection profile={profile} userId={user.id} onClose={() => setActiveSection(null)} userEmail={user.email} />
-      )}
-      {activeSection === "family" && (
-        <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
-      {activeSection === "education" && (
-        <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
-      {activeSection === "testScores" && (
-        <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
-      )}
-      {activeSection === "documents" && (
-        <DocumentsSection documents={documents} studentId={profile?.id ?? ""} userId={user.id} onClose={() => setActiveSection(null)} />
-      )}
+
     </div>
   );
 }
