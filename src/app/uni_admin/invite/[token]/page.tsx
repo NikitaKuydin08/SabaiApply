@@ -98,10 +98,22 @@ export default function AcceptInvitePage() {
     }
 
     if (authData.user) {
-      // Update profile with full name
+      // Derive university_id from faculty or invite
+      let universityId: string | null = invite.university_id ?? null;
+
+      if (!universityId && invite.faculty_id) {
+        const { data: faculty } = await supabase
+          .from("faculties")
+          .select("university_id")
+          .eq("id", invite.faculty_id)
+          .single();
+        if (faculty) universityId = faculty.university_id;
+      }
+
+      // Update profile with full name and university_id
       await supabase
         .from("profiles")
-        .update({ full_name: fullName })
+        .update({ full_name: fullName, university_id: universityId })
         .eq("id", authData.user.id);
 
       // Link to faculty

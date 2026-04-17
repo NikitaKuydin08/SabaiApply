@@ -65,3 +65,35 @@ export async function sendInviteEmail(
 
   return { success: true };
 }
+
+export async function sendSupportEmail(
+  to: string,
+  subject: string,
+  message: string
+) {
+  const { error } = await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject,
+    html: `
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 520px; margin: 0 auto; padding: 40px 20px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <h1 style="font-size: 30px; font-weight: 700; color: #1a1a1a; margin: 0;">SabaiApply</h1>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e8e8e8; border-radius: 16px; padding: 32px;">
+          <p style="font-size: 16px; color: #666; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+        </div>
+        <p style="font-size: 12px; color: #999; text-align: center; margin-top: 24px;">
+          SabaiApply — One Form. Multiple Universities.
+        </p>
+      </div>
+    `,
+  });
+
+  if (error) {
+    console.error("Failed to send support email:", error);
+    return { error: error.message };
+  }
+
+  return { success: true };
+}

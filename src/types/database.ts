@@ -5,7 +5,7 @@
 
 // ---- ENUMS ----
 
-export type UserRole = "student" | "faculty_admin" | "uni_admin";
+export type UserRole = "student" | "faculty_admin" | "uni_admin" | "super_admin";
 
 export type ApplicationStatus =
   | "submitted"
@@ -72,6 +72,7 @@ export interface Profile {
   email: string;
   role: UserRole;
   full_name: string | null;
+  university_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -381,11 +382,22 @@ export interface Invite {
   email: string;
   role: UserRole;
   faculty_id: string | null;
+  university_id: string | null;
   invited_by: string;
   token: string;
   accepted_at: string | null;
   expires_at: string;
   created_at: string;
+}
+
+// ---- ADMIN CONTEXT ----
+
+export interface AdminContext {
+  profile: Profile;
+  university: University | null;
+  faculties: Faculty[];
+  assignedFacultyIds: string[];
+  isSuperAdmin: boolean;
 }
 
 // ---- INSERT TYPES ----

@@ -4,22 +4,32 @@ import { AdminSidebar } from "@/components/admin-sidebar";
 import { LanguageToggle } from "@/components/language-toggle";
 import { LocaleProvider } from "@/lib/locale-context";
 import { signOut } from "./actions";
+import type { UserRole } from "@/types/database";
 
 interface AdminLayoutClientProps {
   children: React.ReactNode;
   fullName: string | null;
   email: string;
+  role: UserRole;
+  universityName: string | null;
 }
 
 export function AdminLayoutClient({
   children,
   fullName,
   email,
+  role,
+  universityName,
 }: AdminLayoutClientProps) {
   return (
     <LocaleProvider>
       <div className="min-h-screen bg-[#fafafa]">
-        <AdminSidebar fullName={fullName} email={email} />
+        <AdminSidebar
+          fullName={fullName}
+          email={email}
+          role={role}
+          universityName={universityName}
+        />
 
         <div className="ml-64">
           <header className="flex items-center justify-between border-b border-[#e0e0e0] bg-white px-6 py-3">

@@ -103,6 +103,25 @@ const translations = {
   "pending": { th: "รอดำเนินการ", en: "Pending" },
   "already_pending": { th: "อีเมลนี้มีคำเชิญที่รอดำเนินการอยู่แล้ว", en: "This email already has a pending invite." },
   "invite_created": { th: "สร้างคำเชิญสำหรับ", en: "Invite created for" },
+
+  // Super Admin
+  "super_dashboard": { th: "แดชบอร์ดระบบ", en: "Platform Dashboard" },
+  "all_universities": { th: "มหาวิทยาลัยทั้งหมด", en: "All Universities" },
+  "all_users": { th: "ผู้ใช้ทั้งหมด", en: "All Users" },
+  "super_admin_label": { th: "ผู้ดูแลระบบ", en: "Super Admin" },
+  "university_admin_label": { th: "ผู้ดูแลมหาวิทยาลัย", en: "University Admin" },
+  "faculty_team_label": { th: "ทีมคณะ", en: "Faculty Team" },
+  "create_university": { th: "สร้างมหาวิทยาลัย", en: "Create University" },
+  "assign_admin": { th: "กำหนดผู้ดูแล", en: "Assign Admin" },
+  "manage_users": { th: "จัดการผู้ใช้", en: "Manage Users" },
+  "total_universities": { th: "มหาวิทยาลัยทั้งหมด", en: "Total Universities" },
+  "total_users": { th: "ผู้ใช้ทั้งหมด", en: "Total Users" },
+  "role": { th: "บทบาท", en: "Role" },
+  "change_role": { th: "เปลี่ยนบทบาท", en: "Change Role" },
+  "search_users": { th: "ค้นหาผู้ใช้...", en: "Search users..." },
+  "no_users_found": { th: "ไม่พบผู้ใช้", en: "No users found" },
+  "platform": { th: "ระบบ", en: "Platform" },
+  "university_section": { th: "มหาวิทยาลัย", en: "University" },
 } as const;
 
 type TranslationKey = keyof typeof translations;
