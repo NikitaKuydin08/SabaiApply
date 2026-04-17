@@ -2,6 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import DashboardClient from "./dashboard-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DashboardPage() {
   const supabase = await createClient();
   const {
@@ -13,11 +16,15 @@ export default async function DashboardPage() {
   }
 
   // Fetch all student data in parallel
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("student_profiles")
     .select("*")
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Error fetching student profile:", profileError);
+  }
 
   const studentId = profile?.id;
 

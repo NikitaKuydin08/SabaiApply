@@ -91,6 +91,8 @@ export default function DashboardClient({ user, profile, family, education, scor
     profile?.nationality,
     profile?.gender,
     profile?.phone,
+    profile?.id_number,
+    profile?.address,
   ];
   const filledPersonal = personalFields.filter(Boolean).length;
   const personalStatus: SectionStatus =
@@ -331,7 +333,7 @@ export default function DashboardClient({ user, profile, family, education, scor
 
       {/* ── Section Panels ── */}
       {activeSection === "personal" && (
-        <PersonalInfoSection profile={profile} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} userEmail={user.email} />
+        <PersonalInfoSection profile={profile} userId={user.id} onClose={() => setActiveSection(null)} userEmail={user.email} />
       )}
       {activeSection === "family" && (
         <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
@@ -343,7 +345,7 @@ export default function DashboardClient({ user, profile, family, education, scor
         <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
       )}
       {activeSection === "documents" && (
-        <DocumentsSection documents={documents} studentId={profile?.id ?? ""} onClose={() => setActiveSection(null)} />
+        <DocumentsSection documents={documents} studentId={profile?.id ?? ""} userId={user.id} onClose={() => setActiveSection(null)} />
       )}
     </div>
   );

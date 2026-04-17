@@ -8,7 +8,7 @@ import SectionPanel from "./section-panel";
 
 interface Props {
   profile: StudentProfile | null;
-  studentId: string;
+  userId: string;
   onClose: () => void;
   userEmail: string;
 }
@@ -110,7 +110,7 @@ function parsePhone(phone: string | null): { code: string; number: string } {
   return { code: "+66", number: phone };
 }
 
-export default function PersonalInfoSection({ profile, studentId, onClose, userEmail }: Props) {
+export default function PersonalInfoSection({ profile, userId, onClose, userEmail }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -213,7 +213,7 @@ export default function PersonalInfoSection({ profile, studentId, onClose, userE
     } else {
       const { error: err } = await supabase
         .from("student_profiles")
-        .insert({ ...data, user_id: studentId });
+        .insert({ ...data, user_id: userId });
       if (err) { setError(err.message); setSaving(false); return; }
     }
 

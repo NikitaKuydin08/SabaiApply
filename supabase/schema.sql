@@ -1,6 +1,6 @@
 -- ============================================
--- SabaiApply Database Schema
--- Run this in Supabase SQL Editor (supabase.com → SQL Editor → New Query)
+-- SabaiApply Database Schema (Loop-Proof Version)
+-- Run this in Supabase SQL Editor
 -- ============================================
 
 -- ==========================================
@@ -33,20 +33,54 @@ CREATE TYPE interview_slot_status AS ENUM (
 CREATE TYPE admission_round AS ENUM ('1', '2', '4');
 
 -- ==========================================
--- 2. PROFILES TABLE (extends Supabase Auth)
+-- 2. UNIVERSITY TABLES (Moved up for Foreign Key support)
+-- ==========================================
+
+CREATE TABLE universities (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  name_th TEXT,
+  logo_url TEXT,
+  website TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE faculties (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  university_id UUID NOT NULL REFERENCES universities(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  name_th TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ==========================================
+-- 3. PROFILES TABLE (extends Supabase Auth)
 -- ==========================================
 
 CREATE TABLE profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
   role user_role NOT NULL DEFAULT 'student',
+  university_id UUID REFERENCES universities(id) ON DELETE SET NULL, -- Added for uni_admin linkage
   full_name TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Link faculty admins to their faculty
+CREATE TABLE faculty_admins (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  faculty_id UUID NOT NULL REFERENCES faculties(id) ON DELETE CASCADE,
+  is_primary BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(user_id, faculty_id)
+);
+
 -- ==========================================
--- 3. STUDENT TABLES
+-- 4. STUDENT TABLES
 -- ==========================================
 
 CREATE TABLE student_profiles (
@@ -110,37 +144,8 @@ CREATE TABLE student_portfolios (
 );
 
 -- ==========================================
--- 4. UNIVERSITY TABLES
+-- 5. PROGRAM TABLES
 -- ==========================================
-
-CREATE TABLE universities (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  name_th TEXT,
-  logo_url TEXT,
-  website TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-CREATE TABLE faculties (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  university_id UUID NOT NULL REFERENCES universities(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  name_th TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
--- Link faculty admins to their faculty
-CREATE TABLE faculty_admins (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  faculty_id UUID NOT NULL REFERENCES faculties(id) ON DELETE CASCADE,
-  is_primary BOOLEAN NOT NULL DEFAULT false,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE(user_id, faculty_id)
-);
 
 CREATE TABLE programs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -175,7 +180,7 @@ CREATE TABLE program_requirements (
 );
 
 -- ==========================================
--- 5. APPLICATIONS (connects students ↔ universities)
+-- 6. APPLICATIONS
 -- ==========================================
 
 CREATE TABLE applications (
@@ -197,7 +202,7 @@ CREATE TABLE applications (
 );
 
 -- ==========================================
--- 6. INTERVIEW SLOTS
+-- 7. INTERVIEW SLOTS
 -- ==========================================
 
 CREATE TABLE interview_slots (
@@ -213,7 +218,7 @@ CREATE TABLE interview_slots (
 );
 
 -- ==========================================
--- 7. INDEXES FOR PERFORMANCE
+-- 8. INDEXES FOR PERFORMANCE
 -- ==========================================
 
 CREATE INDEX idx_student_profiles_user ON student_profiles(user_id);
@@ -234,7 +239,7 @@ CREATE INDEX idx_faculty_admins_user ON faculty_admins(user_id);
 CREATE INDEX idx_faculty_admins_faculty ON faculty_admins(faculty_id);
 
 -- ==========================================
--- 8. AUTO-UPDATE updated_at TRIGGER
+-- 9. AUTO-UPDATE updated_at TRIGGER
 -- ==========================================
 
 CREATE OR REPLACE FUNCTION update_updated_at()
@@ -245,35 +250,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON profiles
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON student_profiles
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON student_education
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON student_portfolios
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON universities
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON faculties
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON programs
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON program_requirements
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER set_updated_at BEFORE UPDATE ON applications
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON student_profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON student_education FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON student_portfolios FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON universities FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON faculties FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON programs FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON program_requirements FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER set_updated_at BEFORE UPDATE ON applications FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 -- ==========================================
--- 9. AUTO-CREATE PROFILE ON SIGNUP
+-- 10. AUTO-CREATE PROFILE ON SIGNUP
 -- ==========================================
 
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -297,10 +285,76 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- ==========================================
--- 10. ROW LEVEL SECURITY (RLS)
+-- 11. SECURE ROLE-CHECK HELPERS (Bypasses RLS Loops)
 -- ==========================================
 
--- Enable RLS on all tables
+-- 11.1 Gets the current user's role safely
+CREATE OR REPLACE FUNCTION public.get_user_role()
+RETURNS public.user_role
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
+DECLARE
+  found_role public.user_role;
+BEGIN
+  SELECT role INTO found_role FROM profiles WHERE id = auth.uid();
+  RETURN found_role;
+END;
+$$;
+
+-- 11.2 Checks if user is a uni_admin for a specific faculty
+CREATE OR REPLACE FUNCTION public.is_uni_admin_for_faculty(target_faculty_id uuid)
+RETURNS boolean
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM faculties f
+    JOIN profiles p ON p.university_id = f.university_id
+    WHERE f.id = target_faculty_id AND p.id = auth.uid() AND p.role = 'uni_admin'
+  );
+END;
+$$;
+
+-- 11.3 Checks if user is a faculty_admin for a specific faculty
+CREATE OR REPLACE FUNCTION public.is_my_faculty(target_faculty_id uuid)
+RETURNS boolean
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM faculty_admins
+    WHERE user_id = auth.uid() AND faculty_id = target_faculty_id
+  );
+END;
+$$;
+
+-- 11.4 Checks if user has admin rights to a specific program
+CREATE OR REPLACE FUNCTION public.can_manage_program(target_program_id uuid)
+RETURNS boolean
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+DECLARE
+  prog_faculty_id uuid;
+BEGIN
+  SELECT faculty_id INTO prog_faculty_id FROM programs WHERE id = target_program_id;
+  RETURN public.is_uni_admin_for_faculty(prog_faculty_id) OR public.is_my_faculty(prog_faculty_id);
+END;
+$$;
+
+-- 11.5 Checks if an admin has rights to view a specific student's data
+CREATE OR REPLACE FUNCTION public.check_is_admin_for_student(target_student_id uuid)
+RETURNS boolean
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM applications a
+    WHERE a.student_id = target_student_id
+    AND public.can_manage_program(a.program_id)
+  );
+END;
+$$;
+
+
+-- ==========================================
+-- 12. ROW LEVEL SECURITY (RLS)
+-- ==========================================
+
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_education ENABLE ROW LEVEL SECURITY;
@@ -315,246 +369,67 @@ ALTER TABLE program_requirements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE interview_slots ENABLE ROW LEVEL SECURITY;
 
--- PROFILES: users can read/update their own profile
-CREATE POLICY "Users can view own profile"
-  ON profiles FOR SELECT
-  USING (auth.uid() = id);
+-- PROFILES
+CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 
-CREATE POLICY "Users can update own profile"
-  ON profiles FOR UPDATE
-  USING (auth.uid() = id);
+-- STUDENT PROFILES
+CREATE POLICY "Students can view own student profile" ON student_profiles FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "Students can insert own student profile" ON student_profiles FOR INSERT WITH CHECK (user_id = auth.uid());
+CREATE POLICY "Students can update own student profile" ON student_profiles FOR UPDATE USING (user_id = auth.uid());
+CREATE POLICY "Admins can view student profiles" ON student_profiles FOR SELECT USING (public.check_is_admin_for_student(id));
 
--- STUDENT PROFILES: students see/edit their own, faculty admins can read all
-CREATE POLICY "Students can view own student profile"
-  ON student_profiles FOR SELECT
-  USING (user_id = auth.uid());
+-- STUDENT EDUCATION
+CREATE POLICY "Students can manage own education" ON student_education FOR ALL USING (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Faculty admins can view student education" ON student_education FOR SELECT USING (public.check_is_admin_for_student(student_id));
 
-CREATE POLICY "Students can insert own student profile"
-  ON student_profiles FOR INSERT
-  WITH CHECK (user_id = auth.uid());
+-- STUDENT SCORES
+CREATE POLICY "Students can manage own scores" ON student_scores FOR ALL USING (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Faculty admins can view student scores" ON student_scores FOR SELECT USING (public.check_is_admin_for_student(student_id));
 
-CREATE POLICY "Students can update own student profile"
-  ON student_profiles FOR UPDATE
-  USING (user_id = auth.uid());
+-- STUDENT DOCUMENTS
+CREATE POLICY "Students can manage own documents" ON student_documents FOR ALL USING (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Faculty admins can view student documents" ON student_documents FOR SELECT USING (public.check_is_admin_for_student(student_id));
 
-CREATE POLICY "Faculty admins can view student profiles"
-  ON student_profiles FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
+-- STUDENT PORTFOLIOS
+CREATE POLICY "Students can manage own portfolios" ON student_portfolios FOR ALL USING (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Faculty admins can view student portfolios" ON student_portfolios FOR SELECT USING (public.check_is_admin_for_student(student_id));
 
--- STUDENT EDUCATION: same pattern
-CREATE POLICY "Students can manage own education"
-  ON student_education FOR ALL
-  USING (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
+-- UNIVERSITIES
+CREATE POLICY "Anyone can view universities" ON universities FOR SELECT USING (true);
+CREATE POLICY "Uni admins can manage universities" ON universities FOR ALL USING (public.get_user_role() = 'uni_admin');
 
-CREATE POLICY "Faculty admins can view student education"
-  ON student_education FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
+-- FACULTIES
+CREATE POLICY "Anyone can view faculties" ON faculties FOR SELECT USING (true);
+CREATE POLICY "Admins can manage faculties" ON faculties FOR ALL USING (public.is_uni_admin_for_faculty(id) OR public.is_my_faculty(id));
 
--- STUDENT SCORES: same pattern
-CREATE POLICY "Students can manage own scores"
-  ON student_scores FOR ALL
-  USING (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
+-- FACULTY ADMINS
+CREATE POLICY "Admins can view faculty_admins" ON faculty_admins FOR SELECT USING (user_id = auth.uid() OR public.is_uni_admin_for_faculty(faculty_id));
+CREATE POLICY "Uni admins can manage faculty_admins" ON faculty_admins FOR ALL USING (public.is_uni_admin_for_faculty(faculty_id));
 
-CREATE POLICY "Faculty admins can view student scores"
-  ON student_scores FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
+-- PROGRAMS
+CREATE POLICY "Anyone can view programs" ON programs FOR SELECT USING (true);
+CREATE POLICY "Faculty admins can manage their programs" ON programs FOR ALL USING (public.can_manage_program(id));
 
--- STUDENT DOCUMENTS: same pattern
-CREATE POLICY "Students can manage own documents"
-  ON student_documents FOR ALL
-  USING (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
+-- PROGRAM REQUIREMENTS
+CREATE POLICY "Anyone can view program requirements" ON program_requirements FOR SELECT USING (true);
+CREATE POLICY "Faculty admins can manage their program requirements" ON program_requirements FOR ALL USING (public.can_manage_program(program_id));
 
-CREATE POLICY "Faculty admins can view student documents"
-  ON student_documents FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
+-- APPLICATIONS
+CREATE POLICY "Students can view own applications" ON applications FOR SELECT USING (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Students can insert applications" ON applications FOR INSERT WITH CHECK (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Students can update own applications" ON applications FOR UPDATE USING (student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()));
+CREATE POLICY "Faculty admins can view applications to their programs" ON applications FOR SELECT USING (public.can_manage_program(program_id));
+CREATE POLICY "Faculty admins can update applications to their programs" ON applications FOR UPDATE USING (public.can_manage_program(program_id));
 
--- STUDENT PORTFOLIOS: same pattern
-CREATE POLICY "Students can manage own portfolios"
-  ON student_portfolios FOR ALL
-  USING (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
-
-CREATE POLICY "Faculty admins can view student portfolios"
-  ON student_portfolios FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
-
--- UNIVERSITIES: everyone can read, only uni_admin can edit
-CREATE POLICY "Anyone can view universities"
-  ON universities FOR SELECT
-  USING (true);
-
-CREATE POLICY "Uni admins can manage universities"
-  ON universities FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
--- FACULTIES: everyone can read, admins can edit
-CREATE POLICY "Anyone can view faculties"
-  ON faculties FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admins can manage faculties"
-  ON faculties FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
-
--- FACULTY ADMINS: admins can manage
-CREATE POLICY "Admins can view faculty_admins"
-  ON faculty_admins FOR SELECT
-  USING (
-    user_id = auth.uid() OR
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
-CREATE POLICY "Uni admins can manage faculty_admins"
-  ON faculty_admins FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
--- PROGRAMS: everyone can read, admins can edit
-CREATE POLICY "Anyone can view programs"
-  ON programs FOR SELECT
-  USING (true);
-
-CREATE POLICY "Faculty admins can manage their programs"
-  ON programs FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM faculty_admins fa
-      WHERE fa.user_id = auth.uid() AND fa.faculty_id = programs.faculty_id
-    )
-    OR EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
--- PROGRAM REQUIREMENTS: everyone can read, admins can edit
-CREATE POLICY "Anyone can view program requirements"
-  ON program_requirements FOR SELECT
-  USING (true);
-
-CREATE POLICY "Faculty admins can manage their program requirements"
-  ON program_requirements FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM programs p
-      JOIN faculty_admins fa ON fa.faculty_id = p.faculty_id
-      WHERE p.id = program_requirements.program_id AND fa.user_id = auth.uid()
-    )
-    OR EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
--- APPLICATIONS: students see their own, faculty sees applications to their programs
-CREATE POLICY "Students can view own applications"
-  ON applications FOR SELECT
-  USING (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
-
-CREATE POLICY "Students can insert applications"
-  ON applications FOR INSERT
-  WITH CHECK (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
-
-CREATE POLICY "Students can update own applications"
-  ON applications FOR UPDATE
-  USING (
-    student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-  );
-
-CREATE POLICY "Faculty admins can view applications to their programs"
-  ON applications FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM programs p
-      JOIN faculty_admins fa ON fa.faculty_id = p.faculty_id
-      WHERE p.id = applications.program_id AND fa.user_id = auth.uid()
-    )
-    OR EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
-CREATE POLICY "Faculty admins can update applications to their programs"
-  ON applications FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM programs p
-      JOIN faculty_admins fa ON fa.faculty_id = p.faculty_id
-      WHERE p.id = applications.program_id AND fa.user_id = auth.uid()
-    )
-    OR EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
--- INTERVIEW SLOTS: faculty manages, students can view/book their own
-CREATE POLICY "Faculty admins can manage interview slots"
-  ON interview_slots FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM programs p
-      JOIN faculty_admins fa ON fa.faculty_id = p.faculty_id
-      WHERE p.id = interview_slots.program_id AND fa.user_id = auth.uid()
-    )
-    OR EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'uni_admin'
-    )
-  );
-
-CREATE POLICY "Students can view available interview slots"
-  ON interview_slots FOR SELECT
-  USING (
-    status = 'available'
-    OR application_id IN (
-      SELECT id FROM applications
-      WHERE student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid())
-    )
-  );
+-- INTERVIEW SLOTS
+CREATE POLICY "Faculty admins can manage interview slots" ON interview_slots FOR ALL USING (public.can_manage_program(program_id));
+CREATE POLICY "Students can view available interview slots" ON interview_slots FOR SELECT USING (
+  status = 'available' OR application_id IN (SELECT id FROM applications WHERE student_id IN (SELECT id FROM student_profiles WHERE user_id = auth.uid()))
+);
 
 -- ==========================================
--- 11. STORAGE BUCKETS
+-- 13. STORAGE BUCKETS
 -- ==========================================
 
 INSERT INTO storage.buckets (id, name, public)
@@ -562,47 +437,17 @@ VALUES
   ('documents', 'documents', false),
   ('portfolios', 'portfolios', false),
   ('photos', 'photos', true),
-  ('logos', 'logos', true);
+  ('logos', 'logos', true)
+ON CONFLICT (id) DO NOTHING; -- Prevents errors if rerun
 
--- Storage policies: students upload to their own folder
-CREATE POLICY "Students can upload documents"
-  ON storage.objects FOR INSERT
-  WITH CHECK (
-    bucket_id IN ('documents', 'portfolios', 'photos')
-    AND (storage.foldername(name))[1] = auth.uid()::text
-  );
-
-CREATE POLICY "Students can view own documents"
-  ON storage.objects FOR SELECT
-  USING (
-    bucket_id IN ('documents', 'portfolios', 'photos')
-    AND (storage.foldername(name))[1] = auth.uid()::text
-  );
-
-CREATE POLICY "Faculty can view student documents"
-  ON storage.objects FOR SELECT
-  USING (
-    bucket_id IN ('documents', 'portfolios')
-    AND EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
-
-CREATE POLICY "Anyone can view public photos and logos"
-  ON storage.objects FOR SELECT
-  USING (bucket_id IN ('photos', 'logos'));
-
-CREATE POLICY "Admins can upload logos"
-  ON storage.objects FOR INSERT
-  WITH CHECK (
-    bucket_id = 'logos'
-    AND EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
+CREATE POLICY "Students can upload documents" ON storage.objects FOR INSERT WITH CHECK (bucket_id IN ('documents', 'portfolios', 'photos') AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "Students can view own documents" ON storage.objects FOR SELECT USING (bucket_id IN ('documents', 'portfolios', 'photos') AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "Faculty can view student documents" ON storage.objects FOR SELECT USING (bucket_id IN ('documents', 'portfolios') AND public.get_user_role() IN ('faculty_admin', 'uni_admin'));
+CREATE POLICY "Anyone can view public photos and logos" ON storage.objects FOR SELECT USING (bucket_id IN ('photos', 'logos'));
+CREATE POLICY "Admins can upload logos" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'logos' AND public.get_user_role() IN ('faculty_admin', 'uni_admin'));
 
 -- ==========================================
--- 12. INVITES (Invite-Only Admin Registration)
+-- 14. INVITES (Invite-Only Admin Registration)
 -- ==========================================
 
 CREATE TABLE invites (
@@ -622,15 +467,5 @@ CREATE INDEX idx_invites_email ON invites(email);
 
 ALTER TABLE invites ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Admins can manage invites"
-  ON invites FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('faculty_admin', 'uni_admin')
-    )
-  );
-
--- Allow unauthenticated users to read invites by token (for accepting)
-CREATE POLICY "Anyone can view invite by token"
-  ON invites FOR SELECT
-  USING (true);
+CREATE POLICY "Admins can manage invites" ON invites FOR ALL USING (public.get_user_role() IN ('faculty_admin', 'uni_admin'));
+CREATE POLICY "Anyone can view invite by token" ON invites FOR SELECT USING (true);
