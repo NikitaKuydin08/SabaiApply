@@ -276,22 +276,25 @@ CREATE TRIGGER set_updated_at BEFORE UPDATE ON applications
 -- 9. AUTO-CREATE PROFILE ON SIGNUP
 -- ==========================================
 
-CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+SECURITY DEFINER
+SET search_path = public
+AS $$
 BEGIN
-  INSERT INTO profiles (id, email, role)
+  INSERT INTO public.profiles (id, email, role)
   VALUES (
     NEW.id,
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'role', 'student')::user_role
+    COALESCE(NEW.raw_user_meta_data->>'role', 'student')::public.user_role
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- ==========================================
 -- 10. ROW LEVEL SECURITY (RLS)
