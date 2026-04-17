@@ -9,6 +9,7 @@ import SectionPanel from "./section-panel";
 interface Props {
   documents: StudentDocument[];
   studentId: string;
+  userId: string;
   onClose: () => void;
 }
 
@@ -30,7 +31,7 @@ const DOCUMENT_SLOTS: DocSlot[] = [
   { type: "certificate", label: "Certificate", required: true },
 ];
 
-export default function DocumentsSection({ documents, studentId, onClose }: Props) {
+export default function DocumentsSection({ documents, studentId, userId, onClose }: Props) {
   const [localDocs, setLocalDocs] = useState<StudentDocument[]>(documents);
   const [uploading, setUploading] = useState<DocType | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +62,7 @@ export default function DocumentsSection({ documents, studentId, onClose }: Prop
     const docType = activeSlotType;
 
     // Upload to Supabase Storage
-    const filePath = `${studentId}/documents/${docType}_${Date.now()}_${file.name}`;
+    const filePath = `${userId}/documents/${docType}_${Date.now()}_${file.name}`;
     const { error: uploadError } = await supabase.storage
       .from("documents")
       .upload(filePath, file);
