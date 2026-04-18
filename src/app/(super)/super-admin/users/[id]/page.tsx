@@ -163,11 +163,11 @@ export default function UserDetailPage() {
             </div>
             <div className="flex gap-2">
               <button type="submit" disabled={sendingEmail}
-                className="rounded-lg bg-[#F4C430] px-5 py-3 text-base font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors">
+                className="rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors">
                 {sendingEmail ? "Sending..." : "Send"}
               </button>
               <button type="button" onClick={() => setShowEmailForm(false)}
-                className="rounded-lg px-5 py-3 text-base text-[#666] hover:bg-[#fafafa] transition-colors">
+                className="rounded-lg px-5 py-4 text-base text-[#666] hover:bg-[#fafafa] transition-colors">
                 Cancel
               </button>
             </div>

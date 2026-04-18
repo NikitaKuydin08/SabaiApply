@@ -100,7 +100,7 @@ export default function SuperUniversitiesPage() {
           <h1 className="text-3xl font-bold text-[#1a1a1a]">All Universities</h1>
           <p className="mt-2 text-base text-[#666]">Manage universities on the platform ({universities.length})</p>
         </div>
-        <button onClick={() => setShowCreate(true)} className="rounded-lg bg-[#F4C430] px-5 py-3 text-base font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] transition-colors">
+        <button onClick={() => setShowCreate(true)} className="rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] transition-colors">
           + Create University
         </button>
       </div>
@@ -141,10 +141,10 @@ export default function SuperUniversitiesPage() {
             </div>
             {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
             <div className="flex gap-2">
-              <button type="submit" disabled={saving} className="rounded-lg bg-[#F4C430] px-5 py-3 text-base font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors">
+              <button type="submit" disabled={saving} className="rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors">
                 {saving ? "Creating..." : "Create"}
               </button>
-              <button type="button" onClick={() => setShowCreate(false)} className="rounded-lg px-5 py-3 text-base text-[#666] hover:bg-[#fafafa] transition-colors">
+              <button type="button" onClick={() => setShowCreate(false)} className="rounded-lg px-5 py-4 text-base text-[#666] hover:bg-[#fafafa] transition-colors">
                 Cancel
               </button>
             </div>

@@ -18,6 +18,7 @@ const navItems: NavItem[] = [
   { href: "/admin/dashboard", labelKey: "dashboard", icon: "📊", roles: ["super_admin", "uni_admin", "faculty_admin"] },
   { href: "/admin/university", labelKey: "university_setup", icon: "🏛️", roles: ["super_admin", "uni_admin"] },
   { href: "/admin/programs", labelKey: "programs", icon: "📋", roles: ["super_admin", "uni_admin", "faculty_admin"] },
+  { href: "/admin/requirements", labelKey: "requirements", icon: "📝", roles: ["super_admin", "uni_admin", "faculty_admin"] },
   { href: "/admin/applications", labelKey: "applications", icon: "📥", roles: ["super_admin", "uni_admin", "faculty_admin"] },
   { href: "/admin/interviews", labelKey: "interviews", icon: "🗓️", roles: ["uni_admin", "faculty_admin"] },
   { href: "/admin/results", labelKey: "results", icon: "✅", roles: ["uni_admin", "faculty_admin"] },

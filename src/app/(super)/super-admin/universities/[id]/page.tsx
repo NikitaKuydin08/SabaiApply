@@ -1,6 +1,8 @@
 import { getUniversityDetail } from "../../actions";
+import { getFacultyPreset } from "@/lib/thai-faculties";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { RestoreFacultiesButton } from "./restore-faculties-button";
 
 export default async function UniversityDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -9,6 +11,7 @@ export default async function UniversityDetailPage({ params }: { params: Promise
   if (!data) redirect("/super-admin/universities");
 
   const { university, faculties, teamMembers, stats } = data;
+  const hasPreset = !!getFacultyPreset(university.name) || !!(university.name_th && getFacultyPreset(university.name_th));
 
   function getRoleBadge(role: string) {
     switch (role) {
@@ -54,23 +57,28 @@ export default async function UniversityDetailPage({ params }: { params: Promise
 
       {/* Faculties */}
       <div className="mt-6 rounded-xl border border-[#e8e8e8] bg-white p-6">
-        <h2 className="text-lg font-bold text-[#1a1a1a] mb-4">
-          Faculties <span className="text-base font-normal text-[#999]">({faculties.length})</span>
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-[#1a1a1a]">
+            Faculties <span className="text-base font-normal text-[#999]">({faculties.length})</span>
+          </h2>
+          {hasPreset && <RestoreFacultiesButton universityId={university.id} />}
+        </div>
         {faculties.length === 0 ? (
           <p className="text-base text-[#999]">No faculties set up yet.</p>
         ) : (
           <div className="space-y-2">
             {faculties.map((faculty: Record<string, unknown>) => (
-              <div key={faculty.id as string} className="flex items-center justify-between rounded-lg border border-[#efefef] px-4 py-4">
-                <div>
-                  <p className="text-base font-medium text-[#1a1a1a]">{String(faculty.name)}</p>
-                  {faculty.name_th ? <p className="text-sm text-[#666]">{String(faculty.name_th)}</p> : null}
+              <Link key={faculty.id as string} href={`/super-admin/faculties/${faculty.id}`}>
+                <div className="flex items-center justify-between rounded-lg border border-[#efefef] px-4 py-4 hover:border-[#F4C430]/50 hover:shadow-sm transition-all cursor-pointer mb-2">
+                  <div>
+                    <p className="text-base font-medium text-[#1a1a1a]">{String(faculty.name)}</p>
+                    {faculty.name_th ? <p className="text-sm text-[#666]">{String(faculty.name_th)}</p> : null}
+                  </div>
+                  <span className="text-sm text-[#999]">
+                    {String(faculty.programCount)} {(faculty.programCount as number) === 1 ? "program" : "programs"}
+                  </span>
                 </div>
-                <span className="text-sm text-[#999]">
-                  {String(faculty.programCount)} {(faculty.programCount as number) === 1 ? "program" : "programs"}
-                </span>
-              </div>
+              </Link>
             ))}
           </div>
         )}

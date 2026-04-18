@@ -3,6 +3,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { sendSupportEmail } from "@/lib/email";
+import { getFacultyPreset } from "@/lib/thai-faculties";
+import { getProgramPreset } from "@/lib/thai-programs";
 
 // ── Auth check (reused across actions) ──
 
@@ -68,6 +70,19 @@ export async function createUniversity(name: string, nameTh: string | null, webs
   await requireSuperAdmin();
   const db = createServiceClient();
 
+  // Check for duplicates by name OR name_th (case-insensitive)
+  const { data: existing } = await db
+    .from("universities")
+    .select("id, name, name_th")
+    .or(nameTh ? `name.ilike.${name},name_th.eq.${nameTh}` : `name.ilike.${name}`);
+
+  if (existing && existing.length > 0) {
+    const dup = existing[0];
+    return {
+      error: `University already exists: "${dup.name}"${dup.name_th ? ` (${dup.name_th})` : ""}. Click on it in the list to manage it.`,
+    };
+  }
+
   const { data, error } = await db
     .from("universities")
     .insert({ name, name_th: nameTh, website })
@@ -75,7 +90,78 @@ export async function createUniversity(name: string, nameTh: string | null, webs
     .single();
 
   if (error) return { error: error.message };
-  return { success: true, university: data };
+
+  // Auto-add standard faculties if we have a preset for this university
+  const preset = getFacultyPreset(name) ?? (nameTh ? getFacultyPreset(nameTh) : null);
+  let facultiesCreated = 0;
+  if (preset && data) {
+    const { error: facultyError } = await db
+      .from("faculties")
+      .insert(preset.map((f) => ({
+        university_id: data.id,
+        name: f.name,
+        name_th: f.name_th,
+      })));
+    if (!facultyError) facultiesCreated = preset.length;
+  }
+
+  return { success: true, university: data, facultiesCreated };
+}
+
+// Restore standard faculties — adds missing ones, skips duplicates
+export async function restoreStandardFaculties(universityId: string) {
+  await requireSuperAdmin();
+  const db = createServiceClient();
+
+  // Get the university name to find preset
+  const { data: uni } = await db
+    .from("universities")
+    .select("name, name_th")
+    .eq("id", universityId)
+    .single();
+
+  if (!uni) return { error: "University not found" };
+
+  const preset = getFacultyPreset(uni.name) ?? (uni.name_th ? getFacultyPreset(uni.name_th) : null);
+  if (!preset) return { error: "No standard faculty preset available for this university" };
+
+  // Get existing faculties to avoid duplicates
+  const { data: existing } = await db
+    .from("faculties")
+    .select("name, name_th")
+    .eq("university_id", universityId);
+
+  const existingNames = new Set(
+    (existing ?? []).flatMap((f: { name: string; name_th: string | null }) => [
+      f.name.toLowerCase(),
+      ...(f.name_th ? [f.name_th] : []),
+    ])
+  );
+
+  // Filter out faculties that already exist
+  const toCreate = preset.filter(
+    (p) => !existingNames.has(p.name.toLowerCase()) && !existingNames.has(p.name_th)
+  );
+
+  if (toCreate.length === 0) {
+    return { success: true, created: 0, skipped: preset.length };
+  }
+
+  const { error } = await db
+    .from("faculties")
+    .insert(toCreate.map((f) => ({
+      university_id: universityId,
+      name: f.name,
+      name_th: f.name_th,
+    })));
+
+  if (error) return { error: error.message };
+
+  return {
+    success: true,
+    created: toCreate.length,
+    skipped: preset.length - toCreate.length,
+  };
 }
 
 export async function deleteUniversity(id: string) {
@@ -325,4 +411,98 @@ export async function sendSupportEmailToUser(to: string, subject: string, messag
   await requireSuperAdmin();
   const result = await sendSupportEmail(to, subject, message);
   return result;
+}
+
+// ── Faculty Detail & Programs ──
+
+export async function getFacultyDetail(facultyId: string) {
+  await requireSuperAdmin();
+  const db = createServiceClient();
+
+  const { data: faculty } = await db
+    .from("faculties")
+    .select("*, universities(id, name, name_th)")
+    .eq("id", facultyId)
+    .single();
+
+  if (!faculty) return null;
+
+  const { data: programs } = await db
+    .from("programs")
+    .select("*")
+    .eq("faculty_id", facultyId)
+    .order("name");
+
+  return { faculty, programs: programs ?? [] };
+}
+
+export async function restoreStandardPrograms(facultyId: string) {
+  await requireSuperAdmin();
+  const db = createServiceClient();
+
+  // Get the faculty + university name to find preset
+  const { data: faculty } = await db
+    .from("faculties")
+    .select("name, universities(name, name_th)")
+    .eq("id", facultyId)
+    .single();
+
+  if (!faculty) return { error: "Faculty not found" };
+
+  const universities = faculty.universities as unknown as { name: string; name_th: string | null } | null;
+  const uniName = universities?.name ?? "";
+
+  const preset = getProgramPreset(faculty.name, uniName)
+    ?? (universities?.name_th ? getProgramPreset(faculty.name, universities.name_th) : null);
+
+  if (!preset) return { error: "No standard program preset available for this faculty" };
+
+  // Get existing programs to avoid duplicates
+  const { data: existing } = await db
+    .from("programs")
+    .select("name, name_th")
+    .eq("faculty_id", facultyId);
+
+  const existingNames = new Set(
+    (existing ?? []).flatMap((p: { name: string; name_th: string | null }) => [
+      p.name.toLowerCase(),
+      ...(p.name_th ? [p.name_th] : []),
+    ])
+  );
+
+  // Filter out duplicates
+  const toCreate = preset.filter(
+    (p) => !existingNames.has(p.name.toLowerCase()) && !existingNames.has(p.name_th)
+  );
+
+  if (toCreate.length === 0) {
+    return { success: true, created: 0, skipped: preset.length };
+  }
+
+  const { error } = await db
+    .from("programs")
+    .insert(toCreate.map((p) => ({
+      faculty_id: facultyId,
+      name: p.name,
+      name_th: p.name_th,
+      degree_type: p.degree_type ?? "bachelor",
+      is_international: p.is_international ?? false,
+    })));
+
+  if (error) return { error: error.message };
+
+  return {
+    success: true,
+    created: toCreate.length,
+    skipped: preset.length - toCreate.length,
+  };
+}
+
+export async function deleteProgram(programId: string) {
+  await requireSuperAdmin();
+  const db = createServiceClient();
+
+  const { error } = await db.from("programs").delete().eq("id", programId);
+  if (error) return { error: error.message };
+  return { success: true };
 }
