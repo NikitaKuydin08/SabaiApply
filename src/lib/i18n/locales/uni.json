@@ -58,5 +58,33 @@
   "uni.addMoreBtn": {
     "en": "Add more universities",
     "th": "เพิ่มมหาวิทยาลัยอีก"
+  },
+  "uni.info": {
+    "en": "Info",
+    "th": "ข้อมูล"
+  },
+  "uni.application": {
+    "en": "Application",
+    "th": "ใบสมัคร"
+  },
+  "uni.general": {
+    "en": "General",
+    "th": "ทั่วไป"
+  },
+  "uni.academics": {
+    "en": "Academics",
+    "th": "วิชาการ"
+  },
+  "uni.otherRequirements": {
+    "en": "Other Requirements",
+    "th": "เงื่อนไขอื่น ๆ"
+  },
+  "uni.reviewAndSubmit": {
+    "en": "Review & Submit",
+    "th": "ตรวจสอบและส่ง"
+  },
+  "uni.completed": {
+    "en": "Completed",
+    "th": "เสร็จสมบูรณ์"
   }
 }

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
-import { faqCategories, searchFAQ, type FAQCategory } from "../data/faq";
+import { faqCategories, faqEntries, type FAQCategory } from "../data/faq";
 
 export interface Program {
   id: string;
