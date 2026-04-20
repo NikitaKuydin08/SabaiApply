@@ -371,7 +371,7 @@ export default function DashboardClient({ user, profile, family, education, scor
   );
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col overflow-hidden">
       {/* ── Mobile Top Bar (Menu · Logo · Help) ── */}
       <MobileTopBar
         onOpenMenu={() => setMobileMenuOpen(true)}
@@ -379,9 +379,9 @@ export default function DashboardClient({ user, profile, family, education, scor
         t={t}
       />
 
-      <div className="flex flex-1">
+      <div className="flex min-h-0 flex-1">
       {/* ── Left Sidebar (desktop only) ── */}
-      <aside className="hidden md:flex w-[280px] shrink-0 flex-col border-r border-[#e8e8e8] bg-white">
+      <aside className="hidden md:flex w-[280px] shrink-0 flex-col overflow-y-auto border-r border-[#e8e8e8] bg-white">
         <div className="border-b border-[#f0f0f0] px-6 py-5">
           <div className="flex items-center">
             <img src="/logo-lotus.png" alt="" className="mr-2 h-9 w-9 object-contain" />
@@ -1322,7 +1322,7 @@ function HelpContent({ locale, t, onClose }: { locale: string; t: TFn; onClose?:
       <CategoryTabs locale={locale} activeCategory={activeCategory} setActiveCategory={setActiveCategory} t={t} />
 
       {/* FAQ list */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 md:max-h-[637px]">
+      <div className="flex-1 overflow-y-auto px-5 py-4">
         {filtered.length === 0 ? (
           <p className="py-4 text-center text-sm text-[#999]">{t("help.noResults")}</p>
         ) : (
