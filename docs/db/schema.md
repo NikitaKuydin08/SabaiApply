@@ -12,6 +12,8 @@ The database uses PostgreSQL to define tables, custom types, functions, triggers
   - `'student'`
   - `'uni_admin'`
   - `'faculty_admin'`
+- **`score_type`**: Supported standardized tests (e.g., `TGAT`, `TPAT`, `A-Level`, `IELTS`, `Duolingo`, `CU-TEP`, `IB`, etc.)
+- **`doc_type`**: Supported document categories (e.g., `transcript`, `id_copy`, `passport_copy`, `high_school_diploma`, `english_proficiency_cert`, `recommendation_letter`, etc.)
 
 ## Core Tables
 
@@ -25,7 +27,7 @@ Supabase Auth seamlessly integrates with public tables via Postgres triggers.
    - **RLS**: Public read, Users can update their own rows. Admins can update roles.
 
 2. **`student_profiles`**
-   - **Fields**: `id` (UUID), `user_id` (UUID, UNIQUE), `prefix`, `first_name`, `last_name`, `first_name_th`, `last_name_th`, `date_of_birth`, `nationality`, `id_type`, `id_number`, `contact_email`, `phone`, `address`, `created_at`, `updated_at`.
+   - **Fields**: `id` (UUID), `user_id` (UUID, UNIQUE), `prefix`, `first_name`, `last_name`, `first_name_th`, `last_name_th`, `date_of_birth`, `nationality`, `id_type`, `id_number`, `contact_email`, `phone`, `address`, `religion`, `former_name`, `nickname`, `mailing_address`, `first_language`, `language_at_home`, `created_at`, `updated_at`.
    - **Usage**: Student-specific demographic details. Automatically initialized for roles of type `'student'`.
 
 ### Student Domain / Application Data
