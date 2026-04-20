@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useLocale } from "@/lib/i18n/context";
 
 interface Props {
   title: string;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export default function SectionPanel({ title, onClose, children, onSave, saveLabel, saving }: Props) {
+  const { t } = useLocale();
+  
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
@@ -40,7 +43,7 @@ export default function SectionPanel({ title, onClose, children, onSave, saveLab
               disabled={saving}
               className="w-full rounded-lg bg-[#F4C430] px-5 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50"
             >
-              {saving ? "..." : saveLabel || "Save"}
+              {saving ? t("form.saving") : saveLabel || t("form.save")}
             </button>
           </div>
         )}

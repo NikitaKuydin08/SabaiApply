@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/client";
 import type { StudentFamily } from "@/types/database";
 import { Search, ChevronDown } from "lucide-react";
 import SectionPanel from "./section-panel";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
 
 const PHONE_CODES = [
   "+66", "+1", "+7", "+20", "+27", "+30", "+31", "+32", "+33", "+34",
@@ -33,21 +35,21 @@ interface Props {
   inline?: boolean;
 }
 
-const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs."];
+const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs."] as const;
 const EDUCATION_LEVELS = [
   "Below high school",
   "High school",
   "Bachelor",
   "Master",
   "Doctorate",
-];
+] as const;
 const INCOME_RANGES = [
   "< 15,000",
   "15,000 - 30,000",
   "30,000 - 50,000",
   "50,000 - 100,000",
   "> 100,000",
-];
+] as const;
 
 const pillCls = (active: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -57,6 +59,7 @@ const pillCls = (active: boolean) =>
   }`;
 
 export default function FamilySection({ family, studentId, onClose, inline }: Props) {
+  const { t } = useLocale();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -156,7 +159,7 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
         )}
 
         <ParentFields
-          label="Father"
+          label={t("form.father")}
           prefix={fatherPrefix} setPrefix={setFatherPrefix}
           firstName={fatherFirstName} setFirstName={setFatherFirstName}
           lastName={fatherLastName} setLastName={setFatherLastName}
@@ -169,7 +172,7 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
         />
 
         <ParentFields
-          label="Mother"
+          label={t("form.mother")}
           prefix={motherPrefix} setPrefix={setMotherPrefix}
           firstName={motherFirstName} setFirstName={setMotherFirstName}
           lastName={motherLastName} setLastName={setMotherLastName}
@@ -183,58 +186,58 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
 
         {/* Guardian */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Guardian</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.guardian")}</legend>
           <div className="space-y-4">
             <label className="flex items-center gap-3 text-sm font-medium text-[#1a1a1a]">
               <input type="checkbox" checked={hasGuardian} onChange={(e) => setHasGuardian(e.target.checked)} className="h-4 w-4 rounded border-[#e0e0e0] accent-[#F4C430]" />
-              I have a separate guardian
+              {t("form.hasGuardian")}
             </label>
 
             {hasGuardian && (
               <div className="space-y-4 rounded-lg border border-[#f0f0f0] bg-[#FAFAFA] p-4">
                 <div>
-                  <label className={labelCls}>Relationship</label>
-                  <input type="text" value={guardianRelationship} onChange={(e) => setGuardianRelationship(e.target.value)} placeholder="e.g. Uncle, Aunt, Grandparent" className={inputCls} />
+                  <label className={labelCls}>{t("form.relationship")}</label>
+                  <input type="text" value={guardianRelationship} onChange={(e) => setGuardianRelationship(e.target.value)} placeholder={t("form.ph.relationship")} className={inputCls} />
                 </div>
                 <div>
-                  <label className={labelCls}>Prefix</label>
+                  <label className={labelCls}>{t("form.prefix")}</label>
                   <PrefixPills value={guardianPrefix} onChange={setGuardianPrefix} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>First Name</label>
-                    <input type="text" value={guardianFirstName} onChange={(e) => setGuardianFirstName(e.target.value)} placeholder="First name" className={inputCls} />
+                    <label className={labelCls}>{t("form.firstName")}</label>
+                    <input type="text" value={guardianFirstName} onChange={(e) => setGuardianFirstName(e.target.value)} placeholder={t("form.ph.firstName")} className={inputCls} />
                   </div>
                   <div>
-                    <label className={labelCls}>Last Name</label>
-                    <input type="text" value={guardianLastName} onChange={(e) => setGuardianLastName(e.target.value)} placeholder="Last name" className={inputCls} />
+                    <label className={labelCls}>{t("form.lastName")}</label>
+                    <input type="text" value={guardianLastName} onChange={(e) => setGuardianLastName(e.target.value)} placeholder={t("form.ph.lastName")} className={inputCls} />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>ชื่อ (Thai)</label>
-                    <input type="text" value={guardianFirstNameTh} onChange={(e) => setGuardianFirstNameTh(e.target.value)} placeholder="ชื่อ" className={inputCls} />
+                    <label className={labelCls}>{t("form.firstName")} (Thai)</label>
+                    <input type="text" value={guardianFirstNameTh} onChange={(e) => setGuardianFirstNameTh(e.target.value)} placeholder={t("form.firstName")} className={inputCls} />
                   </div>
                   <div>
-                    <label className={labelCls}>นามสกุล (Thai)</label>
-                    <input type="text" value={guardianLastNameTh} onChange={(e) => setGuardianLastNameTh(e.target.value)} placeholder="นามสกุล" className={inputCls} />
+                    <label className={labelCls}>{t("form.lastName")} (Thai)</label>
+                    <input type="text" value={guardianLastNameTh} onChange={(e) => setGuardianLastNameTh(e.target.value)} placeholder={t("form.lastName")} className={inputCls} />
                   </div>
                 </div>
                 <div>
-                  <label className={labelCls}>Occupation</label>
-                  <input type="text" value={guardianOccupation} onChange={(e) => setGuardianOccupation(e.target.value)} placeholder="Occupation" className={inputCls} />
+                  <label className={labelCls}>{t("form.occupation")}</label>
+                  <input type="text" value={guardianOccupation} onChange={(e) => setGuardianOccupation(e.target.value)} placeholder={t("form.occupation")} className={inputCls} />
                 </div>
                 <div>
-                  <label className={labelCls}>Education Level</label>
+                  <label className={labelCls}>{t("form.educationLevel")}</label>
                   <EducationPills value={guardianEducationLevel} onChange={setGuardianEducationLevel} />
                 </div>
                 <div>
-                  <label className={labelCls}>Phone</label>
+                  <label className={labelCls}>{t("form.phone")}</label>
                   <div className="flex gap-2">
                     <div className="w-[140px] shrink-0">
                       <PhoneCodeSelect value={guardianPhoneCode} onChange={setGuardianPhoneCode} />
                     </div>
-                    <input type="tel" value={guardianPhoneNumber} onChange={(e) => setGuardianPhoneNumber(e.target.value)} placeholder="Phone number" className={inputCls} />
+                    <input type="tel" value={guardianPhoneNumber} onChange={(e) => setGuardianPhoneNumber(e.target.value)} placeholder={t("form.ph.phoneNumber")} className={inputCls} />
                   </div>
                 </div>
               </div>
@@ -244,10 +247,10 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
 
         {/* Household */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Household</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.household")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Household Income (THB/month) {requiredStar}</label>
+              <label className={labelCls}>{t("form.income")} {requiredStar}</label>
               <div className="flex gap-2 flex-wrap">
                 {INCOME_RANGES.map((r) => (
                   <button key={r} type="button" onClick={() => setHouseholdIncome(r)} className={pillCls(householdIncome === r)}>{r}</button>
@@ -256,11 +259,11 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelCls}>Number of Siblings</label>
+                <label className={labelCls}>{t("form.siblings")}</label>
                 <input type="number" min={0} value={numberOfSiblings} onChange={(e) => setNumberOfSiblings(e.target.value === "" ? "" : parseInt(e.target.value, 10))} placeholder="0" className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Sibling Order</label>
+                <label className={labelCls}>{t("form.siblingOrder")}</label>
                 <input type="number" min={1} value={siblingOrder} onChange={(e) => setSiblingOrder(e.target.value === "" ? "" : parseInt(e.target.value, 10))} placeholder="e.g. 1 = oldest" className={inputCls} />
               </div>
             </div>
@@ -275,7 +278,7 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? "Saving..." : "Save"}
+            {saving ? t("form.saving") : t("form.save")}
           </button>
         </div>
       </div>
@@ -283,7 +286,7 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
   }
 
   return (
-    <SectionPanel title="Family Information" onClose={onClose} onSave={handleSave} saving={saving}>
+    <SectionPanel title={t("form.familyInfo")} onClose={onClose} onSave={handleSave} saving={saving}>
       {formContent}
     </SectionPanel>
   );
@@ -292,6 +295,7 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
 function PhoneCodeSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const { t } = useLocale();
 
   const filtered = useMemo(() => {
     if (!search) return PHONE_CODES;
@@ -324,7 +328,7 @@ function PhoneCodeSelect({ value, onChange }: { value: string; onChange: (v: str
             </div>
             <div className="max-h-[200px] overflow-y-auto py-1">
               {filtered.length === 0 ? (
-                <p className="px-4 py-2 text-sm text-[#999]">No results</p>
+                <p className="px-4 py-2 text-sm text-[#999]">{t("form.noResults")}</p>
               ) : (
                 filtered.map((code) => (
                   <button
@@ -352,23 +356,36 @@ function PhoneCodeSelect({ value, onChange }: { value: string; onChange: (v: str
 const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
 const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
 const requiredStar = <span className="ml-0.5 text-red-500">*</span>;
-const optionalTag = <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span>;
 
 function PrefixPills({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useLocale();
+  const MAP: Record<string, TranslationKey> = {
+    "Mr.": "form.prefix.mr",
+    "Ms.": "form.prefix.ms",
+    "Mrs.": "form.prefix.mrs",
+  };
   return (
     <div className="flex gap-2 flex-wrap">
       {PREFIX_OPTIONS.map((p) => (
-        <button key={p} type="button" onClick={() => onChange(p)} className={pillCls(value === p)}>{p}</button>
+        <button key={p} type="button" onClick={() => onChange(p)} className={pillCls(value === p)}>{t(MAP[p] || p as any)}</button>
       ))}
     </div>
   );
 }
 
 function EducationPills({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useLocale();
+  const MAP: Record<string, TranslationKey> = {
+    "Below high school": "form.edu.belowHighSchool",
+    "High school": "form.edu.highSchool",
+    "Bachelor": "form.edu.bachelor",
+    "Master": "form.edu.master",
+    "Doctorate": "form.edu.doctorate",
+  };
   return (
     <div className="flex gap-2 flex-wrap">
       {EDUCATION_LEVELS.map((l) => (
-        <button key={l} type="button" onClick={() => onChange(l)} className={pillCls(value === l)}>{l}</button>
+        <button key={l} type="button" onClick={() => onChange(l)} className={pillCls(value === l)}>{t(MAP[l] || l as any)}</button>
       ))}
     </div>
   );
@@ -386,50 +403,51 @@ function ParentFields({ label, prefix: pfx, setPrefix: setPfx, firstName: fn, se
   phoneCode: string; setPhoneCode: (v: string) => void;
   phoneNumber: string; setPhoneNumber: (v: string) => void;
 }) {
+  const { t } = useLocale();
   return (
     <fieldset>
-      <legend className="mb-2 text-base font-semibold text-[#1a1a1a]">{label} {optionalTag}</legend>
-      <p className="mb-4 text-xs text-[#999]">Fill in if applicable. At least one parent is required.</p>
+      <legend className="mb-2 text-base font-semibold text-[#1a1a1a]">{label} <span className="ml-1 text-xs font-normal text-[#999]">{t("form.optional")}</span></legend>
+      <p className="mb-4 text-xs text-[#999]">{t("form.parentNote")}</p>
       <div className="space-y-4">
         <div>
-          <label className={labelCls}>Prefix</label>
+          <label className={labelCls}>{t("form.prefix")}</label>
           <PrefixPills value={pfx} onChange={setPfx} />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className={labelCls}>First Name {requiredStar}</label>
-            <input type="text" value={fn} onChange={(e) => setFn(e.target.value)} placeholder="First name" className={inputCls} />
+            <label className={labelCls}>{t("form.firstName")} {requiredStar}</label>
+            <input type="text" value={fn} onChange={(e) => setFn(e.target.value)} placeholder={t("form.ph.firstName")} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Last Name {requiredStar}</label>
-            <input type="text" value={ln} onChange={(e) => setLn(e.target.value)} placeholder="Last name" className={inputCls} />
+            <label className={labelCls}>{t("form.lastName")} {requiredStar}</label>
+            <input type="text" value={ln} onChange={(e) => setLn(e.target.value)} placeholder={t("form.ph.lastName")} className={inputCls} />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className={labelCls}>ชื่อ (Thai)</label>
-            <input type="text" value={fnTh} onChange={(e) => setFnTh(e.target.value)} placeholder="ชื่อ" className={inputCls} />
+            <label className={labelCls}>{t("form.firstName")} (Thai)</label>
+            <input type="text" value={fnTh} onChange={(e) => setFnTh(e.target.value)} placeholder={t("form.firstName")} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>นามสกุล (Thai)</label>
-            <input type="text" value={lnTh} onChange={(e) => setLnTh(e.target.value)} placeholder="นามสกุล" className={inputCls} />
+            <label className={labelCls}>{t("form.lastName")} (Thai)</label>
+            <input type="text" value={lnTh} onChange={(e) => setLnTh(e.target.value)} placeholder={t("form.lastName")} className={inputCls} />
           </div>
         </div>
         <div>
-          <label className={labelCls}>Occupation</label>
-          <input type="text" value={occ} onChange={(e) => setOcc(e.target.value)} placeholder="Occupation" className={inputCls} />
+          <label className={labelCls}>{t("form.occupation")}</label>
+          <input type="text" value={occ} onChange={(e) => setOcc(e.target.value)} placeholder={t("form.occupation")} className={inputCls} />
         </div>
         <div>
-          <label className={labelCls}>Education Level</label>
+          <label className={labelCls}>{t("form.educationLevel")}</label>
           <EducationPills value={edu} onChange={setEdu} />
         </div>
         <div>
-          <label className={labelCls}>Phone {requiredStar}</label>
+          <label className={labelCls}>{t("form.phone")} {requiredStar}</label>
           <div className="flex gap-2">
             <div className="w-[140px] shrink-0">
               <PhoneCodeSelect value={phCode} onChange={setPhCode} />
             </div>
-            <input type="tel" value={phNum} onChange={(e) => setPhNum(e.target.value)} placeholder="Phone number" className={inputCls} />
+            <input type="tel" value={phNum} onChange={(e) => setPhNum(e.target.value)} placeholder={t("form.ph.phoneNumber")} className={inputCls} />
           </div>
         </div>
       </div>

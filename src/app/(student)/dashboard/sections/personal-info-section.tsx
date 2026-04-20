@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
 import { Search, ChevronDown } from "lucide-react";
 import SectionPanel from "./section-panel";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
 
 interface Props {
   profile: StudentProfile | null;
@@ -14,9 +16,10 @@ interface Props {
   inline?: boolean;
 }
 
-const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs.", "Master", "Miss"];
+const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs.", "Master", "Miss"] as const;
 const ID_TYPE_OPTIONS = ["Thai ID", "Passport", "G-Code"] as const;
-const GENDER_OPTIONS = ["Male", "Female", "Other", "Prefer not to say"];
+const GENDER_OPTIONS = ["Male", "Female", "Other", "Prefer not to say"] as const;
+const RELIGION_OPTIONS = ["Buddhism", "Islam", "Christianity", "Hinduism", "Other"] as const;
 
 const PHONE_CODES = [
   "+66", "+1", "+7", "+20", "+27", "+30", "+31", "+32", "+33", "+34",
@@ -112,6 +115,7 @@ function parsePhone(phone: string | null): { code: string; number: string } {
 }
 
 export default function PersonalInfoSection({ profile, userId, onClose, userEmail, inline }: Props) {
+  const { t } = useLocale();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -134,7 +138,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
   const [nickname, setNickname] = useState(profile?.nickname || "");
   const [firstLanguage, setFirstLanguage] = useState(profile?.first_language || "");
   const [languageAtHome, setLanguageAtHome] = useState(profile?.language_at_home || "");
-  const [sameMailingAddress, setSameMailingAddress] = useState(true);
+  const [sameMailingAddress, setSameMailingAddress] = useState(profile?.mailing_address ? false : true);
 
   const parsedAddr = parseAddress(profile?.address ?? null);
   const parsedMailing = parseAddress(profile?.mailing_address ?? null);
@@ -153,16 +157,16 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
 
     // Validation
     if (!firstName || !lastName) {
-      setError("First name and last name (English) are required.");
+      setError(t("form.validation.nameRequired"));
       return;
     }
     
-    if (!idNumber) { setError("ID number is required."); return; }
+    if (!idNumber) { setError(t("form.validation.idRequired")); return; }
     
     if (idType === "Thai ID") {
 
         if (!/^\d{13}$/.test(idNumber)) {
-            setError("Thai ID must contains exactly 13 numeric digits.");
+            setError(t("form.validation.thaiIdDigits"));
             return;
         }
 
@@ -175,17 +179,17 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
         const checkDigit = (11 - (sum % 11)) % 10;
 
         if (checkDigit !== parseInt(idNumber[12], 10)) {
-            setError("Invalid Thai ID number. Please check your ID number and try again.");
+            setError(t("form.validation.invalidThaiId"));
             return;
         }
 
     }
 
-    if (!dob) { setError("Date of birth is required."); return; }
-    if (!nationality) { setError("Nationality is required."); return; }
-    if (!gender) { setError("Gender is required."); return; }
-    if (!phoneNumber) { setError("Phone number is required."); return; }
-    if (!addrLine) { setError("Address is required."); return; }
+    if (!dob) { setError(t("form.validation.dobRequired")); return; }
+    if (!nationality) { setError(t("form.validation.nationalityRequired")); return; }
+    if (!gender) { setError(t("form.validation.genderRequired")); return; }
+    if (!phoneNumber) { setError(t("form.validation.phoneRequired")); return; }
+    if (!addrLine) { setError(t("form.validation.addressRequired")); return; }
 
     setSaving(true);
     setError(null);
@@ -252,6 +256,35 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
   const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
   const requiredStar = <span className="text-red-500 ml-0.5">*</span>;
 
+  const PREFIX_MAP: Record<string, TranslationKey> = {
+    "Mr.": "form.prefix.mr",
+    "Ms.": "form.prefix.ms",
+    "Mrs.": "form.prefix.mrs",
+    "Master": "form.prefix.master",
+    "Miss": "form.prefix.miss",
+  };
+
+  const ID_TYPE_MAP: Record<string, TranslationKey> = {
+    "Thai ID": "form.idType.thai",
+    "Passport": "form.idType.passport",
+    "G-Code": "form.idType.gcode",
+  };
+
+  const GENDER_MAP: Record<string, TranslationKey> = {
+    "Male": "form.gender.male",
+    "Female": "form.gender.female",
+    "Other": "form.gender.other",
+    "Prefer not to say": "form.gender.preferNotToSay",
+  };
+
+  const RELIGION_MAP: Record<string, TranslationKey> = {
+    "Buddhism": "form.religion.buddhism",
+    "Islam": "form.religion.islam",
+    "Christianity": "form.religion.christianity",
+    "Hinduism": "form.religion.hinduism",
+    "Other": "form.religion.other",
+  };
+
   const formContent = (
       <div className="space-y-8">
         {error && (
@@ -260,10 +293,10 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
 
         {/* Identity */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Identity</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.identity")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Prefix</label>
+              <label className={labelCls}>{t("form.prefix")}</label>
               <div className="flex gap-2 flex-wrap">
                 {PREFIX_OPTIONS.map((p) => (
                   <button
@@ -276,14 +309,14 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
                         : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
                     }`}
                   >
-                    {p}
+                    {PREFIX_MAP[p] ? t(PREFIX_MAP[p]) : p}
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className={labelCls}>ID Type {requiredStar}</label>
+              <label className={labelCls}>{t("form.idType")} {requiredStar}</label>
               <div className="flex gap-2">
                 {ID_TYPE_OPTIONS.map((type) => (
                   <button
@@ -296,22 +329,22 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
                         : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
                     }`}
                   >
-                    {type}
+                    {ID_TYPE_MAP[type] ? t(ID_TYPE_MAP[type]) : type}
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className={labelCls}>ID Number {requiredStar}</label>
+              <label className={labelCls}>{t("form.idNumber")} {requiredStar}</label>
               <input
                 type="text"
                 value={idNumber}
                 onChange={(e) => setIdNumber(e.target.value)}
                 placeholder={
-                  idType === "Thai ID" ? "Enter 13-digit Thai ID (e.g. 1100123456789)" :
-                  idType === "Passport" ? "Enter passport number (e.g. AA1234567)" :
-                  "Enter G-Code issued by Ministry of Education"
+                  idType === "Thai ID" ? t("form.ph.idNumber.thai") :
+                  idType === "Passport" ? t("form.ph.idNumber.passport") :
+                  t("form.ph.idNumber.gcode")
                 }
                 className={inputCls}
               />
@@ -321,53 +354,53 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
 
         {/* Name (English) */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Name (English)</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.nameEN")}</legend>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelCls}>First Name {requiredStar}</label>
-              <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" className={inputCls} />
+              <label className={labelCls}>{t("form.firstName")} {requiredStar}</label>
+              <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder={t("form.ph.firstName")} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Last Name {requiredStar}</label>
-              <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last name" className={inputCls} />
+              <label className={labelCls}>{t("form.lastName")} {requiredStar}</label>
+              <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={t("form.ph.lastName")} className={inputCls} />
             </div>
           </div>
         </fieldset>
 
         {/* Name (Thai) */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Name (Thai)</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.nameTH")}</legend>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelCls}>ชื่อ</label>
-              <input type="text" value={firstNameTh} onChange={(e) => setFirstNameTh(e.target.value)} placeholder="ชื่อ" className={inputCls} />
+              <label className={labelCls}>{t("form.firstName")}</label>
+              <input type="text" value={firstNameTh} onChange={(e) => setFirstNameTh(e.target.value)} placeholder={t("form.firstName")} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>นามสกุล</label>
-              <input type="text" value={lastNameTh} onChange={(e) => setLastNameTh(e.target.value)} placeholder="นามสกุล" className={inputCls} />
+              <label className={labelCls}>{t("form.lastName")}</label>
+              <input type="text" value={lastNameTh} onChange={(e) => setLastNameTh(e.target.value)} placeholder={t("form.lastName")} className={inputCls} />
             </div>
           </div>
         </fieldset>
 
         {/* Personal */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Personal Details</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.personalDetails")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Date of Birth {requiredStar}</label>
+              <label className={labelCls}>{t("form.dob")} {requiredStar}</label>
               <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Nationality {requiredStar}</label>
+              <label className={labelCls}>{t("form.nationality")} {requiredStar}</label>
               <SearchableSelect
                 value={nationality}
                 onChange={setNationality}
                 options={COUNTRIES}
-                placeholder="Search or select nationality..."
+                placeholder={t("form.ph.nationality")}
               />
             </div>
             <div>
-              <label className={labelCls}>Gender {requiredStar}</label>
+              <label className={labelCls}>{t("form.gender")} {requiredStar}</label>
               <div className="flex gap-2 flex-wrap">
                 {GENDER_OPTIONS.map((g) => (
                   <button
@@ -380,7 +413,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
                         : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
                     }`}
                   >
-                    {g}
+                    {GENDER_MAP[g] ? t(GENDER_MAP[g]) : g}
                   </button>
                 ))}
               </div>
@@ -390,10 +423,10 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
 
         {/* Contact */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Contact</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.contact")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Phone {requiredStar}</label>
+              <label className={labelCls}>{t("form.phone")} {requiredStar}</label>
               <div className="flex gap-2">
                 <div className="w-[160px] shrink-0">
                   <PhoneCodeSelect value={phoneCode} onChange={setPhoneCode} />
@@ -402,34 +435,34 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="Phone number"
+                  placeholder={t("form.ph.phoneNumber")}
                   className={inputCls}
                 />
               </div>
             </div>
             <div>
-              <label className={labelCls}>LINE ID <span className="text-xs text-[#999] ml-1">(optional)</span></label>
-              <input type="text" value={lineId} onChange={(e) => setLineId(e.target.value)} placeholder="LINE ID" className={inputCls} />
+              <label className={labelCls}>{t("form.lineId")} <span className="text-xs text-[#999] ml-1">{t("form.optional")}</span></label>
+              <input type="text" value={lineId} onChange={(e) => setLineId(e.target.value)} placeholder={t("form.lineId")} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Contact Email</label>
+              <label className={labelCls}>{t("form.contactEmail")}</label>
               <input type="email" value={userEmail} disabled className={`${inputCls} bg-[#f5f5f5] text-[#999]`} />
-              <p className="mt-1 text-xs text-[#999]">This is your registered email</p>
+              <p className="mt-1 text-xs text-[#999]">{t("form.registeredEmail")}</p>
             </div>
           </div>
         </fieldset>
 
         {/* Address */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Address</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.address")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Country</label>
+              <label className={labelCls}>{t("form.country")}</label>
               <SearchableSelect
                 value={addrCountry}
                 onChange={(v) => { setAddrCountry(v); if (v !== "Thailand") { setAddrProvince(""); } }}
                 options={COUNTRIES}
-                placeholder="Search or select country..."
+                placeholder={t("form.ph.country")}
               />
             </div>
 
@@ -437,44 +470,44 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>Province {requiredStar}</label>
+                    <label className={labelCls}>{t("form.province")} {requiredStar}</label>
                     <SearchableSelect
                       value={addrProvince}
                       onChange={setAddrProvince}
                       options={THAI_PROVINCES}
-                      placeholder="Select province..."
+                      placeholder={t("form.ph.province")}
                     />
                   </div>
                   <div>
-                    <label className={labelCls}>City / District {requiredStar}</label>
-                    <input type="text" value={addrCity} onChange={(e) => setAddrCity(e.target.value)} placeholder="District / Amphoe" className={inputCls} />
+                    <label className={labelCls}>{t("form.cityDistrict")} {requiredStar}</label>
+                    <input type="text" value={addrCity} onChange={(e) => setAddrCity(e.target.value)} placeholder={t("form.ph.cityDistrict")} className={inputCls} />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className={labelCls}>Zip Code {requiredStar}</label>
-                    <input type="text" value={addrZipcode} onChange={(e) => setAddrZipcode(e.target.value)} placeholder="10100" className={inputCls} maxLength={5} />
+                    <label className={labelCls}>{t("form.zipCode")} {requiredStar}</label>
+                    <input type="text" value={addrZipcode} onChange={(e) => setAddrZipcode(e.target.value)} placeholder={t("form.ph.zipCode")} className={inputCls} maxLength={5} />
                   </div>
                 </div>
                 <div>
-                  <label className={labelCls}>Address Line {requiredStar}</label>
+                  <label className={labelCls}>{t("form.addressLine")} {requiredStar}</label>
                   <textarea
                     value={addrLine}
                     onChange={(e) => setAddrLine(e.target.value)}
                     rows={2}
-                    placeholder="House number, street, soi..."
+                    placeholder={t("form.ph.addressLine")}
                     className={inputCls}
                   />
                 </div>
               </>
             ) : (
               <div>
-                <label className={labelCls}>Full Address {requiredStar}</label>
+                <label className={labelCls}>{t("form.fullAddress")} {requiredStar}</label>
                 <textarea
                   value={addrLine}
                   onChange={(e) => setAddrLine(e.target.value)}
                   rows={3}
-                  placeholder="Full address including city, state/province, postal code"
+                  placeholder={t("form.ph.fullAddress")}
                   className={inputCls}
                 />
               </div>
@@ -484,45 +517,45 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
 
         {/* Mailing Address */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Mailing Address</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.mailingAddress")}</legend>
           <div className="space-y-4">
             <label className="flex items-center gap-3 text-sm font-medium text-[#1a1a1a]">
               <input type="checkbox" checked={sameMailingAddress} onChange={(e) => setSameMailingAddress(e.target.checked)} className="h-4 w-4 accent-[#F4C430]" />
-              Same as permanent address
+              {t("form.sameAsPermanent")}
             </label>
             {!sameMailingAddress && (
               <>
                 <div>
-                  <label className={labelCls}>Country</label>
-                  <SearchableSelect value={mailCountry} onChange={(v) => { setMailCountry(v); if (v !== "Thailand") setMailProvince(""); }} options={COUNTRIES} placeholder="Select country..." />
+                  <label className={labelCls}>{t("form.country")}</label>
+                  <SearchableSelect value={mailCountry} onChange={(v) => { setMailCountry(v); if (v !== "Thailand") setMailProvince(""); }} options={COUNTRIES} placeholder={t("form.ph.country")} />
                 </div>
                 {mailCountry === "Thailand" ? (
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className={labelCls}>Province</label>
-                        <SearchableSelect value={mailProvince} onChange={setMailProvince} options={THAI_PROVINCES} placeholder="Select province..." />
+                        <label className={labelCls}>{t("form.province")}</label>
+                        <SearchableSelect value={mailProvince} onChange={setMailProvince} options={THAI_PROVINCES} placeholder={t("form.ph.province")} />
                       </div>
                       <div>
-                        <label className={labelCls}>City / District</label>
-                        <input type="text" value={mailCity} onChange={(e) => setMailCity(e.target.value)} placeholder="District / Amphoe" className={inputCls} />
+                        <label className={labelCls}>{t("form.cityDistrict")}</label>
+                        <input type="text" value={mailCity} onChange={(e) => setMailCity(e.target.value)} placeholder={t("form.ph.cityDistrict")} className={inputCls} />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className={labelCls}>Zip Code</label>
-                        <input type="text" value={mailZipcode} onChange={(e) => setMailZipcode(e.target.value)} placeholder="10100" className={inputCls} maxLength={5} />
+                        <label className={labelCls}>{t("form.zipCode")}</label>
+                        <input type="text" value={mailZipcode} onChange={(e) => setMailZipcode(e.target.value)} placeholder={t("form.ph.zipCode")} className={inputCls} maxLength={5} />
                       </div>
                     </div>
                     <div>
-                      <label className={labelCls}>Address Line</label>
-                      <textarea value={mailLine} onChange={(e) => setMailLine(e.target.value)} rows={2} placeholder="House number, street, soi..." className={inputCls} />
+                      <label className={labelCls}>{t("form.addressLine")}</label>
+                      <textarea value={mailLine} onChange={(e) => setMailLine(e.target.value)} rows={2} placeholder={t("form.ph.addressLine")} className={inputCls} />
                     </div>
                   </>
                 ) : (
                   <div>
-                    <label className={labelCls}>Full Address</label>
-                    <textarea value={mailLine} onChange={(e) => setMailLine(e.target.value)} rows={3} placeholder="Full mailing address" className={inputCls} />
+                    <label className={labelCls}>{t("form.fullAddress")}</label>
+                    <textarea value={mailLine} onChange={(e) => setMailLine(e.target.value)} rows={3} placeholder={t("form.ph.fullMailingAddress")} className={inputCls} />
                   </div>
                 )}
               </>
@@ -532,34 +565,34 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
 
         {/* Additional Information */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Additional Information</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.additionalInfo")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Religion <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span></label>
+              <label className={labelCls}>{t("form.religion")} <span className="ml-1 text-xs font-normal text-[#999]">{t("form.optional")}</span></label>
               <div className="flex gap-2 flex-wrap">
-                {["Buddhism", "Islam", "Christianity", "Hinduism", "Other"].map((r) => (
+                {RELIGION_OPTIONS.map((r) => (
                   <button key={r} type="button" onClick={() => setReligion(r)} className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${religion === r ? "border-[#F4C430] bg-[#FFF3D0] text-[#1a1a1a]" : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"}`}>
-                    {r}
+                    {RELIGION_MAP[r] ? t(RELIGION_MAP[r]) : r}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <label className={labelCls}>Former Name <span className="ml-1 text-xs font-normal text-[#999]">(if changed)</span></label>
-              <input type="text" value={formerName} onChange={(e) => setFormerName(e.target.value)} placeholder="Previous legal name" className={inputCls} />
+              <label className={labelCls}>{t("form.formerName")} <span className="ml-1 text-xs font-normal text-[#999]">{t("form.ifChanged")}</span></label>
+              <input type="text" value={formerName} onChange={(e) => setFormerName(e.target.value)} placeholder={t("form.ph.formerName")} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Nickname / Preferred Name <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span></label>
-              <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="What you prefer to be called" className={inputCls} />
+              <label className={labelCls}>{t("form.nickname")} <span className="ml-1 text-xs font-normal text-[#999]">{t("form.optional")}</span></label>
+              <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={t("form.ph.nickname")} className={inputCls} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelCls}>First Language <span className="ml-1 text-xs font-normal text-[#999]">(if not Thai/English)</span></label>
-                <input type="text" value={firstLanguage} onChange={(e) => setFirstLanguage(e.target.value)} placeholder="e.g. Chinese, Japanese" className={inputCls} />
+                <label className={labelCls}>{t("form.firstLanguage")} <span className="ml-1 text-xs font-normal text-[#999]">{t("form.ifNotThaiEnglish")}</span></label>
+                <input type="text" value={firstLanguage} onChange={(e) => setFirstLanguage(e.target.value)} placeholder={t("form.ph.firstLanguage")} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Language Spoken at Home</label>
-                <input type="text" value={languageAtHome} onChange={(e) => setLanguageAtHome(e.target.value)} placeholder="e.g. Thai, English" className={inputCls} />
+                <label className={labelCls}>{t("form.languageAtHome")}</label>
+                <input type="text" value={languageAtHome} onChange={(e) => setLanguageAtHome(e.target.value)} placeholder={t("form.ph.languageAtHome")} className={inputCls} />
               </div>
             </div>
           </div>
@@ -573,7 +606,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? "Saving..." : "Save"}
+            {saving ? t("form.saving") : t("form.save")}
           </button>
         </div>
       </div>
@@ -581,7 +614,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
   }
 
   return (
-    <SectionPanel title="Personal Information" onClose={onClose} onSave={handleSave} saving={saving} saveLabel="Save">
+    <SectionPanel title={t("form.personalInfo")} onClose={onClose} onSave={handleSave} saving={saving} saveLabel={t("form.save")}>
       {formContent}
     </SectionPanel>
   );
@@ -597,6 +630,7 @@ function SearchableSelect({ value, onChange, options, placeholder }: {
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const { t } = useLocale();
 
   const filtered = useMemo(() => {
     if (!search) return options;
@@ -629,7 +663,7 @@ function SearchableSelect({ value, onChange, options, placeholder }: {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search..."
+                  placeholder={t("form.searchSelect")}
                   autoFocus
                   className="w-full rounded-md border border-[#e0e0e0] py-1.5 pl-8 pr-3 text-sm outline-none focus:border-[#F4C430]"
                 />
@@ -638,7 +672,7 @@ function SearchableSelect({ value, onChange, options, placeholder }: {
             {/* Options list */}
             <div className="max-h-[200px] overflow-y-auto py-1">
               {filtered.length === 0 ? (
-                <p className="px-4 py-2 text-sm text-[#999]">No results</p>
+                <p className="px-4 py-2 text-sm text-[#999]">{t("form.noResults")}</p>
               ) : (
                 filtered.map((option) => (
                   <button
@@ -666,6 +700,7 @@ function SearchableSelect({ value, onChange, options, placeholder }: {
 function PhoneCodeSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const { t } = useLocale();
 
   const filtered = useMemo(() => {
     if (!search) return PHONE_CODES;
@@ -701,7 +736,7 @@ function PhoneCodeSelect({ value, onChange }: { value: string; onChange: (v: str
             </div>
             <div className="max-h-[200px] overflow-y-auto py-1">
               {filtered.length === 0 ? (
-                <p className="px-4 py-2 text-sm text-[#999]">No results</p>
+                <p className="px-4 py-2 text-sm text-[#999]">{t("form.noResults")}</p>
               ) : (
                 filtered.map((code) => (
                   <button

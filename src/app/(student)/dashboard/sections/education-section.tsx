@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/client";
 import type { StudentEducation } from "@/types/database";
 import { FileText } from "lucide-react";
 import SectionPanel from "./section-panel";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
 
 interface Props {
   education: StudentEducation | null;
@@ -16,7 +18,7 @@ interface Props {
 const CURRICULUM_TYPES = ["Thai National", "International", "GED", "Overseas"] as const;
 const THAI_STUDY_PLANS = ["Science-Math", "Arts-Math", "Arts-Language", "Arts-Society", "Vocational", "Other"];
 const INTERNATIONAL_STUDY_PLANS = ["IB", "IGCSE", "AP", "Other"];
-const GRADE_LEVELS = ["ม.4 / Grade 10", "ม.5 / Grade 11", "ม.6 / Grade 12", "Graduated"];
+const GRADE_LEVELS = ["ม.4 / Grade 10", "ม.5 / Grade 11", "ม.6 / Grade 12", "Graduated"] as const;
 
 const pillCls = (active: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -26,6 +28,7 @@ const pillCls = (active: boolean) =>
   }`;
 
 export default function EducationSection({ education, studentId, onClose, inline }: Props) {
+  const { t } = useLocale();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +53,7 @@ export default function EducationSection({ education, studentId, onClose, inline
     const parsedYear = graduationYear === "" ? null : parseInt(graduationYear, 10);
 
     if (parsedGpa !== null && (isNaN(parsedGpa) || parsedGpa < 0 || parsedGpa > 4)) {
-      setError("GPA must be between 0.00 and 4.00.");
+      setError(t("form.validation.invalidGpa"));
       setSaving(false);
       return;
     }
@@ -81,6 +84,17 @@ export default function EducationSection({ education, studentId, onClose, inline
   const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
   const star = <span className="ml-0.5 text-red-500">*</span>;
 
+  const CURRICULUM_MAP: Record<string, TranslationKey> = {
+    "Thai National": "form.curriculum.thaiNational",
+    "International": "form.curriculum.international",
+    "GED": "form.curriculum.ged",
+    "Overseas": "form.curriculum.overseas",
+  };
+
+  const GRADE_MAP: Record<string, TranslationKey> = {
+    "Graduated": "form.grade.graduated",
+  };
+
   const formContent = (
       <div className="space-y-8">
         {error && (
@@ -89,18 +103,18 @@ export default function EducationSection({ education, studentId, onClose, inline
 
         {/* School */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">School</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.school")}</legend>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>School Province</label>
-              <input type="text" value={schoolProvince} onChange={(e) => setSchoolProvince(e.target.value)} placeholder="e.g. Bangkok, Chiang Mai" className={inputCls} />
+              <label className={labelCls}>{t("form.schoolProvince")}</label>
+              <input type="text" value={schoolProvince} onChange={(e) => setSchoolProvince(e.target.value)} placeholder={t("form.ph.schoolProvince")} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>School Name {star}</label>
-              <input type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} placeholder="School name" className={inputCls} />
+              <label className={labelCls}>{t("form.schoolName")} {star}</label>
+              <input type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} placeholder={t("form.schoolName")} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Curriculum Type {star}</label>
+              <label className={labelCls}>{t("form.curriculum")} {star}</label>
               <div className="flex gap-2 flex-wrap">
                 {CURRICULUM_TYPES.map((type) => (
                   <button
@@ -109,14 +123,14 @@ export default function EducationSection({ education, studentId, onClose, inline
                     onClick={() => { setCurriculumType(type); setStudyPlan(""); }}
                     className={pillCls(curriculumType === type)}
                   >
-                    {type}
+                    {t(CURRICULUM_MAP[type] || type as any)}
                   </button>
                 ))}
               </div>
             </div>
             {curriculumType && (
               <div>
-                <label className={labelCls}>Study Plan</label>
+                <label className={labelCls}>{t("form.studyPlan")}</label>
                 <div className="flex gap-2 flex-wrap">
                   {studyPlanOptions.map((p) => (
                     <button key={p} type="button" onClick={() => setStudyPlan(p)} className={pillCls(studyPlan === p)}>
@@ -131,24 +145,24 @@ export default function EducationSection({ education, studentId, onClose, inline
 
         {/* Academic */}
         <fieldset>
-          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Academic</legend>
+          <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.academic")}</legend>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelCls}>GPA {star}</label>
+                <label className={labelCls}>{t("form.gpa")} {star}</label>
                 <input type="number" step="0.01" min="0" max="4.00" value={gpa} onChange={(e) => setGpa(e.target.value)} placeholder="0.00 - 4.00" className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>Graduation Year</label>
+                <label className={labelCls}>{t("form.gradYear")}</label>
                 <input type="number" min="2020" max="2035" value={graduationYear} onChange={(e) => setGraduationYear(e.target.value)} placeholder="e.g. 2026" className={inputCls} />
               </div>
             </div>
             <div>
-              <label className={labelCls}>Current Grade Level {star}</label>
+              <label className={labelCls}>{t("form.gradeLevel")} {star}</label>
               <div className="flex gap-2 flex-wrap">
                 {GRADE_LEVELS.map((g) => (
                   <button key={g} type="button" onClick={() => setCurrentGradeLevel(g)} className={pillCls(currentGradeLevel === g)}>
-                    {g}
+                    {t(GRADE_MAP[g] || g as any)}
                   </button>
                 ))}
               </div>
@@ -159,11 +173,11 @@ export default function EducationSection({ education, studentId, onClose, inline
         {/* Transcript */}
         {education?.transcript_url && (
           <fieldset>
-            <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">Transcript</legend>
+            <legend className="mb-4 text-base font-semibold text-[#1a1a1a]">{t("form.transcript")}</legend>
             <div className="flex items-center gap-3 rounded-lg border border-[#e0e0e0] bg-[#FAFAFA] px-4 py-3">
               <FileText size={18} className="shrink-0 text-[#666]" />
               <a href={education.transcript_url} target="_blank" rel="noopener noreferrer" className="truncate text-sm font-medium text-[#F4C430] underline hover:text-[#e6b82a]">
-                View uploaded transcript
+                {t("form.viewTranscript")}
               </a>
             </div>
           </fieldset>
@@ -177,7 +191,7 @@ export default function EducationSection({ education, studentId, onClose, inline
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? "Saving..." : "Save"}
+            {saving ? t("form.saving") : t("form.save")}
           </button>
         </div>
       </div>
@@ -185,7 +199,7 @@ export default function EducationSection({ education, studentId, onClose, inline
   }
 
   return (
-    <SectionPanel title="Education" onClose={onClose} onSave={handleSave} saving={saving}>
+    <SectionPanel title={t("form.education")} onClose={onClose} onSave={handleSave} saving={saving}>
       {formContent}
     </SectionPanel>
   );
