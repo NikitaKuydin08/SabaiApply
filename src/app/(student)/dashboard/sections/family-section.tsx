@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentFamily } from "@/types/database";
 import { Search, ChevronDown } from "lucide-react";
@@ -33,6 +33,7 @@ interface Props {
   studentId: string;
   onClose: () => void;
   inline?: boolean;
+  onSaved?: () => void;
 }
 
 const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs."] as const;
@@ -58,10 +59,17 @@ const pillCls = (active: boolean) =>
       : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
   }`;
 
-export default function FamilySection({ family, studentId, onClose, inline }: Props) {
+export default function FamilySection({ family, studentId, onClose, inline, onSaved }: Props) {
   const { t } = useLocale();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [error]);
 
   const [fatherPrefix, setFatherPrefix] = useState(family?.father_prefix || "");
   const [fatherFirstName, setFatherFirstName] = useState(family?.father_first_name || "");
@@ -149,11 +157,16 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
       if (err) { setError(err.message); setSaving(false); return; }
     }
 
-    window.location.reload();
+    if (onSaved) {
+      setSaving(false);
+      onSaved();
+    } else {
+      window.location.reload();
+    }
   }
 
   const formContent = (
-      <div className="space-y-8">
+      <div ref={formRef} className="space-y-8">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
         )}
@@ -278,7 +291,7 @@ export default function FamilySection({ family, studentId, onClose, inline }: Pr
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? t("form.saving") : t("form.save")}
+            {saving ? t("form.saving") : t("form.continue")}
           </button>
         </div>
       </div>

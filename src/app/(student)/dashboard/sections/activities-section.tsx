@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { PortfolioItem, PortfolioItemType } from "@/types/database";
 import { Plus, Trash2, ChevronDown } from "lucide-react";
@@ -37,7 +38,9 @@ const pillCls = (active: boolean) =>
 
 export default function ActivitiesSection({ items, studentId, onClose, inline }: Props) {
   const { t, locale } = useLocale();
+  const router = useRouter();
   const [localItems, setLocalItems] = useState<PortfolioItem[]>(items);
+  useEffect(() => { setLocalItems(items); }, [items]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -133,6 +136,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline }:
     setLocalItems((prev) => [...prev, data as PortfolioItem]);
     resetForm();
     setSaving(false);
+    router.refresh();
   }
 
   async function handleDelete(itemId: string) {
@@ -152,6 +156,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline }:
 
     setLocalItems((prev) => prev.filter((i) => i.id !== itemId));
     setDeleting(null);
+    router.refresh();
   }
 
   const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";

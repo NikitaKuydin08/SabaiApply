@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
 import { Search, ChevronDown } from "lucide-react";
@@ -14,6 +14,7 @@ interface Props {
   onClose: () => void;
   userEmail: string;
   inline?: boolean;
+  onSaved?: () => void;
 }
 
 const PREFIX_OPTIONS = ["Mr.", "Ms.", "Mrs.", "Master", "Miss"] as const;
@@ -114,10 +115,17 @@ function parsePhone(phone: string | null): { code: string; number: string } {
   return { code: "+66", number: phone };
 }
 
-export default function PersonalInfoSection({ profile, userId, onClose, userEmail, inline }: Props) {
+export default function PersonalInfoSection({ profile, userId, onClose, userEmail, inline, onSaved }: Props) {
   const { t } = useLocale();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [error]);
 
   const [prefix, setPrefix] = useState(profile?.prefix || "");
   const [idType, setIdType] = useState(profile?.id_type || "Thai ID");
@@ -248,7 +256,12 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
       if (err) { setError(err.message); setSaving(false); return; }
     }
 
-    window.location.reload();
+    if (onSaved) {
+      setSaving(false);
+      onSaved();
+    } else {
+      window.location.reload();
+    }
   }
 
   const inputCls =
@@ -286,7 +299,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
   };
 
   const formContent = (
-      <div className="space-y-8">
+      <div ref={formRef} className="space-y-8">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
         )}
@@ -606,7 +619,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? t("form.saving") : t("form.save")}
+            {saving ? t("form.saving") : t("form.continue")}
           </button>
         </div>
       </div>
@@ -614,7 +627,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
   }
 
   return (
-    <SectionPanel title={t("form.personalInfo")} onClose={onClose} onSave={handleSave} saving={saving} saveLabel={t("form.save")}>
+    <SectionPanel title={t("form.personalInfo")} onClose={onClose} onSave={handleSave} saving={saving} saveLabel={t("form.continue")}>
       {formContent}
     </SectionPanel>
   );

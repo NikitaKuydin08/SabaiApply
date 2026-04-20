@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentScore, ScoreType } from "@/types/database";
 import { Plus, Trash2 } from "lucide-react";
@@ -37,7 +38,9 @@ const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 export default function TestScoresSection({ scores, studentId, onClose, inline }: Props) {
   const { t, locale } = useLocale();
+  const router = useRouter();
   const [localScores, setLocalScores] = useState<StudentScore[]>(scores);
+  useEffect(() => { setLocalScores(scores); }, [scores]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -100,6 +103,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline }
     setLocalScores((prev) => [...prev, data as StudentScore]);
     resetForm();
     setSaving(false);
+    router.refresh();
   }
 
   async function handleDeleteScore(scoreId: string) {
@@ -119,6 +123,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline }
 
     setLocalScores((prev) => prev.filter((s) => s.id !== scoreId));
     setDeleting(null);
+    router.refresh();
   }
 
   const inputCls =

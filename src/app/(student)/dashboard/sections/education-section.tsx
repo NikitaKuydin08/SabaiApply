@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentEducation } from "@/types/database";
 import { FileText } from "lucide-react";
@@ -13,6 +13,7 @@ interface Props {
   studentId: string;
   onClose: () => void;
   inline?: boolean;
+  onSaved?: () => void;
 }
 
 const CURRICULUM_TYPES = ["Thai National", "International", "GED", "Overseas"] as const;
@@ -27,10 +28,17 @@ const pillCls = (active: boolean) =>
       : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
   }`;
 
-export default function EducationSection({ education, studentId, onClose, inline }: Props) {
+export default function EducationSection({ education, studentId, onClose, inline, onSaved }: Props) {
   const { t } = useLocale();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [error]);
 
   const [schoolProvince, setSchoolProvince] = useState(education?.school_province || "");
   const [schoolName, setSchoolName] = useState(education?.school_name || "");
@@ -77,7 +85,12 @@ export default function EducationSection({ education, studentId, onClose, inline
       if (err) { setError(err.message); setSaving(false); return; }
     }
 
-    window.location.reload();
+    if (onSaved) {
+      setSaving(false);
+      onSaved();
+    } else {
+      window.location.reload();
+    }
   }
 
   const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
@@ -96,7 +109,7 @@ export default function EducationSection({ education, studentId, onClose, inline
   };
 
   const formContent = (
-      <div className="space-y-8">
+      <div ref={formRef} className="space-y-8">
         {error && (
           <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>
         )}
@@ -191,7 +204,7 @@ export default function EducationSection({ education, studentId, onClose, inline
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? t("form.saving") : t("form.save")}
+            {saving ? t("form.saving") : t("form.continue")}
           </button>
         </div>
       </div>

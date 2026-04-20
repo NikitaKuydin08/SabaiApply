@@ -367,6 +367,10 @@
     "en": "Save",
     "th": "บันทึก"
   },
+  "form.continue": {
+    "en": "Continue",
+    "th": "ดำเนินการต่อ"
+  },
   "form.saving": {
     "en": "Saving...",
     "th": "กำลังบันทึก..."

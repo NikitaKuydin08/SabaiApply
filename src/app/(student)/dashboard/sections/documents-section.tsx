@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentDocument, DocType } from "@/types/database";
 import { Upload, CheckCircle, FileText } from "lucide-react";
@@ -41,7 +42,9 @@ const DOCUMENT_SLOTS: DocSlot[] = [
 
 export default function DocumentsSection({ documents, studentId, userId, onClose, inline }: Props) {
   const { t, locale } = useLocale();
+  const router = useRouter();
   const [localDocs, setLocalDocs] = useState<StudentDocument[]>(documents);
+  useEffect(() => { setLocalDocs(documents); }, [documents]);
   const [uploading, setUploading] = useState<DocType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -128,6 +131,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
     setUploading(null);
     setActiveSlotType(null);
     resetFileInput();
+    router.refresh();
   }
 
   function resetFileInput() {
