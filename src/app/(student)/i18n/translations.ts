@@ -3,6 +3,7 @@
 
 import app from './locales/app.json';
 import dash from './locales/dash.json';
+import faq from './locales/faq.json';
 import form from './locales/form.json';
 import help from './locales/help.json';
 import login from './locales/login.json';
@@ -18,6 +19,7 @@ export type Locale = "en" | "th";
 const translations = {
   ...app,
   ...dash,
+  ...faq,
   ...form,
   ...help,
   ...login,

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
 import { thaiUniversities, searchUniversities, type ThaiUniversity } from "../data/thai-universities";
-import { faqCategories, searchFAQ, type FAQCategory } from "../data/faq";
+import { faqCategories, faqEntries, type FAQCategory } from "../data/faq";
 import {
   LayoutDashboard,
   Search,
@@ -829,10 +829,15 @@ function HelpSidebar({ locale, t }: { locale: string; t: TFn }) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showChatModal, setShowChatModal] = useState(false);
 
-  const searchResults = searchFAQ(faqSearch, locale as "en" | "th");
-  const filtered = activeCategory === "all"
-    ? searchResults
-    : searchResults.filter((e) => e.category === activeCategory);
+  const filtered = faqEntries.filter((entry) => {
+    if (activeCategory !== "all" && entry.category !== activeCategory) return false;
+    
+    if (!faqSearch.trim()) return true;
+    const q = faqSearch.toLowerCase().trim();
+    const question = t(entry.questionKey).toLowerCase();
+    const answer = t(entry.answerKey).toLowerCase();
+    return question.includes(q) || answer.includes(q);
+  });
 
   return (
     <>
@@ -865,8 +870,8 @@ function HelpSidebar({ locale, t }: { locale: string; t: TFn }) {
           ) : (
             <div className="space-y-3">
               {filtered.map((entry) => {
-                const question = locale === "th" ? entry.question_th : entry.question_en;
-                const answer = locale === "th" ? entry.answer_th : entry.answer_en;
+                const question = t(entry.questionKey);
+                const answer = t(entry.answerKey);
                 const isExpanded = expandedId === entry.id;
                 return (
                   <div key={entry.id}>
@@ -954,7 +959,7 @@ function CategoryTabs({ locale, activeCategory, setActiveCategory, t }: {
             activeCategory === cat.key ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:bg-[#f0f0f0]"
           }`}
         >
-          {locale === "th" ? cat.label_th : cat.label_en}
+          {t(cat.labelKey)}
         </button>
       ))}
       {hiddenCats.length > 0 && (
@@ -980,7 +985,7 @@ function CategoryTabs({ locale, activeCategory, setActiveCategory, t }: {
                       activeCategory === cat.key ? "bg-[#FFF3D0] text-[#1a1a1a]" : "text-[#444] hover:bg-[#f5f5f5]"
                     }`}
                   >
-                    {locale === "th" ? cat.label_th : cat.label_en}
+                    {t(cat.labelKey)}
                   </button>
                 ))}
               </div>

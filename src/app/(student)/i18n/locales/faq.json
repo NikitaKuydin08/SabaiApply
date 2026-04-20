@@ -1,0 +1,174 @@
+{
+  "faq.category.account": {
+    "en": "Account",
+    "th": "บัญชี"
+  },
+  "faq.category.universities": {
+    "en": "Universities",
+    "th": "มหาวิทยาลัย"
+  },
+  "faq.category.applying": {
+    "en": "Applying",
+    "th": "การสมัคร"
+  },
+  "faq.category.documents": {
+    "en": "Documents",
+    "th": "เอกสาร"
+  },
+  "faq.category.general": {
+    "en": "General",
+    "th": "ทั่วไป"
+  },
+  "faq.q.acc-1": {
+    "en": "How do I create an account?",
+    "th": "ฉันจะสร้างบัญชีได้อย่างไร?"
+  },
+  "faq.a.acc-1": {
+    "en": "Click 'Sign up' on the homepage. Enter your email address, create a password, and confirm your email through the link we send you.",
+    "th": "คลิก 'สมัครสมาชิก' ที่หน้าแรก กรอกอีเมล สร้างรหัสผ่าน และยืนยันอีเมลผ่านลิงก์ที่เราส่งให้"
+  },
+  "faq.q.acc-2": {
+    "en": "I forgot my password. How do I reset it?",
+    "th": "ฉันลืมรหัสผ่าน จะรีเซ็ตได้อย่างไร?"
+  },
+  "faq.a.acc-2": {
+    "en": "On the login page, click 'Forgot password?' and enter your email. We'll send you a link to create a new password.",
+    "th": "ที่หน้าเข้าสู่ระบบ คลิก 'ลืมรหัสผ่าน?' แล้วกรอกอีเมล เราจะส่งลิงก์เพื่อสร้างรหัสผ่านใหม่"
+  },
+  "faq.q.acc-3": {
+    "en": "Can I change my email address?",
+    "th": "ฉันสามารถเปลี่ยนอีเมลได้ไหม?"
+  },
+  "faq.a.acc-3": {
+    "en": "Yes. Go to Settings in the dashboard sidebar, click 'Change my email', enter your current password and new email. A confirmation link will be sent to your new email.",
+    "th": "ได้ ไปที่ตั้งค่าในแถบด้านข้าง คลิก 'เปลี่ยนอีเมล' กรอกรหัสผ่านปัจจุบันและอีเมลใหม่ ลิงก์ยืนยันจะถูกส่งไปที่อีเมลใหม่"
+  },
+  "faq.q.acc-4": {
+    "en": "How do I delete my account?",
+    "th": "ฉันจะลบบัญชีได้อย่างไร?"
+  },
+  "faq.a.acc-4": {
+    "en": "Go to Settings, select 'Delete my account'. Read the warning carefully, check the confirmation box, enter your password, and click Continue. This action is permanent.",
+    "th": "ไปที่ตั้งค่า เลือก 'ลบบัญชี' อ่านคำเตือน ทำเครื่องหมายยืนยัน กรอกรหัสผ่าน แล้วคลิกดำเนินการต่อ การกระทำนี้ไม่สามารถย้อนกลับได้"
+  },
+  "faq.q.uni-1": {
+    "en": "How can I add a university to my list?",
+    "th": "ฉันจะเพิ่มมหาวิทยาลัยในรายการได้อย่างไร?"
+  },
+  "faq.a.uni-1": {
+    "en": "Click 'Choose University' in the sidebar. Search by name or browse the full list. Click the 'Add' button next to any university you're interested in.",
+    "th": "คลิก 'เลือกมหาวิทยาลัย' ในแถบด้านข้าง ค้นหาด้วยชื่อหรือดูรายการทั้งหมด คลิกปุ่ม 'เพิ่ม' ที่มหาวิทยาลัยที่สนใจ"
+  },
+  "faq.q.uni-2": {
+    "en": "How many universities can I apply to?",
+    "th": "ฉันสามารถสมัครได้กี่มหาวิทยาลัย?"
+  },
+  "faq.a.uni-2": {
+    "en": "You can add and apply to multiple universities. There is no limit on SabaiApply, but check each admission round's rules for any restrictions.",
+    "th": "คุณสามารถเพิ่มและสมัครได้หลายมหาวิทยาลัย ไม่จำกัดจำนวนบน SabaiApply แต่ตรวจสอบกฎของแต่ละรอบการรับสมัคร"
+  },
+  "faq.q.uni-3": {
+    "en": "Can I remove a university from my list?",
+    "th": "ฉันสามารถลบมหาวิทยาลัยออกจากรายการได้ไหม?"
+  },
+  "faq.a.uni-3": {
+    "en": "Yes. Go to the University Search page and click 'Remove' next to the university you want to remove. If you haven't submitted an application yet, it will be removed immediately.",
+    "th": "ได้ ไปที่หน้าค้นหามหาวิทยาลัย คลิก 'ลบ' ที่มหาวิทยาลัยที่ต้องการลบ หากยังไม่ส่งใบสมัครจะถูกลบทันที"
+  },
+  "faq.q.uni-4": {
+    "en": "What information is available for each university?",
+    "th": "มีข้อมูลอะไรบ้างสำหรับแต่ละมหาวิทยาลัย?"
+  },
+  "faq.a.uni-4": {
+    "en": "Each university page will show programs offered, admission requirements, tuition fees, deadlines, and application instructions. This information is being added progressively.",
+    "th": "หน้ามหาวิทยาลัยจะแสดงหลักสูตร ข้อกำหนดการรับสมัคร ค่าเล่าเรียน กำหนดส่ง และคำแนะนำการสมัคร ข้อมูลกำลังถูกเพิ่มเข้ามาเรื่อยๆ"
+  },
+  "faq.q.app-1": {
+    "en": "How does the application process work?",
+    "th": "กระบวนการสมัครทำงานอย่างไร?"
+  },
+  "faq.a.app-1": {
+    "en": "First, complete your profile (personal info, education, test scores). Then choose your universities. Finally, submit your application to each university — your profile data is automatically filled in.",
+    "th": "ขั้นแรก กรอกโปรไฟล์ (ข้อมูลส่วนตัว การศึกษา คะแนนสอบ) จากนั้นเลือกมหาวิทยาลัย สุดท้ายส่งใบสมัคร — ข้อมูลโปรไฟล์จะถูกกรอกให้อัตโนมัติ"
+  },
+  "faq.q.app-2": {
+    "en": "Can I edit my application after submitting?",
+    "th": "ฉันสามารถแก้ไขใบสมัครหลังจากส่งได้ไหม?"
+  },
+  "faq.a.app-2": {
+    "en": "You can edit your application until the program's deadline. After the deadline, your submission is locked and cannot be changed.",
+    "th": "คุณสามารถแก้ไขใบสมัครได้จนถึงกำหนดเส้นตาย หลังจากนั้นการเปลี่ยนแปลงจะถูกล็อค"
+  },
+  "faq.q.app-3": {
+    "en": "How do I track my application status?",
+    "th": "ฉันจะติดตามสถานะใบสมัครได้อย่างไร?"
+  },
+  "faq.a.app-3": {
+    "en": "Your dashboard shows all submitted applications with their current status: submitted, under review, shortlisted, accepted, or rejected. You'll also receive email notifications for status changes.",
+    "th": "แดชบอร์ดแสดงใบสมัครทั้งหมดพร้อมสถานะปัจจุบัน: ส่งแล้ว กำลังพิจารณา ผ่านคัดเลือก ตอบรับ หรือไม่ผ่าน คุณจะได้รับอีเมลแจ้งเตือนเมื่อสถานะเปลี่ยน"
+  },
+  "faq.q.app-4": {
+    "en": "What are the admission rounds?",
+    "th": "รอบการรับสมัครมีอะไรบ้าง?"
+  },
+  "faq.a.app-4": {
+    "en": "Thai universities typically have Round 1 (Portfolio), Round 2 (Quota), and Round 4 (Direct Admission). Each round has different requirements and deadlines. Check each program for details.",
+    "th": "มหาวิทยาลัยไทยมักมีรอบ 1 (พอร์ตฟอลิโอ) รอบ 2 (โควตา) และรอบ 4 (รับตรง) แต่ละรอบมีข้อกำหนดและกำหนดส่งต่างกัน ตรวจสอบรายละเอียดแต่ละหลักสูตร"
+  },
+  "faq.q.doc-1": {
+    "en": "What documents do I need to apply?",
+    "th": "ฉันต้องใช้เอกสารอะไรบ้างในการสมัคร?"
+  },
+  "faq.a.doc-1": {
+    "en": "Most programs require: transcript, ID copy, test scores (GAT/PAT, TGAT/TPAT, or O-NET), and a portfolio. Some programs may require additional documents — check each program's requirements.",
+    "th": "หลักสูตรส่วนใหญ่ต้องการ: สำเนาผลการเรียน สำเนาบัตรประชาชน คะแนนสอบ (GAT/PAT, TGAT/TPAT หรือ O-NET) และพอร์ตฟอลิโอ บางหลักสูตรอาจต้องการเอกสารเพิ่มเติม"
+  },
+  "faq.q.doc-2": {
+    "en": "What file formats are accepted?",
+    "th": "รองรับไฟล์รูปแบบใดบ้าง?"
+  },
+  "faq.a.doc-2": {
+    "en": "We accept PDF, JPG, and PNG files. Maximum file size is 10MB per document. We recommend PDF for transcripts and certificates.",
+    "th": "เรารองรับไฟล์ PDF, JPG และ PNG ขนาดไฟล์สูงสุด 10MB ต่อเอกสาร แนะนำ PDF สำหรับผลการเรียนและประกาศนียบัตร"
+  },
+  "faq.q.doc-3": {
+    "en": "Can I update my documents after uploading?",
+    "th": "ฉันสามารถอัปเดตเอกสารหลังจากอัปโหลดได้ไหม?"
+  },
+  "faq.a.doc-3": {
+    "en": "Yes, you can replace any uploaded document at any time from your profile. If you've already submitted an application, the updated document will be used for future submissions.",
+    "th": "ได้ คุณสามารถเปลี่ยนเอกสารที่อัปโหลดได้ตลอดเวลาจากโปรไฟล์ หากส่งใบสมัครไปแล้ว เอกสารที่อัปเดตจะถูกใช้สำหรับการส่งครั้งต่อไป"
+  },
+  "faq.q.gen-1": {
+    "en": "Is SabaiApply free to use?",
+    "th": "SabaiApply ใช้ฟรีไหม?"
+  },
+  "faq.a.gen-1": {
+    "en": "Yes, SabaiApply is completely free for students. We believe every student should have equal access to university applications.",
+    "th": "ใช่ SabaiApply ใช้ฟรีสำหรับนักศึกษา เราเชื่อว่านักศึกษาทุกคนควรมีสิทธิ์เข้าถึงการสมัครมหาวิทยาลัยอย่างเท่าเทียม"
+  },
+  "faq.q.gen-2": {
+    "en": "What languages does SabaiApply support?",
+    "th": "SabaiApply รองรับภาษาอะไรบ้าง?"
+  },
+  "faq.a.gen-2": {
+    "en": "SabaiApply is available in English and Thai. You can switch languages at any time using the EN/TH toggle on any page.",
+    "th": "SabaiApply รองรับภาษาอังกฤษและไทย คุณสามารถเปลี่ยนภาษาได้ตลอดเวลาโดยใช้ปุ่ม EN/TH บนทุกหน้า"
+  },
+  "faq.q.gen-3": {
+    "en": "How do I contact support?",
+    "th": "ฉันจะติดต่อฝ่ายสนับสนุนได้อย่างไร?"
+  },
+  "faq.a.gen-3": {
+    "en": "Use the 24/7 Support Chat button at the bottom of the help panel, or email us at support@sabaiapply.com. We typically respond within 24 hours.",
+    "th": "ใช้ปุ่มแชทสนับสนุน 24/7 ที่ด้านล่างของแผงช่วยเหลือ หรืออีเมลเราที่ support@sabaiapply.com เราตอบกลับภายใน 24 ชั่วโมง"
+  },
+  "faq.q.gen-4": {
+    "en": "Is my data safe?",
+    "th": "ข้อมูลของฉันปลอดภัยไหม?"
+  },
+  "faq.a.gen-4": {
+    "en": "Yes. Your data is stored securely and encrypted. We never share your personal information with third parties without your consent. Only the universities you apply to can see your application data.",
+    "th": "ใช่ ข้อมูลของคุณถูกจัดเก็บอย่างปลอดภัยและเข้ารหัส เราไม่เปิดเผยข้อมูลส่วนตัวให้บุคคลที่สามโดยไม่ได้รับความยินยอม เฉพาะมหาวิทยาลัยที่คุณสมัครเท่านั้นที่เห็นข้อมูลใบสมัคร"
+  }
+}
