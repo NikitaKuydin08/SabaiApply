@@ -28,7 +28,7 @@ export default async function DashboardPage() {
 
   const studentId = profile?.id;
 
-  const [familyRes, educationRes, scoresRes, documentsRes, portfolioItemsRes, universitiesRes] = await Promise.all([
+  const [familyRes, educationRes, scoresRes, documentsRes, portfolioItemsRes, universitiesRes, applicationsRes] = await Promise.all([
     studentId
       ? supabase.from("student_family").select("*").eq("student_id", studentId).single()
       : { data: null },
@@ -54,6 +54,18 @@ export default async function DashboardPage() {
         )
       `)
       .order("name"),
+    studentId
+      ? supabase
+          .from("applications")
+          .select(`
+            id, status, round, submitted_at, program_id,
+            program:programs!inner(
+              id,
+              faculty:faculties!inner(id, university_id)
+            )
+          `)
+          .eq("student_id", studentId)
+      : { data: null },
   ]);
 
   type ProgramRow = {
@@ -102,6 +114,30 @@ export default async function DashboardPage() {
     })),
   }));
 
+  // Build per-university submission map from the student's actual applications.
+  // A university is "submitted" if any of its programs has an application row.
+  type ApplicationRow = {
+    id: string;
+    status: string;
+    round: string;
+    submitted_at: string;
+    program_id: string;
+    program: { id: string; faculty: { id: string; university_id: string } | { id: string; university_id: string }[] } | { id: string; faculty: { id: string; university_id: string } | { id: string; university_id: string }[] }[];
+  };
+  const applications = (applicationsRes.data ?? []) as ApplicationRow[];
+  const submittedUniIds: Record<string, { applicationId: string; status: string; submittedAt: string }> = {};
+  for (const a of applications) {
+    const program = Array.isArray(a.program) ? a.program[0] : a.program;
+    const faculty = program ? (Array.isArray(program.faculty) ? program.faculty[0] : program.faculty) : null;
+    const uniId = faculty?.university_id;
+    if (!uniId) continue;
+    // Keep the most recent if multiple exist (e.g. different rounds).
+    const prev = submittedUniIds[uniId];
+    if (!prev || a.submitted_at > prev.submittedAt) {
+      submittedUniIds[uniId] = { applicationId: a.id, status: a.status, submittedAt: a.submitted_at };
+    }
+  }
+
   return (
     <DashboardClient
       user={{ email: user.email!, id: user.id }}
@@ -112,6 +148,7 @@ export default async function DashboardPage() {
       documents={documentsRes.data ?? []}
       portfolioItems={portfolioItemsRes.data ?? []}
       universities={universities}
+      submittedApplications={submittedUniIds}
     />
   );
 }

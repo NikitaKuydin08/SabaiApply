@@ -2,15 +2,21 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  AlertTriangle,
+  Check,
   ChevronDown,
   ChevronUp,
   ExternalLink,
   HelpCircle,
   Info,
+  Pencil,
   Trash2,
+  X,
 } from "lucide-react";
 import type { University } from "./dashboard-client";
+import type { StudentProfile, StudentFamily, StudentEducation, StudentScore, StudentDocument, PortfolioItem } from "@/types/database";
 import { getUniMeta } from "./uni-meta";
+import { submitApplication } from "./actions";
 
 // Brand icons (lucide removed these to avoid trademark issues — using inline SVG).
 function Facebook({ size = 16 }: { size?: number }) {
@@ -68,6 +74,8 @@ export interface UniDraft {
   facultyId?: string;
   programId?: string;
   essay?: string;
+  submittedAt?: string;
+  signatureName?: string;
 }
 
 export type UniAppStatus = "completed" | "in_progress" | "not_started";
@@ -110,6 +118,7 @@ export type UniOverallStatus = "not_started" | "in_progress" | "completed" | "su
 
 /** Roll draft section statuses up into a single overall status for the uni. */
 export function getUniOverallStatus(draft: UniDraft): UniOverallStatus {
+  if (draft.submittedAt) return "submitted";
   const s = getUniSectionStatuses(draft);
   const sections: UniAppSection[] = ["general", "academics", "other"];
   const allCompleted = sections.every((k) => s[k] === "completed");
@@ -146,6 +155,16 @@ export function getUniSectionStatuses(draft: UniDraft): Record<UniAppSection, Un
 
 /* ══════════════════════════════════════════════ */
 
+export interface StudentData {
+  email: string;
+  profile: StudentProfile | null;
+  family: StudentFamily | null;
+  education: StudentEducation | null;
+  scores: StudentScore[];
+  documents: StudentDocument[];
+  portfolioItems: PortfolioItem[];
+}
+
 interface Props {
   university: University;
   activeSection: UniAppSection;
@@ -154,8 +173,10 @@ interface Props {
   onDraftChange: (d: UniDraft) => void;
   commonAppSections: CommonAppSectionState[];
   locale: "en" | "th";
+  studentData: StudentData;
   onRemove: () => void;
   onJumpToCommonAppSection: (action: CommonAppSectionState["action"]) => void;
+  onSubmitApplication: () => void;
 }
 
 export default function UniversityAppView({
@@ -166,8 +187,10 @@ export default function UniversityAppView({
   onDraftChange,
   commonAppSections,
   locale,
+  studentData,
   onRemove,
   onJumpToCommonAppSection,
+  onSubmitApplication,
 }: Props) {
   const sectionStatus = useMemo(() => getUniSectionStatuses(draft), [draft]);
 
@@ -191,8 +214,12 @@ export default function UniversityAppView({
           locale={locale}
           commonAppSections={commonAppSections}
           sectionStatus={sectionStatus}
+          draft={draft}
+          onDraftChange={onDraftChange}
+          studentData={studentData}
           onJumpToCommonAppSection={onJumpToCommonAppSection}
           onJumpToUniSection={setActiveSection}
+          onSubmitApplication={onSubmitApplication}
         />
       )}
     </div>
@@ -706,17 +733,26 @@ function ReviewAndSubmitPage({
   locale,
   commonAppSections,
   sectionStatus,
+  draft,
+  onDraftChange,
+  studentData,
   onJumpToCommonAppSection,
   onJumpToUniSection,
+  onSubmitApplication,
 }: {
   university: University;
   locale: "en" | "th";
   commonAppSections: CommonAppSectionState[];
   sectionStatus: Record<UniAppSection, UniAppStatus>;
+  draft: UniDraft;
+  onDraftChange: (d: UniDraft) => void;
+  studentData: StudentData;
   onJumpToCommonAppSection: (action: CommonAppSectionState["action"]) => void;
   onJumpToUniSection: (s: UniAppSection) => void;
+  onSubmitApplication: () => void;
 }) {
   const title = locale === "th" && university.name_th ? university.name_th : university.name;
+  const [showModal, setShowModal] = useState(false);
 
   const incompleteCommon = commonAppSections.filter((s) => s.status !== "completed");
   const incompleteUni: Array<{ key: UniAppSection; label: string }> = [];
@@ -789,12 +825,614 @@ function ReviewAndSubmitPage({
       )}
 
       {allComplete && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-8 text-base leading-relaxed text-green-700">
-          {locale === "th"
-            ? "ทุกส่วนของใบสมัครเสร็จสมบูรณ์ ฟังก์ชันการตรวจและส่งใบสมัครกำลังจะเปิดใช้งานเร็วๆ นี้"
-            : "All required components are complete. The review-and-submit flow will be enabled shortly."}
+        <div className="space-y-6">
+          <p className="text-[15px] leading-relaxed text-[#444]">
+            {locale === "th"
+              ? `คุณพร้อมที่จะตรวจและส่งใบสมัครไปยัง ${title} แล้ว! กระบวนการส่งประกอบด้วยขั้นตอนต่อไปนี้:`
+              : `You are ready to review and submit your application to ${title}! The submission process includes the following steps:`}
+          </p>
+
+          <StepBlock
+            title={locale === "th" ? "ขั้นตอนที่ 1: ตรวจสอบใบสมัคร" : "Step 1: Review your application"}
+          >
+            <p>{locale === "th" ? "ดูตัวอย่าง PDF ของใบสมัคร" : "Review a PDF preview of your application."}</p>
+            {draft.essay && (
+              <p>{locale === "th" ? `${title} ต้องการเรียงความส่วนตัวของคุณ` : `${title} requires your personal essay.`}</p>
+            )}
+          </StepBlock>
+
+          <StepBlock
+            title={locale === "th" ? "ขั้นตอนที่ 2: ชำระค่าสมัคร (ถ้ามี)" : "Step 2: Pay the application fee (if applicable)"}
+          >
+            <p>
+              {locale === "th"
+                ? "หากมหาวิทยาลัยเรียกเก็บค่าสมัครและคุณไม่มีการยกเว้นค่าสมัคร คุณจะต้องชำระค่าสมัครก่อนการส่งใบสมัคร"
+                : "If this university charges a fee and you do not have a fee waiver, you will need to pay the application fee before submitting your application."}
+            </p>
+            <p>
+              {locale === "th"
+                ? "ขั้นตอนการชำระเงินจะนำคุณไปยังบริการชำระเงินภายนอกที่ปลอดภัย เมื่อชำระเงินเสร็จแล้ว คุณต้องกลับมาที่ SabaiApply เพื่อดำเนินการส่งใบสมัคร"
+                : "Application payment will take you to a secure, third-party payment service. Once you have paid the application fee, you must return to SabaiApply to complete your submission."}
+            </p>
+          </StepBlock>
+
+          <div className="flex items-start gap-3 rounded-xl border border-[#F4C430] bg-[#FFF9EC] p-4">
+            <AlertTriangle size={20} className="mt-0.5 shrink-0 text-[#b88a12]" />
+            <p className="text-[15px] leading-relaxed text-[#8a6d17]">
+              {locale === "th"
+                ? "ใบสมัครของคุณจะยังไม่ถูกส่งจนกว่าคุณจะเสร็จสิ้นขั้นตอนลายเซ็นและการยืนยัน"
+                : "Your application will not be submitted until you complete your signature and affirmations."}
+            </p>
+          </div>
+
+          <StepBlock
+            title={locale === "th" ? "ขั้นตอนที่ 3: ส่งใบสมัคร" : "Step 3: Submit your application"}
+          >
+            <p>
+              {locale === "th"
+                ? "ลงลายเซ็นและยืนยันเพื่อส่งใบสมัคร"
+                : "Complete your signature and affirmations to submit your application."}
+            </p>
+          </StepBlock>
+
+          <div className="pt-2">
+            <button
+              onClick={() => setShowModal(true)}
+              className="rounded-full bg-[#F4C430] px-8 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+            >
+              {locale === "th" ? "ตรวจและส่งใบสมัคร" : "Review and Submit"}
+            </button>
+          </div>
+
+          {showModal && (
+            <ReviewSubmitModal
+              university={university}
+              locale={locale}
+              draft={draft}
+              studentData={studentData}
+              onDraftChange={onDraftChange}
+              onClose={() => setShowModal(false)}
+              onSubmit={() => {
+                setShowModal(false);
+                onSubmitApplication();
+              }}
+            />
+          )}
+          {/* NOTE: onSubmit receives { applicationId, submittedAt } — kept as a
+              void-closure here because the parent (dashboard-client) only needs
+              to flip local status; future work can thread the applicationId
+              through if we need to reference it in the UI. */}
         </div>
       )}
+    </div>
+  );
+}
+
+function StepBlock({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1">
+      <h3 className="text-[15px] font-bold text-[#1a1a1a]">{title}</h3>
+      <div className="space-y-2 text-[15px] leading-relaxed text-[#444]">{children}</div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   Review & Submit modal (Final Review → Payment → Signature)
+   ══════════════════════════════════════════════ */
+
+type ReviewStage = "review" | "payment" | "signature";
+
+function ReviewSubmitModal({
+  university,
+  locale,
+  draft,
+  studentData,
+  onDraftChange,
+  onClose,
+  onSubmit,
+}: {
+  university: University;
+  locale: "en" | "th";
+  draft: UniDraft;
+  studentData: StudentData;
+  onDraftChange: (d: UniDraft) => void;
+  onClose: () => void;
+  onSubmit: (info: { applicationId: string; submittedAt: string }) => void;
+}) {
+  const [stage, setStage] = useState<ReviewStage>("review");
+  const [signatureName, setSignatureName] = useState(draft.signatureName ?? "");
+  const [affirmed, setAffirmed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const stages: { key: ReviewStage; label: string }[] = [
+    { key: "review", label: locale === "th" ? "ตรวจสอบขั้นสุดท้าย" : "Final Review" },
+    { key: "payment", label: locale === "th" ? "ชำระเงิน" : "Payment" },
+    { key: "signature", label: locale === "th" ? "ลายเซ็นและส่ง" : "Signature & Submission" },
+  ];
+  const stageIdx = stages.findIndex((s) => s.key === stage);
+
+  function advance() {
+    if (stage === "review") setStage("payment");
+    else if (stage === "payment") setStage("signature");
+  }
+
+  async function handleSubmit() {
+    if (!affirmed || !signatureName.trim()) return;
+    if (!draft.programId) {
+      setSubmitError(locale === "th"
+        ? "กรุณาเลือกหลักสูตรในส่วน 'สาขาวิชา'"
+        : "Please select a program in the Academics section before submitting.");
+      return;
+    }
+    if (!draft.preferredRound) {
+      setSubmitError(locale === "th"
+        ? "กรุณาเลือกรอบการสมัครในส่วน 'ข้อมูลทั่วไป'"
+        : "Please select an admission round in the General section before submitting.");
+      return;
+    }
+
+    setSubmitError(null);
+    setSubmitting(true);
+
+    const result = await submitApplication({
+      programId: draft.programId,
+      round: draft.preferredRound as "1" | "2" | "4",
+      essay: draft.essay,
+      signatureName: signatureName.trim(),
+      customAnswers: {
+        admission_plan: draft.admissionPlan ?? null,
+        faculty_id: draft.facultyId ?? null,
+      },
+    });
+
+    if (result.error || !result.applicationId || !result.submittedAt) {
+      setSubmitError(result.error ?? (locale === "th" ? "ส่งไม่สำเร็จ" : "Submission failed"));
+      setSubmitting(false);
+      return;
+    }
+
+    onDraftChange({
+      ...draft,
+      signatureName: signatureName.trim(),
+      submittedAt: result.submittedAt,
+    });
+    onSubmit({ applicationId: result.applicationId, submittedAt: result.submittedAt });
+  }
+
+  const continueDisabled =
+    stage === "signature" && (!affirmed || !signatureName.trim() || submitting);
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col bg-white">
+      {/* Header */}
+      <div className="flex items-center border-b border-[#e8e8e8] px-6 py-4">
+        <button
+          onClick={onClose}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e0e0e0] text-[#666] transition-colors hover:bg-[#f5f5f5] hover:text-[#1a1a1a]"
+          aria-label={locale === "th" ? "ปิด" : "Close"}
+        >
+          <X size={18} />
+        </button>
+        <h2 className="flex-1 text-center text-xl font-bold text-[#1a1a1a]">
+          {locale === "th" ? "ตรวจและส่งใบสมัคร" : "Review and submit"}
+        </h2>
+        <div className="w-10" />
+      </div>
+
+      {/* Stepper */}
+      <div className="flex items-center justify-center gap-6 border-b border-[#e8e8e8] px-6 py-5">
+        {stages.map((s, i) => {
+          const active = i === stageIdx;
+          const done = i < stageIdx;
+          return (
+            <div key={s.key} className="flex items-center gap-3">
+              <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
+                active
+                  ? "bg-[#F4C430] text-[#1a1a1a]"
+                  : done
+                    ? "bg-[#FFF3D0] text-[#b88a12]"
+                    : "bg-[#f0f0f0] text-[#999]"
+              }`}>
+                {active && <Pencil size={14} />}
+                {done && <Check size={14} />}
+                {!active && !done && (i + 1)}
+              </div>
+              <span className={`text-[15px] font-medium ${active ? "text-[#1a1a1a]" : "text-[#888]"}`}>
+                {s.label}
+              </span>
+              {i < stages.length - 1 && <div className="h-px w-16 bg-[#e0e0e0]" />}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto bg-[#FFF9EC] px-6 py-8">
+        <div className="mx-auto max-w-4xl">
+          {stage === "review" && (
+            <FinalReviewStage university={university} locale={locale} draft={draft} studentData={studentData} />
+          )}
+          {stage === "payment" && (
+            <PaymentStage university={university} locale={locale} />
+          )}
+          {stage === "signature" && (
+            <SignatureStage
+              locale={locale}
+              signatureName={signatureName}
+              setSignatureName={setSignatureName}
+              affirmed={affirmed}
+              setAffirmed={setAffirmed}
+              submitError={submitError}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-end gap-3 border-t border-[#e8e8e8] px-6 py-4">
+        <button
+          onClick={onClose}
+          className="rounded-full border border-[#e0e0e0] bg-white px-6 py-2.5 text-[15px] font-semibold text-[#666] transition-colors hover:bg-[#f5f5f5] hover:text-[#1a1a1a]"
+        >
+          {locale === "th" ? "ยกเลิก" : "Cancel"}
+        </button>
+        <button
+          onClick={stage === "signature" ? handleSubmit : advance}
+          disabled={continueDisabled}
+          className="rounded-full bg-[#F4C430] px-6 py-2.5 text-[15px] font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50"
+        >
+          {submitting
+            ? (locale === "th" ? "กำลังส่ง..." : "Submitting...")
+            : stage === "signature"
+              ? (locale === "th" ? "ส่งใบสมัคร" : "Submit application")
+              : (locale === "th" ? "ถัดไป" : "Continue")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Stage 1: Final Review ── */
+
+function FinalReviewStage({ university, locale, draft, studentData }: {
+  university: University;
+  locale: "en" | "th";
+  draft: UniDraft;
+  studentData: StudentData;
+}) {
+  const title = locale === "th" && university.name_th ? university.name_th : university.name;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4 text-[15px] leading-relaxed text-blue-900">
+        <Info size={18} className="mt-0.5 shrink-0 text-blue-500" />
+        <p>
+          {locale === "th"
+            ? `ตรวจสอบใบสมัครของคุณก่อนส่ง หากจำเป็นต้องแก้ไข กดปุ่มยกเลิกแล้วกลับไปแก้ไขส่วนที่เกี่ยวข้อง`
+            : `Please review your complete application before continuing. If you need to make changes, click Cancel and return to the relevant section.`}
+        </p>
+      </div>
+
+      {/* PDF-like preview */}
+      <div className="rounded-xl border border-[#e0e0e0] bg-white shadow-sm">
+        <ApplicationPreview
+          university={university}
+          title={title}
+          locale={locale}
+          draft={draft}
+          studentData={studentData}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ApplicationPreview({ university, title, locale, draft, studentData }: {
+  university: University;
+  title: string;
+  locale: "en" | "th";
+  draft: UniDraft;
+  studentData: StudentData;
+}) {
+  const { profile, family, education, scores, documents, portfolioItems, email } = studentData;
+  const fullName = profile ? `${profile.last_name ?? ""}, ${profile.first_name ?? ""}`.replace(/^,\s*|,\s*$/g, "") : "—";
+  const selectedFaculty = university.faculties.find((f) => f.id === draft.facultyId);
+  const selectedProgram = selectedFaculty?.programs.find((p) => p.id === draft.programId);
+  const today = new Date().toISOString().slice(0, 10);
+
+  return (
+    <div className="p-10">
+      {/* Header */}
+      <div className="mb-6 flex items-start justify-between border-b-2 border-[#2E7CD6] pb-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-[#FFF3D0] text-xl font-bold text-[#1a1a1a]">
+            {university.logo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={university.logo_url} alt="" className="h-full w-full object-contain rounded-lg" />
+            ) : (
+              <span>{title[0]}</span>
+            )}
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-[#1a1a1a]">SabaiApply</p>
+            <p className="text-xs text-[#888]">{locale === "th" ? "ใบสมัครมหาวิทยาลัย" : "University Application"}</p>
+          </div>
+        </div>
+        <div className="text-right text-xs text-[#666]">
+          <p className="font-semibold text-[#1a1a1a]">{fullName}</p>
+          <p>{title}</p>
+          <p>{today}</p>
+        </div>
+      </div>
+
+      {/* Profile */}
+      <Section title="Profile">
+        <SubSection title={locale === "th" ? "ข้อมูลส่วนตัว" : "Personal information"}>
+          <Row label={locale === "th" ? "ชื่อ" : "Name"} value={fullName || "—"} />
+          <Row label={locale === "th" ? "ชื่อ (ไทย)" : "Name (Thai)"} value={profile?.first_name_th && profile?.last_name_th ? `${profile.last_name_th}, ${profile.first_name_th}` : "—"} />
+          <Row label={locale === "th" ? "วันเกิด" : "Birthdate"} value={profile?.dob ?? "—"} />
+          <Row label={locale === "th" ? "สัญชาติ" : "Nationality"} value={profile?.nationality ?? "—"} />
+          <Row label={locale === "th" ? "เพศ" : "Gender"} value={profile?.gender ?? "—"} />
+          <Row label={locale === "th" ? "ประเภทบัตร" : "ID type"} value={profile?.id_type ?? "—"} />
+          <Row label={locale === "th" ? "เลขบัตร" : "ID number"} value={profile?.id_number ?? "—"} />
+        </SubSection>
+        <SubSection title={locale === "th" ? "ข้อมูลติดต่อ" : "Contact details"}>
+          <Row label="Email" value={email} />
+          <Row label={locale === "th" ? "โทรศัพท์" : "Phone"} value={profile?.phone ?? "—"} />
+          <Row label="LINE ID" value={profile?.line_id ?? "—"} />
+          <Row label={locale === "th" ? "ที่อยู่" : "Address"} value={formatAddress(profile?.address)} multiline />
+        </SubSection>
+      </Section>
+
+      {/* Family */}
+      <Section title={locale === "th" ? "ครอบครัว" : "Family"}>
+        {family ? (
+          <>
+            <SubSection title={locale === "th" ? "บิดา" : "Father"}>
+              <Row label={locale === "th" ? "ชื่อ" : "Name"} value={joinName(family.father_prefix, family.father_first_name, family.father_last_name)} />
+              <Row label={locale === "th" ? "อาชีพ" : "Occupation"} value={family.father_occupation ?? "—"} />
+              <Row label={locale === "th" ? "การศึกษา" : "Education"} value={family.father_education_level ?? "—"} />
+              <Row label={locale === "th" ? "โทรศัพท์" : "Phone"} value={family.father_phone ?? "—"} />
+            </SubSection>
+            <SubSection title={locale === "th" ? "มารดา" : "Mother"}>
+              <Row label={locale === "th" ? "ชื่อ" : "Name"} value={joinName(family.mother_prefix, family.mother_first_name, family.mother_last_name)} />
+              <Row label={locale === "th" ? "อาชีพ" : "Occupation"} value={family.mother_occupation ?? "—"} />
+              <Row label={locale === "th" ? "การศึกษา" : "Education"} value={family.mother_education_level ?? "—"} />
+              <Row label={locale === "th" ? "โทรศัพท์" : "Phone"} value={family.mother_phone ?? "—"} />
+            </SubSection>
+            <SubSection title={locale === "th" ? "ครัวเรือน" : "Household"}>
+              <Row label={locale === "th" ? "รายได้ครัวเรือน (บาท/เดือน)" : "Household income (THB/month)"} value={family.household_income ?? "—"} />
+              <Row label={locale === "th" ? "จำนวนพี่น้อง" : "Number of siblings"} value={family.number_of_siblings?.toString() ?? "—"} />
+            </SubSection>
+          </>
+        ) : (
+          <p className="text-sm text-[#888]">{locale === "th" ? "ไม่มีข้อมูล" : "No data reported."}</p>
+        )}
+      </Section>
+
+      {/* Education */}
+      <Section title={locale === "th" ? "การศึกษา" : "Education"}>
+        {education ? (
+          <SubSection title={locale === "th" ? "โรงเรียนปัจจุบันหรือล่าสุด" : "Current or most recent secondary school"}>
+            <Row label={locale === "th" ? "ชื่อโรงเรียน" : "School name"} value={education.school_name ?? "—"} />
+            <Row label={locale === "th" ? "จังหวัด" : "Province"} value={education.school_province ?? "—"} />
+            <Row label={locale === "th" ? "ประเภทหลักสูตร" : "Curriculum type"} value={education.curriculum_type ?? "—"} />
+            <Row label={locale === "th" ? "แผนการเรียน" : "Study plan"} value={education.study_plan ?? "—"} />
+            <Row label="GPA" value={education.gpa?.toString() ?? "—"} />
+            <Row label={locale === "th" ? "ปีที่จบการศึกษา" : "Graduation year"} value={education.graduation_year?.toString() ?? "—"} />
+            <Row label={locale === "th" ? "ระดับชั้นปัจจุบัน" : "Current grade level"} value={education.current_grade_level ?? "—"} />
+          </SubSection>
+        ) : (
+          <p className="text-sm text-[#888]">{locale === "th" ? "ไม่มีข้อมูลการศึกษา" : "No education data reported."}</p>
+        )}
+      </Section>
+
+      {/* Testing */}
+      <Section title={locale === "th" ? "ผลการสอบ" : "Testing"}>
+        {scores.length > 0 ? (
+          <ul className="space-y-1 text-sm text-[#1a1a1a]">
+            {scores.map((s) => (
+              <li key={s.id}>
+                <strong>{s.score_type}</strong>{s.sub_type ? ` — ${s.sub_type}` : ""}: {s.score_value}
+                {s.test_date ? ` (${s.test_date})` : ""}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-[#888]">{locale === "th" ? "ไม่มีผลการสอบ" : "There are no test scores to report."}</p>
+        )}
+      </Section>
+
+      {/* Documents */}
+      <Section title={locale === "th" ? "เอกสาร" : "Documents"}>
+        {documents.length > 0 ? (
+          <ul className="space-y-1 text-sm text-[#1a1a1a]">
+            {documents.map((d) => (
+              <li key={d.id}><strong>{d.doc_type}</strong>: {d.file_name}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-[#888]">{locale === "th" ? "ไม่มีเอกสารที่แนบ" : "No documents attached."}</p>
+        )}
+      </Section>
+
+      {/* Activities */}
+      <Section title={locale === "th" ? "กิจกรรม" : "Activities"}>
+        {portfolioItems.length > 0 ? (
+          <ul className="space-y-1 text-sm text-[#1a1a1a]">
+            {portfolioItems.map((p) => (
+              <li key={p.id}><strong>{p.title}</strong>{p.description ? ` — ${p.description}` : ""}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-[#888]">{locale === "th" ? "ไม่มีกิจกรรม" : "There are no activities to report."}</p>
+        )}
+      </Section>
+
+      {/* University-specific */}
+      <Section title={locale === "th" ? `คำถามของ ${title}` : `${title} questions`}>
+        <SubSection title={locale === "th" ? "ข้อมูลทั่วไป" : "General"}>
+          <Row label={locale === "th" ? "รอบที่ต้องการ" : "Preferred admission round"} value={draft.preferredRound ? `Round ${draft.preferredRound}` : "—"} />
+          <Row label={locale === "th" ? "แผนการเข้าศึกษา" : "Preferred admission plan"} value={draft.admissionPlan ?? "—"} />
+        </SubSection>
+        <SubSection title={locale === "th" ? "สาขาวิชา" : "Academics"}>
+          <Row label={locale === "th" ? "คณะ" : "Faculty"} value={selectedFaculty ? (locale === "th" && selectedFaculty.name_th ? selectedFaculty.name_th : selectedFaculty.name) : "—"} />
+          <Row label={locale === "th" ? "หลักสูตร" : "Program"} value={selectedProgram ? (locale === "th" && selectedProgram.name_th ? selectedProgram.name_th : selectedProgram.name) : "—"} />
+        </SubSection>
+        {draft.essay && (
+          <SubSection title={locale === "th" ? "เรียงความ: เหตุผลที่ต้องการเข้าศึกษาที่มหาวิทยาลัยนี้" : "Essay: Why do you want to study at this university?"}>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-[#1a1a1a]">{draft.essay}</p>
+          </SubSection>
+        )}
+      </Section>
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-6 border-t-2 border-[#2E7CD6] pt-3">
+      <h2 className="mb-3 text-xl font-bold text-[#2E7CD6]">{title}</h2>
+      <div className="space-y-4">{children}</div>
+    </div>
+  );
+}
+
+function SubSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="mb-2 text-base font-bold text-[#2E7CD6]">{title}</h3>
+      <div className="space-y-0.5">{children}</div>
+    </div>
+  );
+}
+
+function Row({ label, value, multiline }: { label: string; value: string; multiline?: boolean }) {
+  return (
+    <div className={`flex ${multiline ? "items-start" : "items-center"} gap-6 py-0.5 text-sm`}>
+      <div className="w-52 shrink-0 font-semibold text-[#1a1a1a]">{label}</div>
+      <div className={`text-[#444] ${multiline ? "whitespace-pre-line" : ""}`}>{value || "—"}</div>
+    </div>
+  );
+}
+
+function joinName(prefix?: string | null, first?: string | null, last?: string | null): string {
+  const parts = [prefix, first, last].filter(Boolean);
+  return parts.length ? parts.join(" ") : "—";
+}
+
+function formatAddress(addr: string | null | undefined): string {
+  if (!addr) return "—";
+  try {
+    const parsed = JSON.parse(addr);
+    return [parsed.addressLine, parsed.city, parsed.province, parsed.zipcode, parsed.country].filter(Boolean).join(", ") || "—";
+  } catch {
+    return addr;
+  }
+}
+
+/* ── Stage 2: Payment ── */
+
+function PaymentStage({ university, locale }: { university: University; locale: "en" | "th" }) {
+  const title = locale === "th" && university.name_th ? university.name_th : university.name;
+  return (
+    <div className="mx-auto max-w-2xl space-y-6">
+      <div className="rounded-xl border border-[#e0e0e0] bg-white p-8 text-center">
+        <h2 className="text-xl font-bold text-[#1a1a1a]">
+          {locale === "th" ? "ค่าสมัคร" : "Application fee"}
+        </h2>
+        <p className="mt-2 text-sm text-[#888]">{title}</p>
+
+        <div className="my-8">
+          <p className="text-5xl font-bold text-[#1a1a1a]">฿0</p>
+          <p className="mt-2 text-sm text-[#888]">
+            {locale === "th" ? "ยังไม่มีการเก็บค่าสมัคร (MVP)" : "No fee configured yet (MVP)"}
+          </p>
+        </div>
+
+        <div className="mt-6 rounded-lg border border-[#F4C430]/40 bg-[#FFF9EC] p-4 text-left text-sm leading-relaxed text-[#8a6d17]">
+          {locale === "th"
+            ? "ในระหว่างช่วงเบต้า ยังไม่มีการผูกกับบริการชำระเงิน กดถัดไปเพื่อข้ามขั้นตอนนี้"
+            : "During the beta, payment is not yet wired to a provider. Click Continue to skip this step."}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Stage 3: Signature & Submission ── */
+
+function SignatureStage({
+  locale,
+  signatureName,
+  setSignatureName,
+  affirmed,
+  setAffirmed,
+  submitError,
+}: {
+  locale: "en" | "th";
+  signatureName: string;
+  setSignatureName: (v: string) => void;
+  affirmed: boolean;
+  setAffirmed: (v: boolean) => void;
+  submitError: string | null;
+}) {
+  return (
+    <div className="mx-auto max-w-2xl space-y-6">
+      {submitError && (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-[15px] leading-relaxed text-red-700">
+          {submitError}
+        </div>
+      )}
+      <div className="rounded-xl border border-[#e0e0e0] bg-white p-8 space-y-6">
+        <div>
+          <h2 className="text-xl font-bold text-[#1a1a1a]">
+            {locale === "th" ? "ลายเซ็น" : "Signature"}
+          </h2>
+          <p className="mt-1 text-sm text-[#666]">
+            {locale === "th"
+              ? "พิมพ์ชื่อ-นามสกุลของคุณเพื่อเซ็นใบสมัครอิเล็กทรอนิกส์"
+              : "Type your full legal name to electronically sign this application."}
+          </p>
+          <input
+            type="text"
+            value={signatureName}
+            onChange={(e) => setSignatureName(e.target.value)}
+            placeholder={locale === "th" ? "ชื่อ นามสกุล" : "First name  Last name"}
+            className="mt-4 w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-lg font-serif italic outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+          />
+        </div>
+
+        <div className="border-t border-[#e8e8e8] pt-6">
+          <h2 className="text-xl font-bold text-[#1a1a1a]">
+            {locale === "th" ? "การยืนยัน" : "Affirmations"}
+          </h2>
+          <label className="mt-3 flex items-start gap-3 text-[15px] leading-relaxed text-[#444]">
+            <input
+              type="checkbox"
+              checked={affirmed}
+              onChange={(e) => setAffirmed(e.target.checked)}
+              className="mt-1 h-4 w-4 accent-[#F4C430]"
+            />
+            <span>
+              {locale === "th"
+                ? "ข้าพเจ้ายืนยันว่าข้อมูลในใบสมัครนี้ถูกต้อง ครบถ้วน และเป็นความจริงตามที่ทราบ ข้าพเจ้าเข้าใจและยอมรับข้อตกลงและเงื่อนไขของ SabaiApply รวมทั้งนโยบายการยื่นใบสมัครของมหาวิทยาลัย"
+                : "I affirm that the information in this application is accurate, complete, and true to the best of my knowledge. I have read and agree to the SabaiApply terms and the university's application policies."}
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3 rounded-xl border border-[#F4C430] bg-[#FFF9EC] p-4">
+        <AlertTriangle size={20} className="mt-0.5 shrink-0 text-[#b88a12]" />
+        <p className="text-[15px] leading-relaxed text-[#8a6d17]">
+          {locale === "th"
+            ? "เมื่อส่งใบสมัครแล้ว คุณจะไม่สามารถแก้ไขได้อีก โปรดตรวจสอบให้แน่ใจ"
+            : "Once you submit, the application can no longer be edited. Please make sure everything is correct."}
+        </p>
+      </div>
     </div>
   );
 }

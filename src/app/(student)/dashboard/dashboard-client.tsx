@@ -69,6 +69,12 @@ import { useStudentLocale } from "../i18n/context";
 import type { TranslationKey } from "../i18n/translations";
 import type { StudentFamily, StudentEducation, StudentScore, StudentDocument, PortfolioItem } from "@/types/database";
 
+export interface SubmittedApplicationInfo {
+  applicationId: string;
+  status: string;
+  submittedAt: string;
+}
+
 interface Props {
   user: { email: string; id: string };
   profile: StudentProfile | null;
@@ -78,6 +84,7 @@ interface Props {
   documents: StudentDocument[];
   portfolioItems: PortfolioItem[];
   universities: University[];
+  submittedApplications: Record<string, SubmittedApplicationInfo>;
 }
 
 type SectionStatus = "completed" | "in_progress" | "not_started";
@@ -95,7 +102,7 @@ const APP_SECTION_ORDER: Exclude<AppSection, null>[] = [
   "activities",
 ];
 
-export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems, universities }: Props) {
+export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems, universities, submittedApplications }: Props) {
   const { locale, setLocale, t } = useStudentLocale();
   const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
@@ -112,17 +119,43 @@ export default function DashboardClient({ user, profile, family, education, scor
 
   const [uniDraft, setUniDraft] = useUniDraft(activeUniId ?? "");
 
+  // Auto-add any universities the student has already submitted an
+  // application to — keeps "My Universities" in sync when the student
+  // opens the dashboard from a different device or after clearing
+  // localStorage.
+  useEffect(() => {
+    const submittedIds = Object.keys(submittedApplications);
+    if (submittedIds.length === 0) return;
+    setAddedUniversityIds((prev) => {
+      const next = new Set(prev);
+      let changed = false;
+      for (const id of submittedIds) {
+        if (!next.has(id)) { next.add(id); changed = true; }
+      }
+      if (changed) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...next])); } catch { /* ignore */ }
+      }
+      return changed ? next : prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submittedApplications]);
+
   // Recompute the overall status for every added uni whenever the set
   // changes OR the active uni's draft changes (so the Overview reflects
-  // live edits without requiring a refresh).
+  // live edits without requiring a refresh). Server-confirmed submissions
+  // from `submittedApplications` always win over the local draft.
   useEffect(() => {
     const next: Record<string, UniOverallStatus> = {};
     for (const id of addedUniversityIds) {
-      next[id] = getUniOverallStatus(readUniDraft(id));
+      if (submittedApplications[id]) {
+        next[id] = "submitted";
+      } else {
+        next[id] = getUniOverallStatus(readUniDraft(id));
+      }
     }
     setUniStatuses(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addedUniversityIds, activeUniId, uniDraft]);
+  }, [addedUniversityIds, activeUniId, uniDraft, submittedApplications]);
 
   function openUniversity(id: string) {
     // Auto-add to "my universities" so the flow mirrors Common App
@@ -137,6 +170,14 @@ export default function DashboardClient({ user, profile, family, education, scor
     setActiveUniSection("info");
     setUniExpanded(true);
     setCurrentView("my-universities");
+  }
+
+  function submitUniversityApplication(id: string) {
+    // Draft (signatureName + submittedAt) has already been written by the modal.
+    // Recompute the status map so the Overview flips this uni to "submitted".
+    setUniStatuses((prev) => ({ ...prev, [id]: getUniOverallStatus(readUniDraft(id)) }));
+    // Land the user back on this university's info page so they can see the status.
+    setActiveUniSection("info");
   }
 
   function removeUniversity(id: string) {
@@ -694,8 +735,18 @@ export default function DashboardClient({ user, profile, family, education, scor
                 onDraftChange={setUniDraft}
                 commonAppSections={commonAppSectionsForReview}
                 locale={locale as "en" | "th"}
+                studentData={{
+                  email: user.email,
+                  profile,
+                  family,
+                  education,
+                  scores,
+                  documents,
+                  portfolioItems,
+                }}
                 onRemove={() => removeUniversity(activeUniversity.id)}
                 onJumpToCommonAppSection={(action) => { setActiveSection(action); setCurrentView("application-form"); }}
+                onSubmitApplication={() => submitUniversityApplication(activeUniversity.id)}
               />
             </div>
           </div>

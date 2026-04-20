@@ -586,7 +586,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
         {formContent}
         <div className="mt-6">
           <button onClick={handleSave} disabled={saving} className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50">
-            {saving ? "Saving..." : "Save"}
+            {saving ? "Saving..." : "Continue"}
           </button>
         </div>
       </div>
@@ -594,7 +594,7 @@ export default function PersonalInfoSection({ profile, userId, onClose, userEmai
   }
 
   return (
-    <SectionPanel title="Personal Information" onClose={onClose} onSave={handleSave} saving={saving} saveLabel="Save">
+    <SectionPanel title="Personal Information" onClose={onClose} onSave={handleSave} saving={saving} saveLabel="Continue">
       {formContent}
     </SectionPanel>
   );
