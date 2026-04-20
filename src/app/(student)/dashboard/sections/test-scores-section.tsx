@@ -12,6 +12,7 @@ interface Props {
   studentId: string;
   onClose: () => void;
   inline?: boolean;
+  onSaved?: () => void;
 }
 
 const SCORE_TYPES: ScoreType[] = [
@@ -34,7 +35,7 @@ const SCORE_TYPES: ScoreType[] = [
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
-export default function TestScoresSection({ scores, studentId, onClose, inline }: Props) {
+export default function TestScoresSection({ scores, studentId, onClose, inline, onSaved }: Props) {
   const router = useRouter();
   const [localScores, setLocalScores] = useState<StudentScore[]>(scores);
   useEffect(() => { setLocalScores(scores); }, [scores]);
@@ -305,7 +306,21 @@ export default function TestScoresSection({ scores, studentId, onClose, inline }
       </div>
   );
 
-  if (inline) return <div>{formContent}</div>;
+  if (inline) return (
+    <div>
+      {formContent}
+      {onSaved && (
+        <div className="mt-6 flex justify-end border-t border-[#f0f0f0] pt-5">
+          <button
+            onClick={onSaved}
+            className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+          >
+            Continue
+          </button>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <SectionPanel title="Test Scores" onClose={onClose}>

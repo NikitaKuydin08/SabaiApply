@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   Check,
@@ -945,6 +945,13 @@ function ReviewSubmitModal({
   const [affirmed, setAffirmed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  // When the student clicks Continue and the stage advances,
+  // scroll the modal body back to the top so they see the new step.
+  useEffect(() => {
+    if (bodyRef.current) bodyRef.current.scrollTop = 0;
+  }, [stage]);
 
   const stages: { key: ReviewStage; label: string }[] = [
     { key: "review", label: locale === "th" ? "ตรวจสอบขั้นสุดท้าย" : "Final Review" },
@@ -1049,7 +1056,7 @@ function ReviewSubmitModal({
       </div>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto bg-[#FFF9EC] px-6 py-8">
+      <div ref={bodyRef} className="flex-1 overflow-y-auto bg-[#FFF9EC] px-6 py-8">
         <div className="mx-auto max-w-4xl">
           {stage === "review" && (
             <FinalReviewStage university={university} locale={locale} draft={draft} studentData={studentData} />

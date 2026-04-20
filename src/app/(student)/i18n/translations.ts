@@ -62,6 +62,12 @@ const translations = {
   "nav.back": { en: "Back", th: "กลับ" },
   "nav.overview": { en: "Overview", th: "ภาพรวม" },
   "nav.addUni": { en: "Add a university", th: "เพิ่มมหาวิทยาลัย" },
+  "nav.menu": { en: "Menu", th: "เมนู" },
+  "nav.help": { en: "Help", th: "ช่วยเหลือ" },
+
+  // ── Footer ──
+  "footer.privacy": { en: "Privacy policy", th: "นโยบายความเป็นส่วนตัว" },
+  "footer.terms": { en: "Terms of use", th: "เงื่อนไขการใช้งาน" },
 
   // ── My Application ──
   "app.title": { en: "My Application", th: "ใบสมัครของฉัน" },
