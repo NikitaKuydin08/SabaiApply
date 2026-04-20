@@ -1,0 +1,46 @@
+{
+  "nav.dashboard": {
+    "en": "Dashboard",
+    "th": "แดชบอร์ด"
+  },
+  "nav.explore": {
+    "en": "Explore",
+    "th": "สำรวจ"
+  },
+  "nav.chooseUni": {
+    "en": "Choose University",
+    "th": "เลือกมหาวิทยาลัย"
+  },
+  "nav.apply": {
+    "en": "Apply",
+    "th": "สมัคร"
+  },
+  "nav.myApplication": {
+    "en": "My Application Form",
+    "th": "แบบฟอร์มสมัครของฉัน"
+  },
+  "nav.myUniversities": {
+    "en": "My Universities",
+    "th": "มหาวิทยาลัยของฉัน"
+  },
+  "nav.settings": {
+    "en": "Settings",
+    "th": "ตั้งค่า"
+  },
+  "nav.signOut": {
+    "en": "Sign out",
+    "th": "ออกจากระบบ"
+  },
+  "nav.back": {
+    "en": "Back",
+    "th": "กลับ"
+  },
+  "nav.overview": {
+    "en": "Overview",
+    "th": "ภาพรวม"
+  },
+  "nav.addUni": {
+    "en": "Add a university",
+    "th": "เพิ่มมหาวิทยาลัย"
+  }
+}

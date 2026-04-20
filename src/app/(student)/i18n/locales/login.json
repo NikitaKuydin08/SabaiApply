@@ -1,0 +1,42 @@
+{
+  "login.title": {
+    "en": "Welcome back",
+    "th": "ยินดีต้อนรับกลับ"
+  },
+  "login.subtitle": {
+    "en": "Log in to your student account",
+    "th": "เข้าสู่ระบบบัญชีนักศึกษา"
+  },
+  "login.email": {
+    "en": "Email Address",
+    "th": "อีเมล"
+  },
+  "login.password": {
+    "en": "Password",
+    "th": "รหัสผ่าน"
+  },
+  "login.submit": {
+    "en": "Log in",
+    "th": "เข้าสู่ระบบ"
+  },
+  "login.submitting": {
+    "en": "Logging in...",
+    "th": "กำลังเข้าสู่ระบบ..."
+  },
+  "login.noAccount": {
+    "en": "Don't have an account?",
+    "th": "ยังไม่มีบัญชี?"
+  },
+  "login.signUpLink": {
+    "en": "Sign up",
+    "th": "สมัครสมาชิก"
+  },
+  "login.emailPlaceholder": {
+    "en": "you@example.com",
+    "th": "you@example.com"
+  },
+  "login.passwordPlaceholder": {
+    "en": "Your password",
+    "th": "รหัสผ่านของคุณ"
+  }
+}

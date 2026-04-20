@@ -1,0 +1,38 @@
+{
+  "help.title": {
+    "en": "Help & support",
+    "th": "ช่วยเหลือและสนับสนุน"
+  },
+  "help.searchPlaceholder": {
+    "en": "Search FAQs",
+    "th": "ค้นหาคำถามที่พบบ่อย"
+  },
+  "help.noResults": {
+    "en": "No results found. Try a different search.",
+    "th": "ไม่พบผลลัพธ์ ลองค้นหาด้วยคำอื่น"
+  },
+  "help.allCategories": {
+    "en": "All",
+    "th": "ทั้งหมด"
+  },
+  "help.chat": {
+    "en": "24/7 Support Chat",
+    "th": "แชทสนับสนุน 24/7"
+  },
+  "help.readMore": {
+    "en": "Read full answer",
+    "th": "อ่านคำตอบเต็ม"
+  },
+  "help.showLess": {
+    "en": "Show less",
+    "th": "แสดงน้อยลง"
+  },
+  "help.chatComingSoon": {
+    "en": "Coming soon!",
+    "th": "เร็วๆ นี้!"
+  },
+  "help.chatComingSoonDesc": {
+    "en": "Our AI-powered 24/7 support chat is under development. In the meantime, email us at support@sabaiapply.com",
+    "th": "แชทสนับสนุน AI 24/7 กำลังพัฒนา ในระหว่างนี้ อีเมลเราที่ support@sabaiapply.com"
+  }
+}

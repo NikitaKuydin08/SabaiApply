@@ -1,0 +1,26 @@
+{
+  "pw.length": {
+    "en": "10-32 characters",
+    "th": "10-32 ตัวอักษร"
+  },
+  "pw.uppercase": {
+    "en": "At least one upper case",
+    "th": "ตัวพิมพ์ใหญ่อย่างน้อย 1 ตัว"
+  },
+  "pw.lowercase": {
+    "en": "At least one lower case",
+    "th": "ตัวพิมพ์เล็กอย่างน้อย 1 ตัว"
+  },
+  "pw.number": {
+    "en": "At least one number",
+    "th": "ตัวเลขอย่างน้อย 1 ตัว"
+  },
+  "pw.special": {
+    "en": "At least one special character",
+    "th": "อักขระพิเศษอย่างน้อย 1 ตัว"
+  },
+  "pw.noSpaces": {
+    "en": "No space characters",
+    "th": "ห้ามมีช่องว่าง"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "uni.title": {
+    "en": "My Universities",
+    "th": "มหาวิทยาลัยของฉัน"
+  },
+  "uni.empty": {
+    "en": "Nothing here yet! Add some universities to your list to get started.",
+    "th": "ยังไม่มีรายการ! เพิ่มมหาวิทยาลัยเพื่อเริ่มต้น"
+  },
+  "uni.searchBtn": {
+    "en": "Search universities",
+    "th": "ค้นหามหาวิทยาลัย"
+  },
+  "uni.addMore": {
+    "en": "Add more",
+    "th": "เพิ่มอีก"
+  },
+  "uni.viewAll": {
+    "en": "View all",
+    "th": "ดูทั้งหมด"
+  },
+  "uni.more": {
+    "en": "more",
+    "th": "เพิ่มเติม"
+  },
+  "uni.onList": {
+    "en": "on your list",
+    "th": "ในรายการของคุณ"
+  },
+  "uni.one": {
+    "en": "university",
+    "th": "มหาวิทยาลัย"
+  },
+  "uni.many": {
+    "en": "universities",
+    "th": "มหาวิทยาลัย"
+  },
+  "uni.notStarted": {
+    "en": "Not started",
+    "th": "ยังไม่เริ่ม"
+  },
+  "uni.inProgress": {
+    "en": "In progress",
+    "th": "กำลังดำเนินการ"
+  },
+  "uni.submitted": {
+    "en": "Submitted",
+    "th": "ส่งแล้ว"
+  },
+  "uni.yourUnis": {
+    "en": "Your Universities",
+    "th": "มหาวิทยาลัยของคุณ"
+  },
+  "uni.noUnis": {
+    "en": "You haven't added any universities yet.",
+    "th": "คุณยังไม่ได้เพิ่มมหาวิทยาลัย"
+  },
+  "uni.addMoreBtn": {
+    "en": "Add more universities",
+    "th": "เพิ่มมหาวิทยาลัยอีก"
+  }
+}

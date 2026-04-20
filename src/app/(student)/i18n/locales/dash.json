@@ -1,0 +1,22 @@
+{
+  "dash.title": {
+    "en": "Dashboard",
+    "th": "แดชบอร์ด"
+  },
+  "dash.goodMorning": {
+    "en": "Good morning",
+    "th": "สวัสดีตอนเช้า"
+  },
+  "dash.goodAfternoon": {
+    "en": "Good afternoon",
+    "th": "สวัสดีตอนบ่าย"
+  },
+  "dash.goodEvening": {
+    "en": "Good evening",
+    "th": "สวัสดีตอนเย็น"
+  },
+  "dash.goodNight": {
+    "en": "Good night",
+    "th": "ราตรีสวัสดิ์"
+  }
+}
