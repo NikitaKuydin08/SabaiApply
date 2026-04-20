@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { getAdminProfile } from "./actions";
 import { AdminLayoutClient } from "./layout-client";
 
@@ -7,16 +6,19 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const profile = await getAdminProfile();
+  const adminContext = await getAdminProfile();
 
-  // If no profile (not logged in or student), let middleware handle redirect
-  // But for pages like login/register, profile will be null and that's fine
-  if (!profile) {
+  if (!adminContext) {
     return <>{children}</>;
   }
 
   return (
-    <AdminLayoutClient fullName={profile.full_name} email={profile.email}>
+    <AdminLayoutClient
+      fullName={adminContext.profile.full_name}
+      email={adminContext.profile.email}
+      role={adminContext.profile.role}
+      universityName={adminContext.university?.name ?? null}
+    >
       {children}
     </AdminLayoutClient>
   );

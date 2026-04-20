@@ -39,6 +39,27 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
+  // ── Super admin route protection ──
+  if (pathname.startsWith("/super-admin")) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile || profile.role !== "super_admin") {
+      // Non-super-admins who are still admins go to /admin/dashboard
+      if (profile && profile.role !== "student") {
+        return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+      }
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+  }
+
   // ── Admin route protection ──
   if (
     pathname.startsWith("/admin") &&
@@ -48,8 +69,7 @@ export default async function proxy(request: NextRequest) {
     !pathname.startsWith("/admin/reset-password")
   ) {
     if (!user) {
-      const loginUrl = new URL("/admin/login", request.url);
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
 
     const { data: profile } = await supabase
@@ -59,12 +79,11 @@ export default async function proxy(request: NextRequest) {
       .single();
 
     if (!profile || profile.role === "student") {
-      const loginUrl = new URL("/admin/login", request.url);
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }
 
-  // If logged-in admin visits login, redirect to admin dashboard
+  // If logged-in admin visits login, redirect based on role
   if (user && pathname === "/admin/login") {
     const { data: profile } = await supabase
       .from("profiles")
@@ -72,9 +91,11 @@ export default async function proxy(request: NextRequest) {
       .eq("id", user.id)
       .single();
 
+    if (profile?.role === "super_admin") {
+      return NextResponse.redirect(new URL("/super-admin/dashboard", request.url));
+    }
     if (profile && profile.role !== "student") {
-      const dashboardUrl = new URL("/admin/dashboard", request.url);
-      return NextResponse.redirect(dashboardUrl);
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
   }
 

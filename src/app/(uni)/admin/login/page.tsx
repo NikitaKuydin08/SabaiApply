@@ -31,9 +31,19 @@ export default function AdminLoginPage() {
       return;
     }
 
-    const { data: profile } = await supabase
+    // Get the logged-in user's ID first
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      setError("Login failed.");
+      setLoading(false);
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("role")
+      .eq("id", user.id)
       .single();
 
     if (!profile || profile.role === "student") {
@@ -43,7 +53,11 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.push("/admin/dashboard");
+    if (profile.role === "super_admin") {
+      router.push("/super-admin/dashboard");
+    } else {
+      router.push("/admin/dashboard");
+    }
     router.refresh();
   }
 
