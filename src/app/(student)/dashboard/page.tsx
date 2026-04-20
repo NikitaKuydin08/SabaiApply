@@ -28,7 +28,7 @@ export default async function DashboardPage() {
 
   const studentId = profile?.id;
 
-  const [familyRes, educationRes, scoresRes, documentsRes, portfolioItemsRes] = await Promise.all([
+  const [familyRes, educationRes, scoresRes, documentsRes, portfolioItemsRes, universitiesRes] = await Promise.all([
     studentId
       ? supabase.from("student_family").select("*").eq("student_id", studentId).single()
       : { data: null },
@@ -44,7 +44,28 @@ export default async function DashboardPage() {
     studentId
       ? supabase.from("portfolio_items").select("*").eq("student_id", studentId).order("sort_order")
       : { data: null },
+    supabase
+      .from("universities")
+      .select("id, name, name_th, website, faculties(id, programs(id))")
+      .order("name"),
   ]);
+
+  type UniversityRow = {
+    id: string;
+    name: string;
+    name_th: string | null;
+    website: string | null;
+    faculties: { id: string; programs: { id: string }[] }[];
+  };
+
+  const universities = (universitiesRes.data ?? []).map((u: UniversityRow) => ({
+    id: u.id,
+    name: u.name,
+    name_th: u.name_th ?? "",
+    website: u.website,
+    facultyCount: u.faculties?.length ?? 0,
+    programCount: (u.faculties ?? []).reduce((sum, f) => sum + (f.programs?.length ?? 0), 0),
+  }));
 
   return (
     <DashboardClient
@@ -55,6 +76,7 @@ export default async function DashboardPage() {
       scores={scoresRes.data ?? []}
       documents={documentsRes.data ?? []}
       portfolioItems={portfolioItemsRes.data ?? []}
+      universities={universities}
     />
   );
 }
