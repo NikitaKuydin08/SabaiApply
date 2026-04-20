@@ -1,16 +1,17 @@
 # SabaiApply Internationalization (i18n) Guide
 
-This guide explains how translations are managed within the SabaiApply application, specifically focusing on the client-side rendering (like the `(student)` dashboard workspace).
+This guide explains how translations are managed within the SabaiApply application, for both the admin and the student portals.
 
 ## 📂 File Structure
 
-The internationalization layer lives primarily within `src/app/(student)/i18n/`. It is structured into multiple, modular JSON files to ensure maintainability:
+The internationalization layer lives primarily within `src/lib/i18n/`. It is structured into multiple, modular JSON files to ensure maintainability:
 
 ```text
-src/app/(student)/i18n/
+src/lib/i18n/
 ├── context.tsx         # The React Context Provider that passes the `locale` and `t()` down.
 ├── translations.ts     # The central registry where all JSON files are imported and typed.
 └── locales/            # Individual JSON files grouping translations by domain/feature.
+    ├── admin.json
     ├── app.json
     ├── dash.json
     ├── faq.json
@@ -25,7 +26,7 @@ src/app/(student)/i18n/
 Locate the appropriate domain inside the `locales` folder. Each key should follow a dot-notation convention (`[domain].[feature]`) and must define strings for all supported languages (`en` and `th`).
 
 ```json
-// src/app/(student)/i18n/locales/feature.json
+// src/lib/i18n/locales/feature.json
 {
   "feature.title": {
     "en": "My Feature",
@@ -43,7 +44,7 @@ Locate the appropriate domain inside the `locales` folder. Each key should follo
 If you've created a entirely new file (e.g., `feature.json`), you must register it in `translations.ts` to include it in the global autocomplete definitions:
 
 ```typescript
-// src/app/(student)/i18n/translations.ts
+// src/lib/i18n/translations.ts
 import feature from './locales/feature.json';
 
 const translations = {
@@ -56,14 +57,14 @@ const translations = {
 
 ## 👩‍💻 Using Translations in React Components
 
-In any client or server component within the tree of `TranslationsProvider`, simply access the `t()` function. You can retrieve it by destructuring `useTranslations()`.
+In any client or server component within the tree of `LocaleProvider`, simply access the `t()` function. You can retrieve it by destructuring `useLocale()`.
 
 ```tsx
 'use client';
-import { useTranslations } from "@/app/(student)/i18n/context";
+import { useLocale } from "@/lib/i18n/context";
 
 export function WelcomeBanner() {
-  const { t, locale } = useTranslations();
+  const { t, locale } = useLocale();
 
   return (
     <div>
@@ -75,7 +76,7 @@ export function WelcomeBanner() {
 }
 ```
 
-If you are inside a context that doesn't have `useTranslations` (e.g. passing down to a localized pure function), pass the `t()` function as a prop:
+If you are inside a context that doesn't have `useLocale` (e.g. passing down to a localized pure function), pass the `t()` function as a prop:
 
 ```tsx
 function ActionButton({ t }: { t: TFn }) {
@@ -94,7 +95,7 @@ Instead of hardcoding, provide type-safe translation keys inside the data models
 **Data Model Definition:**
 ```typescript
 // src/app/.../data/categories.ts
-import type { TranslationKey } from '../i18n/translations';
+import type { TranslationKey } from '@/lib/i18n/translations';
 
 export interface Category {
   id: string;
@@ -111,10 +112,10 @@ export const myCategories: Category[] = [
 ```tsx
 // src/app/.../Dashboard.tsx
 import { myCategories } from '../data/categories';
-import { useTranslations } from '../i18n/context';
+import { useLocale } from '@/lib/i18n/context';
 
 export function CategoryList() {
-  const { t } = useTranslations();
+  const { t } = useLocale();
 
   return (
     <ul>

@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useLocale } from "@/lib/locale-context";
-import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t } from "@/lib/i18n/translations";
 import { PasswordInput } from "@/components/password-input";
 
 export default function ProfilePage() {

@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useLocale } from "@/lib/locale-context";
-import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t } from "@/lib/i18n/translations";
 import type { UserRole } from "@/types/database";
 
 interface NavItem {

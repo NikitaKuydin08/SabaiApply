@@ -1,6 +1,6 @@
-// Student-side i18n translations
-// Isolated from uni-side — no shared keys
+// Unified i18n translations
 
+import admin from './locales/admin.json';
 import app from './locales/app.json';
 import dash from './locales/dash.json';
 import faq from './locales/faq.json';
@@ -17,6 +17,7 @@ import uni from './locales/uni.json';
 export type Locale = "en" | "th";
 
 const translations = {
+  ...admin,
   ...app,
   ...dash,
   ...faq,
@@ -35,4 +36,13 @@ export type TranslationKey = keyof typeof translations;
 
 export function t(key: TranslationKey, locale: Locale): string {
   return translations[key]?.[locale] ?? key;
+}
+
+// For template strings like "Delete {{name}}?"
+export function tReplace(key: TranslationKey, locale: Locale, replacements: Record<string, string>): string {
+  let result = t(key, locale);
+  for (const [k, v] of Object.entries(replacements)) {
+    result = result.replace(`{{${k}}}`, v);
+  }
+  return result;
 }

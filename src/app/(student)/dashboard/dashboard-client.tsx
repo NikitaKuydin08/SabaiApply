@@ -29,8 +29,8 @@ import EducationSection from "./sections/education-section";
 import TestScoresSection from "./sections/test-scores-section";
 import DocumentsSection from "./sections/documents-section";
 import ActivitiesSection from "./sections/activities-section";
-import { useStudentLocale } from "../i18n/context";
-import type { TranslationKey } from "../i18n/translations";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
 import type { StudentFamily, StudentEducation, StudentScore, StudentDocument, PortfolioItem } from "@/types/database";
 
 interface Props {
@@ -53,7 +53,7 @@ type University = ThaiUniversity;
 const STORAGE_KEY = "sabaiapply-added-universities";
 
 export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems }: Props) {
-  const { locale, setLocale, t } = useStudentLocale();
+  const { locale, setLocale, t } = useLocale();
   const [showSettings, setShowSettings] = useState(false);
   const [activeSection, setActiveSection] = useState<AppSection>(null);
   const [applicationExpanded, setApplicationExpanded] = useState(true);

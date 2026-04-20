@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useLocale } from "@/lib/locale-context";
-import { t, tReplace } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t, tReplace } from "@/lib/i18n/translations";
 import { getProgramsForAdmin, createProgram, updateProgram, deleteProgram } from "./actions";
 
 interface Faculty {

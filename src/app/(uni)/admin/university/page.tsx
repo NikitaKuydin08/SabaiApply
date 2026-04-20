@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { searchUniversities, type ThaiUniversity } from "@/lib/thai-universities";
-import { useLocale } from "@/lib/locale-context";
-import { t, tReplace } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t, tReplace } from "@/lib/i18n/translations";
 import type { University, Faculty } from "@/types/database";
 
 export default function UniversitySetupPage() {

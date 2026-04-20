@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { createAndSendInvite } from "./actions";
-import { useLocale } from "@/lib/locale-context";
-import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t } from "@/lib/i18n/translations";
 import type { Faculty } from "@/types/database";
 
 interface InviteRow {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useLocale } from "@/lib/locale-context";
-import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t } from "@/lib/i18n/translations";
 
 interface Props {
   email: string | undefined;

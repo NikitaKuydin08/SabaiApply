@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useLocale } from "@/lib/locale-context";
-import { t } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n/context";
+import { t } from "@/lib/i18n/translations";
 import {
   getApplication,
   updateApplicationStatus,

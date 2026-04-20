@@ -2,7 +2,7 @@
 
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { LanguageToggle } from "@/components/language-toggle";
-import { LocaleProvider } from "@/lib/locale-context";
+import { LocaleProvider } from "@/lib/i18n/context";
 import { signOut } from "./actions";
 import type { UserRole } from "@/types/database";
 
@@ -22,7 +22,7 @@ export function AdminLayoutClient({
   universityName,
 }: AdminLayoutClientProps) {
   return (
-    <LocaleProvider>
+    <LocaleProvider defaultLocale="en" storageKey="sabaiapply-student-locale">
       <div className="min-h-screen bg-[#fafafa]">
         <AdminSidebar
           fullName={fullName}

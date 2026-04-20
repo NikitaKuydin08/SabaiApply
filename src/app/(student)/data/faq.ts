@@ -1,4 +1,4 @@
-import type { TranslationKey } from '../i18n/translations';
+import type { TranslationKey } from '@/lib/i18n/translations';
 
 export type FAQCategory = "account" | "universities" | "applying" | "documents" | "general";
 

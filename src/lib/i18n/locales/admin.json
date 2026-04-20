@@ -1,0 +1,926 @@
+{
+  "sign_in": {
+    "en": "Sign In",
+    "th": "เข้าสู่ระบบ"
+  },
+  "sign_out": {
+    "en": "Sign Out",
+    "th": "ออกจากระบบ"
+  },
+  "signing_in": {
+    "en": "Signing in...",
+    "th": "กำลังเข้าสู่ระบบ..."
+  },
+  "save": {
+    "en": "Save",
+    "th": "บันทึก"
+  },
+  "saving": {
+    "en": "Saving...",
+    "th": "กำลังบันทึก..."
+  },
+  "cancel": {
+    "en": "Cancel",
+    "th": "ยกเลิก"
+  },
+  "edit": {
+    "en": "Edit",
+    "th": "แก้ไข"
+  },
+  "delete": {
+    "en": "Delete",
+    "th": "ลบ"
+  },
+  "copy": {
+    "en": "Copy",
+    "th": "คัดลอก"
+  },
+  "email": {
+    "en": "Email",
+    "th": "อีเมล"
+  },
+  "password": {
+    "en": "Password",
+    "th": "รหัสผ่าน"
+  },
+  "confirm_password": {
+    "en": "Confirm Password",
+    "th": "ยืนยันรหัสผ่าน"
+  },
+  "full_name": {
+    "en": "Full Name",
+    "th": "ชื่อ-นามสกุล"
+  },
+  "loading": {
+    "en": "Loading...",
+    "th": "กำลังโหลด..."
+  },
+  "admin_portal": {
+    "en": "Admin Portal",
+    "th": "ระบบจัดการ"
+  },
+  "admin_access_invite_only": {
+    "en": "Admin access is invite-only.",
+    "th": "การเข้าถึงระบบจัดการต้องได้รับเชิญเท่านั้น"
+  },
+  "faculty_admin_portal": {
+    "en": "Faculty Admin Portal",
+    "th": "ระบบจัดการสำหรับคณะ"
+  },
+  "forgot_password": {
+    "en": "Forgot password?",
+    "th": "ลืมรหัสผ่าน?"
+  },
+  "enter_password": {
+    "en": "Enter your password",
+    "th": "กรอกรหัสผ่าน"
+  },
+  "min_6_chars": {
+    "en": "At least 6 characters",
+    "th": "อย่างน้อย 6 ตัวอักษร"
+  },
+  "passwords_not_match": {
+    "en": "Passwords do not match.",
+    "th": "รหัสผ่านไม่ตรงกัน"
+  },
+  "password_too_short": {
+    "en": "Password must be at least 6 characters.",
+    "th": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"
+  },
+  "no_admin_access": {
+    "en": "This account does not have admin access.",
+    "th": "บัญชีนี้ไม่มีสิทธิ์เข้าถึงระบบจัดการ"
+  },
+  "forgot_password_title": {
+    "en": "Forgot Password",
+    "th": "ลืมรหัสผ่าน"
+  },
+  "forgot_password_desc": {
+    "en": "Enter your email and we'll send you a reset link.",
+    "th": "กรอกอีเมลของคุณ แล้วเราจะส่งลิงก์รีเซ็ตให้"
+  },
+  "send_reset_link": {
+    "en": "Send Reset Link",
+    "th": "ส่งลิงก์รีเซ็ต"
+  },
+  "sending": {
+    "en": "Sending...",
+    "th": "กำลังส่ง..."
+  },
+  "check_email": {
+    "en": "Check Your Email",
+    "th": "ตรวจสอบอีเมลของคุณ"
+  },
+  "reset_link_sent": {
+    "en": "We sent a password reset link to",
+    "th": "เราส่งลิงก์รีเซ็ตรหัสผ่านไปที่"
+  },
+  "back_to_login": {
+    "en": "Back to Login",
+    "th": "กลับไปหน้าเข้าสู่ระบบ"
+  },
+  "set_new_password": {
+    "en": "Set New Password",
+    "th": "ตั้งรหัสผ่านใหม่"
+  },
+  "new_password": {
+    "en": "New Password",
+    "th": "รหัสผ่านใหม่"
+  },
+  "confirm_new_password": {
+    "en": "Confirm New Password",
+    "th": "ยืนยันรหัสผ่านใหม่"
+  },
+  "update_password": {
+    "en": "Update Password",
+    "th": "อัปเดตรหัสผ่าน"
+  },
+  "updating": {
+    "en": "Updating...",
+    "th": "กำลังอัปเดต..."
+  },
+  "setup_account": {
+    "en": "Set up your admin account",
+    "th": "ตั้งค่าบัญชีผู้ดูแล"
+  },
+  "create_account": {
+    "en": "Create Account",
+    "th": "สร้างบัญชี"
+  },
+  "creating_account": {
+    "en": "Creating account...",
+    "th": "กำลังสร้างบัญชี..."
+  },
+  "invalid_invite": {
+    "en": "Invalid Invite",
+    "th": "ลิงก์เชิญไม่ถูกต้อง"
+  },
+  "invite_already_used": {
+    "en": "This invite has already been used.",
+    "th": "ลิงก์เชิญนี้ถูกใช้แล้ว"
+  },
+  "invite_expired": {
+    "en": "This invite has expired. Please ask your admin to send a new one.",
+    "th": "ลิงก์เชิญหมดอายุแล้ว กรุณาขอลิงก์ใหม่จากผู้ดูแล"
+  },
+  "invite_invalid": {
+    "en": "This invite link is invalid.",
+    "th": "ลิงก์เชิญไม่ถูกต้อง"
+  },
+  "go_to_login": {
+    "en": "Go to Login",
+    "th": "ไปหน้าเข้าสู่ระบบ"
+  },
+  "dashboard": {
+    "en": "Dashboard",
+    "th": "แดชบอร์ด"
+  },
+  "university_setup": {
+    "en": "University Setup",
+    "th": "ตั้งค่ามหาวิทยาลัย"
+  },
+  "programs": {
+    "en": "Programs",
+    "th": "หลักสูตร"
+  },
+  "applications": {
+    "en": "Applications",
+    "th": "ใบสมัคร"
+  },
+  "interviews": {
+    "en": "Interviews",
+    "th": "สัมภาษณ์"
+  },
+  "results": {
+    "en": "Results",
+    "th": "ผลการคัดเลือก"
+  },
+  "team": {
+    "en": "Team",
+    "th": "ทีมงาน"
+  },
+  "welcome_back": {
+    "en": "Welcome back",
+    "th": "ยินดีต้อนรับกลับ"
+  },
+  "total_applications": {
+    "en": "Total Applications",
+    "th": "ใบสมัครทั้งหมด"
+  },
+  "pending_review": {
+    "en": "Pending Review",
+    "th": "รอการตรวจสอบ"
+  },
+  "configure_uni": {
+    "en": "Configure your university and faculties",
+    "th": "กำหนดค่ามหาวิทยาลัยและคณะ"
+  },
+  "university_profile": {
+    "en": "University Profile",
+    "th": "ข้อมูลมหาวิทยาลัย"
+  },
+  "university_name": {
+    "en": "University Name",
+    "th": "ชื่อมหาวิทยาลัย"
+  },
+  "search_uni": {
+    "en": "Search by English or Thai name...",
+    "th": "ค้นหาชื่อภาษาไทยหรืออังกฤษ..."
+  },
+  "website": {
+    "en": "Website",
+    "th": "เว็บไซต์"
+  },
+  "update_university": {
+    "en": "Update University",
+    "th": "อัปเดตมหาวิทยาลัย"
+  },
+  "save_university": {
+    "en": "Save University",
+    "th": "บันทึกมหาวิทยาลัย"
+  },
+  "faculties": {
+    "en": "Faculties",
+    "th": "คณะ"
+  },
+  "add_faculty": {
+    "en": "+ Add Faculty",
+    "th": "+ เพิ่มคณะ"
+  },
+  "faculty_name_en": {
+    "en": "Faculty Name (English)",
+    "th": "ชื่อคณะ (อังกฤษ)"
+  },
+  "faculty_name_th": {
+    "en": "Faculty Name (Thai)",
+    "th": "ชื่อคณะ (ไทย)"
+  },
+  "no_faculties": {
+    "en": "No faculties added yet. Click \\\"+ Add Faculty\\\" to get started.",
+    "th": "ยังไม่มีคณะ คลิก \\\"+ เพิ่มคณะ\\\" เพื่อเริ่มต้น"
+  },
+  "add_faculty_btn": {
+    "en": "Add Faculty",
+    "th": "เพิ่มคณะ"
+  },
+  "update_faculty": {
+    "en": "Update Faculty",
+    "th": "อัปเดตคณะ"
+  },
+  "select_uni": {
+    "en": "Please select a university from the dropdown list.",
+    "th": "กรุณาเลือกมหาวิทยาลัยจากรายการ"
+  },
+  "delete_faculty_confirm": {
+    "en": "Delete \\\"{{name}}\\\"? This will also delete all programs under it.",
+    "th": "ลบ \\\"{{name}}\\\"? การดำเนินการนี้จะลบหลักสูตรทั้งหมดภายใต้คณะนี้ด้วย"
+  },
+  "invite_admins": {
+    "en": "Invite faculty admins to the platform",
+    "th": "เชิญผู้ดูแลคณะเข้าสู่แพลตฟอร์ม"
+  },
+  "send_invite": {
+    "en": "Send Invite",
+    "th": "ส่งคำเชิญ"
+  },
+  "email_address": {
+    "en": "Email Address",
+    "th": "ที่อยู่อีเมล"
+  },
+  "faculty_optional": {
+    "en": "Faculty (Optional)",
+    "th": "คณะ (ไม่บังคับ)"
+  },
+  "no_specific_faculty": {
+    "en": "No specific faculty",
+    "th": "ไม่ระบุคณะ"
+  },
+  "share_invite_link": {
+    "en": "Share this invite link:",
+    "th": "แชร์ลิงก์เชิญนี้:"
+  },
+  "sent_invites": {
+    "en": "Sent Invites",
+    "th": "คำเชิญที่ส่งแล้ว"
+  },
+  "no_invites": {
+    "en": "No invites sent yet.",
+    "th": "ยังไม่มีคำเชิญที่ส่ง"
+  },
+  "status": {
+    "en": "Status",
+    "th": "สถานะ"
+  },
+  "sent": {
+    "en": "Sent",
+    "th": "ส่งเมื่อ"
+  },
+  "accepted": {
+    "en": "Accepted",
+    "th": "ยอมรับแล้ว"
+  },
+  "expired": {
+    "en": "Expired",
+    "th": "หมดอายุ"
+  },
+  "pending": {
+    "en": "Pending",
+    "th": "รอดำเนินการ"
+  },
+  "already_pending": {
+    "en": "This email already has a pending invite.",
+    "th": "อีเมลนี้มีคำเชิญที่รอดำเนินการอยู่แล้ว"
+  },
+  "invite_created": {
+    "en": "Invite created for",
+    "th": "สร้างคำเชิญสำหรับ"
+  },
+  "super_dashboard": {
+    "en": "Platform Dashboard",
+    "th": "แดชบอร์ดระบบ"
+  },
+  "all_universities": {
+    "en": "All Universities",
+    "th": "มหาวิทยาลัยทั้งหมด"
+  },
+  "all_users": {
+    "en": "All Users",
+    "th": "ผู้ใช้ทั้งหมด"
+  },
+  "super_admin_label": {
+    "en": "Super Admin",
+    "th": "ผู้ดูแลระบบ"
+  },
+  "university_admin_label": {
+    "en": "University Admin",
+    "th": "ผู้ดูแลมหาวิทยาลัย"
+  },
+  "faculty_team_label": {
+    "en": "Faculty Team",
+    "th": "ทีมคณะ"
+  },
+  "create_university": {
+    "en": "Create University",
+    "th": "สร้างมหาวิทยาลัย"
+  },
+  "assign_admin": {
+    "en": "Assign Admin",
+    "th": "กำหนดผู้ดูแล"
+  },
+  "manage_users": {
+    "en": "Manage Users",
+    "th": "จัดการผู้ใช้"
+  },
+  "total_universities": {
+    "en": "Total Universities",
+    "th": "มหาวิทยาลัยทั้งหมด"
+  },
+  "total_users": {
+    "en": "Total Users",
+    "th": "ผู้ใช้ทั้งหมด"
+  },
+  "role": {
+    "en": "Role",
+    "th": "บทบาท"
+  },
+  "change_role": {
+    "en": "Change Role",
+    "th": "เปลี่ยนบทบาท"
+  },
+  "search_users": {
+    "en": "Search users...",
+    "th": "ค้นหาผู้ใช้..."
+  },
+  "no_users_found": {
+    "en": "No users found",
+    "th": "ไม่พบผู้ใช้"
+  },
+  "platform": {
+    "en": "Platform",
+    "th": "ระบบ"
+  },
+  "university_section": {
+    "en": "University",
+    "th": "มหาวิทยาลัย"
+  },
+  "manage_programs": {
+    "en": "Manage programs across your faculties",
+    "th": "จัดการหลักสูตร"
+  },
+  "add_program": {
+    "en": "+ Add Program",
+    "th": "+ เพิ่มหลักสูตร"
+  },
+  "program_name_en": {
+    "en": "Program Name (English)",
+    "th": "ชื่อหลักสูตร (อังกฤษ)"
+  },
+  "program_name_th": {
+    "en": "Program Name (Thai)",
+    "th": "ชื่อหลักสูตร (ไทย)"
+  },
+  "faculty": {
+    "en": "Faculty",
+    "th": "คณะ"
+  },
+  "select_faculty": {
+    "en": "Select Faculty",
+    "th": "เลือกคณะ"
+  },
+  "degree_type": {
+    "en": "Degree Type",
+    "th": "ระดับปริญญา"
+  },
+  "bachelor": {
+    "en": "Bachelor",
+    "th": "ปริญญาตรี"
+  },
+  "master": {
+    "en": "Master",
+    "th": "ปริญญาโท"
+  },
+  "doctor": {
+    "en": "Doctoral",
+    "th": "ปริญญาเอก"
+  },
+  "seats_round_1": {
+    "en": "Seats Round 1 (Portfolio)",
+    "th": "ที่นั่ง Round 1 (Portfolio)"
+  },
+  "seats_round_2": {
+    "en": "Seats Round 2 (Quota)",
+    "th": "ที่นั่ง Round 2 (Quota)"
+  },
+  "seats_round_4": {
+    "en": "Seats Round 4 (Direct)",
+    "th": "ที่นั่ง Round 4 (Direct)"
+  },
+  "tuition_per_semester": {
+    "en": "Tuition (THB/semester)",
+    "th": "ค่าเทอม (บาท/เทอม)"
+  },
+  "description": {
+    "en": "Description",
+    "th": "รายละเอียด"
+  },
+  "international_program": {
+    "en": "International Program",
+    "th": "หลักสูตรนานาชาติ"
+  },
+  "no_programs": {
+    "en": "No programs yet.",
+    "th": "ยังไม่มีหลักสูตร"
+  },
+  "no_faculties_yet": {
+    "en": "Please set up faculties first.",
+    "th": "กรุณาตั้งค่าคณะก่อน"
+  },
+  "add_new_program": {
+    "en": "Add New Program",
+    "th": "เพิ่มหลักสูตรใหม่"
+  },
+  "edit_program": {
+    "en": "Edit Program",
+    "th": "แก้ไขหลักสูตร"
+  },
+  "delete_program_confirm": {
+    "en": "Delete \\\"{{name}}\\\"?",
+    "th": "ลบ \\\"{{name}}\\\"?"
+  },
+  "search_programs": {
+    "en": "Search programs...",
+    "th": "ค้นหาหลักสูตร..."
+  },
+  "all_faculties": {
+    "en": "All Faculties",
+    "th": "ทุกคณะ"
+  },
+  "seats": {
+    "en": "seats",
+    "th": "ที่นั่ง"
+  },
+  "international": {
+    "en": "International",
+    "th": "นานาชาติ"
+  },
+  "optional": {
+    "en": "Optional",
+    "th": "ไม่บังคับ"
+  },
+  "requirements": {
+    "en": "Requirements",
+    "th": "ข้อกำหนด"
+  },
+  "manage_requirements": {
+    "en": "Configure admission requirements per program",
+    "th": "กำหนดข้อกำหนดการสมัครของแต่ละหลักสูตร"
+  },
+  "university": {
+    "en": "University",
+    "th": "มหาวิทยาลัย"
+  },
+  "select_university": {
+    "en": "Select University",
+    "th": "เลือกมหาวิทยาลัย"
+  },
+  "select_program_to_configure": {
+    "en": "Select a program to configure",
+    "th": "เลือกหลักสูตรเพื่อตั้งค่า"
+  },
+  "no_programs_available": {
+    "en": "No programs available to configure.",
+    "th": "ยังไม่มีหลักสูตรให้กำหนดค่า"
+  },
+  "admission_criteria": {
+    "en": "Admission Criteria",
+    "th": "เกณฑ์การรับสมัคร"
+  },
+  "minimum_gpa": {
+    "en": "Minimum GPA",
+    "th": "GPA ขั้นต่ำ"
+  },
+  "gpa_hint": {
+    "en": "Enter 0.00–4.00 or leave blank for no minimum",
+    "th": "ใส่ค่า 0.00–4.00 หรือเว้นว่างหากไม่กำหนด"
+  },
+  "deadlines": {
+    "en": "Application Deadlines",
+    "th": "กำหนดส่งใบสมัคร"
+  },
+  "deadline_round_1": {
+    "en": "Round 1 Deadline (Portfolio)",
+    "th": "กำหนดส่ง Round 1 (Portfolio)"
+  },
+  "deadline_round_2": {
+    "en": "Round 2 Deadline (Quota)",
+    "th": "กำหนดส่ง Round 2 (Quota)"
+  },
+  "deadline_round_4": {
+    "en": "Round 4 Deadline (Direct)",
+    "th": "กำหนดส่ง Round 4 (Direct)"
+  },
+  "required_test_scores": {
+    "en": "Required Test Scores",
+    "th": "คะแนนสอบที่ต้องการ"
+  },
+  "score_type": {
+    "en": "Score Type",
+    "th": "ประเภทคะแนน"
+  },
+  "minimum_score": {
+    "en": "Minimum Score",
+    "th": "คะแนนขั้นต่ำ"
+  },
+  "add_score": {
+    "en": "+ Add Score",
+    "th": "+ เพิ่มคะแนน"
+  },
+  "required_documents": {
+    "en": "Required Documents",
+    "th": "เอกสารที่ต้องใช้"
+  },
+  "doc_transcript": {
+    "en": "Transcript",
+    "th": "ใบแสดงผลการเรียน"
+  },
+  "doc_id_copy": {
+    "en": "ID Card Copy",
+    "th": "สำเนาบัตรประชาชน"
+  },
+  "doc_photo": {
+    "en": "Photo",
+    "th": "รูปถ่าย"
+  },
+  "doc_certificate": {
+    "en": "Certificate",
+    "th": "ประกาศนียบัตร / วุฒิการศึกษา"
+  },
+  "doc_portfolio": {
+    "en": "Portfolio",
+    "th": "แฟ้มสะสมผลงาน"
+  },
+  "required_subjects": {
+    "en": "Required High School Subjects",
+    "th": "วิชาที่ต้องเรียน (ม.ปลาย)"
+  },
+  "subject_name_en": {
+    "en": "Subject Name (English)",
+    "th": "ชื่อวิชา (อังกฤษ)"
+  },
+  "subject_name_th": {
+    "en": "Subject Name (Thai)",
+    "th": "ชื่อวิชา (ไทย)"
+  },
+  "add_subject": {
+    "en": "+ Add Subject",
+    "th": "+ เพิ่มวิชา"
+  },
+  "custom_questions": {
+    "en": "Custom Questions",
+    "th": "คำถามเพิ่มเติม"
+  },
+  "custom_questions_hint": {
+    "en": "Questions applicants must answer on the application",
+    "th": "คำถามที่ผู้สมัครต้องตอบในใบสมัคร"
+  },
+  "question": {
+    "en": "Question",
+    "th": "คำถาม"
+  },
+  "answer_type": {
+    "en": "Answer Type",
+    "th": "ประเภทคำตอบ"
+  },
+  "type_text": {
+    "en": "Short Text",
+    "th": "ข้อความสั้น"
+  },
+  "type_textarea": {
+    "en": "Long Text",
+    "th": "ข้อความยาว"
+  },
+  "type_yes_no": {
+    "en": "Yes / No",
+    "th": "ใช่ / ไม่ใช่"
+  },
+  "required_field": {
+    "en": "Required",
+    "th": "บังคับตอบ"
+  },
+  "add_question": {
+    "en": "+ Add Question",
+    "th": "+ เพิ่มคำถาม"
+  },
+  "scoring_rubric": {
+    "en": "Scoring Rubric",
+    "th": "เกณฑ์การให้คะแนน"
+  },
+  "scoring_rubric_hint": {
+    "en": "Criteria reviewers use to score each application",
+    "th": "กำหนดเกณฑ์ที่ผู้ตรวจใช้ให้คะแนนแต่ละใบสมัคร"
+  },
+  "criterion": {
+    "en": "Criterion",
+    "th": "เกณฑ์"
+  },
+  "weight": {
+    "en": "Weight (%)",
+    "th": "น้ำหนัก (%)"
+  },
+  "max_score": {
+    "en": "Max Score",
+    "th": "คะแนนเต็ม"
+  },
+  "add_criterion": {
+    "en": "+ Add Criterion",
+    "th": "+ เพิ่มเกณฑ์"
+  },
+  "save_requirements": {
+    "en": "Save Requirements",
+    "th": "บันทึกข้อกำหนด"
+  },
+  "requirements_saved": {
+    "en": "Requirements saved.",
+    "th": "บันทึกข้อกำหนดเรียบร้อย"
+  },
+  "remove": {
+    "en": "Remove",
+    "th": "ลบ"
+  },
+  "manage_applications": {
+    "en": "Review and score applications",
+    "th": "ตรวจและให้คะแนนใบสมัคร"
+  },
+  "no_applications_yet": {
+    "en": "No applications yet.",
+    "th": "ยังไม่มีใบสมัคร"
+  },
+  "applicant": {
+    "en": "Applicant",
+    "th": "ผู้สมัคร"
+  },
+  "program": {
+    "en": "Program",
+    "th": "หลักสูตร"
+  },
+  "round": {
+    "en": "Round",
+    "th": "รอบ"
+  },
+  "submitted": {
+    "en": "Submitted",
+    "th": "ส่งใบสมัครแล้ว"
+  },
+  "submitted_at": {
+    "en": "Submitted",
+    "th": "วันที่ส่ง"
+  },
+  "screening": {
+    "en": "Screening",
+    "th": "ตรวจคุณสมบัติ"
+  },
+  "total_score": {
+    "en": "Total Score",
+    "th": "คะแนนรวม"
+  },
+  "screen_green": {
+    "en": "Meets all",
+    "th": "ผ่านเกณฑ์"
+  },
+  "screen_yellow": {
+    "en": "Borderline",
+    "th": "ใกล้เคียง"
+  },
+  "screen_red": {
+    "en": "Does not qualify",
+    "th": "ไม่ผ่านเกณฑ์"
+  },
+  "screen_unknown": {
+    "en": "No config",
+    "th": "ไม่ทราบ"
+  },
+  "search_applications": {
+    "en": "Search applications...",
+    "th": "ค้นหาใบสมัคร..."
+  },
+  "all_statuses": {
+    "en": "All statuses",
+    "th": "ทุกสถานะ"
+  },
+  "all_screen_levels": {
+    "en": "All screening",
+    "th": "ทุกเกณฑ์"
+  },
+  "all_rounds": {
+    "en": "All rounds",
+    "th": "ทุกรอบ"
+  },
+  "round_1": {
+    "en": "Round 1 (Portfolio)",
+    "th": "รอบ 1 (Portfolio)"
+  },
+  "round_2": {
+    "en": "Round 2 (Quota)",
+    "th": "รอบ 2 (Quota)"
+  },
+  "round_4": {
+    "en": "Round 4 (Direct)",
+    "th": "รอบ 4 (Direct)"
+  },
+  "status_submitted": {
+    "en": "Submitted",
+    "th": "ส่งใบสมัคร"
+  },
+  "status_under_review": {
+    "en": "Under Review",
+    "th": "กำลังตรวจสอบ"
+  },
+  "status_shortlisted": {
+    "en": "Shortlisted",
+    "th": "ผ่านการคัดเลือกเบื้องต้น"
+  },
+  "status_interview_scheduled": {
+    "en": "Interview Scheduled",
+    "th": "นัดสัมภาษณ์"
+  },
+  "status_accepted": {
+    "en": "Accepted",
+    "th": "ผ่านการคัดเลือก"
+  },
+  "status_waitlisted": {
+    "en": "Waitlisted",
+    "th": "อยู่ในรายชื่อสำรอง"
+  },
+  "status_rejected": {
+    "en": "Rejected",
+    "th": "ไม่ผ่านการคัดเลือก"
+  },
+  "status_confirmed": {
+    "en": "Confirmed",
+    "th": "ยืนยันสิทธิ์"
+  },
+  "status_withdrawn": {
+    "en": "Withdrawn",
+    "th": "ถอนตัว"
+  },
+  "back_to_applications": {
+    "en": "← Back to applications",
+    "th": "← กลับไปรายการ"
+  },
+  "profile_info": {
+    "en": "Profile Information",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "phone": {
+    "en": "Phone",
+    "th": "เบอร์โทร"
+  },
+  "line_id": {
+    "en": "LINE ID",
+    "th": "LINE ID"
+  },
+  "school": {
+    "en": "School",
+    "th": "โรงเรียน"
+  },
+  "gpa": {
+    "en": "GPA",
+    "th": "GPA"
+  },
+  "graduation_year": {
+    "en": "Graduation Year",
+    "th": "ปีที่จบ"
+  },
+  "test_scores": {
+    "en": "Test Scores",
+    "th": "คะแนนสอบ"
+  },
+  "documents": {
+    "en": "Documents",
+    "th": "เอกสาร"
+  },
+  "no_documents": {
+    "en": "No documents uploaded.",
+    "th": "ยังไม่ได้อัปโหลดเอกสาร"
+  },
+  "view": {
+    "en": "View",
+    "th": "ดู"
+  },
+  "portfolio": {
+    "en": "Portfolio",
+    "th": "แฟ้มสะสมผลงาน"
+  },
+  "no_portfolio": {
+    "en": "No portfolio attached.",
+    "th": "ไม่ได้แนบแฟ้มสะสมผลงาน"
+  },
+  "answers_to_questions": {
+    "en": "Answers to Custom Questions",
+    "th": "คำตอบแบบสอบถาม"
+  },
+  "no_custom_answers": {
+    "en": "No custom questions configured.",
+    "th": "ไม่มีคำถามเพิ่มเติม"
+  },
+  "requirements_check": {
+    "en": "Requirements Check",
+    "th": "ตรวจสอบคุณสมบัติ"
+  },
+  "no_issues": {
+    "en": "All requirements met.",
+    "th": "ผ่านเกณฑ์ทั้งหมด"
+  },
+  "no_requirements_configured": {
+    "en": "No requirements configured for this program.",
+    "th": "ยังไม่ได้กำหนดคุณสมบัติของหลักสูตรนี้"
+  },
+  "scoring": {
+    "en": "Scoring",
+    "th": "ให้คะแนน"
+  },
+  "no_rubric_configured": {
+    "en": "No scoring rubric configured yet.",
+    "th": "ยังไม่ได้กำหนดเกณฑ์การให้คะแนน"
+  },
+  "score": {
+    "en": "Score",
+    "th": "คะแนน"
+  },
+  "weighted_total": {
+    "en": "Weighted Total",
+    "th": "คะแนนถ่วงน้ำหนัก"
+  },
+  "save_scores": {
+    "en": "Save Scores",
+    "th": "บันทึกคะแนน"
+  },
+  "scores_saved": {
+    "en": "Scores saved.",
+    "th": "บันทึกคะแนนแล้ว"
+  },
+  "internal_notes": {
+    "en": "Internal Notes",
+    "th": "บันทึกภายใน"
+  },
+  "notes_hint": {
+    "en": "Visible only to admins — not shown to applicant.",
+    "th": "บันทึกสำหรับผู้ดูแล (ผู้สมัครไม่เห็น)"
+  },
+  "save_notes": {
+    "en": "Save Notes",
+    "th": "บันทึกโน้ต"
+  },
+  "notes_saved": {
+    "en": "Notes saved.",
+    "th": "บันทึกโน้ตแล้ว"
+  },
+  "change_status": {
+    "en": "Change Status",
+    "th": "เปลี่ยนสถานะ"
+  },
+  "status_updated": {
+    "en": "Status updated.",
+    "th": "อัปเดตสถานะแล้ว"
+  }
+}
