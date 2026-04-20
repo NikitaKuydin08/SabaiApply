@@ -13,6 +13,7 @@ interface Props {
   userId: string;
   onClose: () => void;
   inline?: boolean;
+  onSaved?: () => void;
 }
 
 interface DocSlot {
@@ -37,7 +38,7 @@ const DOCUMENT_SLOTS: DocSlot[] = [
   { type: "certificate", label: "Other Certificate / Award", required: false },
 ];
 
-export default function DocumentsSection({ documents, studentId, userId, onClose, inline }: Props) {
+export default function DocumentsSection({ documents, studentId, userId, onClose, inline, onSaved }: Props) {
   const router = useRouter();
   const [localDocs, setLocalDocs] = useState<StudentDocument[]>(documents);
   useEffect(() => { setLocalDocs(documents); }, [documents]);
@@ -196,7 +197,21 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
       </div>
   );
 
-  if (inline) return <div>{formContent}</div>;
+  if (inline) return (
+    <div>
+      {formContent}
+      {onSaved && (
+        <div className="mt-6 flex justify-end border-t border-[#f0f0f0] pt-5">
+          <button
+            onClick={onSaved}
+            className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+          >
+            Continue
+          </button>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <SectionPanel title="Documents" onClose={onClose}>
