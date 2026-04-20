@@ -1,6 +1,10 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) throw new Error("RESEND_API_KEY is not set");
+  return new Resend(key);
+}
 
 const FROM_EMAIL = "SabaiApply <team@sabaiapply.com>";
 
@@ -9,7 +13,7 @@ export async function sendInviteEmail(
   inviteLink: string,
   facultyName?: string
 ) {
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: "You're invited to join SabaiApply",
@@ -71,7 +75,7 @@ export async function sendSupportEmail(
   subject: string,
   message: string
 ) {
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,

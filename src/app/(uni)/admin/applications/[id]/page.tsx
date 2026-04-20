@@ -10,12 +10,14 @@ import {
   updateApplicationStatus,
   saveApplicationScoring,
   saveApplicationNotes,
-  type ScreeningResult,
-  type RubricItem,
-  type CustomQuestion,
-  type ScoreReq,
-  type DocReq,
 } from "../actions";
+import type {
+  ScreeningResult,
+  RubricItem,
+  CustomQuestion,
+  ScoreReq,
+  DocReq,
+} from "../screening";
 
 interface DocRow { id: string; doc_type: string; file_url: string; file_name: string }
 interface ScoreRow { id: string; score_type: string; score_value: number; test_date: string | null }

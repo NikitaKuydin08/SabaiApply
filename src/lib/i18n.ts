@@ -204,7 +204,6 @@ const translations = {
   "applicant": { th: "ผู้สมัคร", en: "Applicant" },
   "program": { th: "หลักสูตร", en: "Program" },
   "round": { th: "รอบ", en: "Round" },
-  "status": { th: "สถานะ", en: "Status" },
   "submitted": { th: "ส่งใบสมัครแล้ว", en: "Submitted" },
   "submitted_at": { th: "วันที่ส่ง", en: "Submitted" },
   "screening": { th: "ตรวจคุณสมบัติ", en: "Screening" },

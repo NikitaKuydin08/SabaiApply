@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useLocale } from "@/lib/locale-context";
 import { t } from "@/lib/i18n";
-import { getApplications, type ScreeningResult } from "./actions";
+import { getApplications } from "./actions";
+import type { ScreeningResult } from "./screening";
 
 interface AppRow {
   id: string;

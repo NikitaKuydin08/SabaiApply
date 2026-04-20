@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { screenApplication, type ProgramRequirements } from "./screening";
 
 async function getCurrentAdmin() {
   const supabase = await createClient();
@@ -16,74 +17,6 @@ async function getCurrentAdmin() {
 
   if (!profile || profile.role === "student") throw new Error("Not authorized");
   return { supabase, profile };
-}
-
-export interface ScoreReq { type: string; min: number }
-export interface DocReq { type: string; required: boolean }
-export interface CustomQuestion { question: string; type: string; required: boolean }
-export interface RubricItem { criterion: string; weight: number; max_score: number }
-
-export interface ScreeningResult {
-  level: "green" | "yellow" | "red" | "unknown";
-  issues: Array<{ severity: "warn" | "fail"; message: string }>;
-}
-
-interface ProgramRequirements {
-  min_gpa: number | null;
-  required_scores: ScoreReq[];
-  required_documents: DocReq[];
-}
-
-interface StudentData {
-  gpa: number | null;
-  scores: Array<{ score_type: string; score_value: number }>;
-  documents: Array<{ doc_type: string }>;
-}
-
-// Pure function — compares student data against program requirements.
-export function screenApplication(student: StudentData, reqs: ProgramRequirements | null): ScreeningResult {
-  if (!reqs) return { level: "unknown", issues: [] };
-
-  const issues: ScreeningResult["issues"] = [];
-
-  // GPA check
-  if (reqs.min_gpa != null && reqs.min_gpa > 0) {
-    if (student.gpa == null) {
-      issues.push({ severity: "fail", message: `Missing GPA (requires ≥ ${reqs.min_gpa.toFixed(2)})` });
-    } else if (student.gpa < reqs.min_gpa) {
-      const diff = reqs.min_gpa - student.gpa;
-      if (diff <= 0.2) issues.push({ severity: "warn", message: `GPA ${student.gpa.toFixed(2)} is just below required ${reqs.min_gpa.toFixed(2)}` });
-      else issues.push({ severity: "fail", message: `GPA ${student.gpa.toFixed(2)} below required ${reqs.min_gpa.toFixed(2)}` });
-    }
-  }
-
-  // Score checks — pick highest matching student score per requirement
-  for (const req of reqs.required_scores ?? []) {
-    const studentScores = student.scores.filter((s) => s.score_type === req.type);
-    if (studentScores.length === 0) {
-      issues.push({ severity: "fail", message: `Missing ${req.type} (requires ≥ ${req.min})` });
-      continue;
-    }
-    const best = Math.max(...studentScores.map((s) => s.score_value));
-    if (best < req.min) {
-      issues.push({ severity: "fail", message: `${req.type} ${best} below required ${req.min}` });
-    }
-  }
-
-  // Document checks
-  const submittedDocs = new Set(student.documents.map((d) => d.doc_type));
-  for (const doc of reqs.required_documents ?? []) {
-    if (doc.required && !submittedDocs.has(doc.type)) {
-      issues.push({ severity: "fail", message: `Missing document: ${doc.type}` });
-    }
-  }
-
-  const hasFail = issues.some((i) => i.severity === "fail");
-  const hasWarn = issues.some((i) => i.severity === "warn");
-  return {
-    level: hasFail ? "red" : hasWarn ? "yellow" : "green",
-    issues,
-  };
 }
 
 export async function getApplications() {
@@ -201,7 +134,13 @@ export async function getApplication(id: string) {
     .eq("id", student.user_id)
     .single();
 
-  const program = Array.isArray(app.program) ? app.program[0] : app.program;
+  const rawProgram = Array.isArray(app.program) ? app.program[0] : app.program;
+  const rawFaculty = Array.isArray(rawProgram.faculty) ? rawProgram.faculty[0] : rawProgram.faculty;
+  const rawUniversity = Array.isArray(rawFaculty.university) ? rawFaculty.university[0] : rawFaculty.university;
+  const program = {
+    ...rawProgram,
+    faculty: { ...rawFaculty, university: rawUniversity },
+  };
   const { data: reqRow } = await supabase
     .from("program_requirements")
     .select("*")
