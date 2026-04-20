@@ -6,13 +6,31 @@ import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
 import { faqCategories, searchFAQ, type FAQCategory } from "../data/faq";
 
+export interface Program {
+  id: string;
+  name: string;
+  name_th: string;
+  degree_type: string | null;
+  is_international: boolean;
+  tuition_per_semester: number | null;
+}
+
+export interface Faculty {
+  id: string;
+  name: string;
+  name_th: string;
+  programs: Program[];
+}
+
 export interface University {
   id: string;
   name: string;
   name_th: string;
   website: string | null;
+  logo_url: string | null;
   facultyCount: number;
   programCount: number;
+  faculties: Faculty[];
 }
 import {
   LayoutDashboard,
@@ -32,6 +50,15 @@ import {
   PlusCircle,
 } from "lucide-react";
 import AccountSettingsModal from "./account-settings-modal";
+import UniversityAppView, {
+  UniStatusRing,
+  useUniDraft,
+  getUniSectionStatuses,
+  getUniOverallStatus,
+  readUniDraft,
+  type UniAppSection,
+  type UniOverallStatus,
+} from "./university-app-view";
 import PersonalInfoSection from "./sections/personal-info-section";
 import FamilySection from "./sections/family-section";
 import EducationSection from "./sections/education-section";
@@ -76,8 +103,56 @@ export default function DashboardClient({ user, profile, family, education, scor
   const [applicationExpanded, setApplicationExpanded] = useState(true);
   const [universitiesExpanded, setUniversitiesExpanded] = useState(true);
   const [currentView, setCurrentView] = useState<View>("dashboard");
+  const [activeUniId, setActiveUniId] = useState<string | null>(null);
+  const [activeUniSection, setActiveUniSection] = useState<UniAppSection>("info");
+  const [uniExpanded, setUniExpanded] = useState(true);
   const [uniSearch, setUniSearch] = useState("");
   const [addedUniversityIds, setAddedUniversityIds] = useState<Set<string>>(new Set());
+  const [uniStatuses, setUniStatuses] = useState<Record<string, UniOverallStatus>>({});
+
+  const [uniDraft, setUniDraft] = useUniDraft(activeUniId ?? "");
+
+  // Recompute the overall status for every added uni whenever the set
+  // changes OR the active uni's draft changes (so the Overview reflects
+  // live edits without requiring a refresh).
+  useEffect(() => {
+    const next: Record<string, UniOverallStatus> = {};
+    for (const id of addedUniversityIds) {
+      next[id] = getUniOverallStatus(readUniDraft(id));
+    }
+    setUniStatuses(next);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addedUniversityIds, activeUniId, uniDraft]);
+
+  function openUniversity(id: string) {
+    // Auto-add to "my universities" so the flow mirrors Common App
+    setAddedUniversityIds((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...next])); } catch { /* ignore */ }
+      return next;
+    });
+    setActiveUniId(id);
+    setActiveUniSection("info");
+    setUniExpanded(true);
+    setCurrentView("my-universities");
+  }
+
+  function removeUniversity(id: string) {
+    setAddedUniversityIds((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
+        localStorage.removeItem(`sabaiapply-uni-app-${id}`);
+      } catch { /* ignore */ }
+      return next;
+    });
+    setActiveUniId(null);
+    setCurrentView("my-universities");
+  }
 
   // Load saved universities after hydration to avoid SSR mismatch.
   // Filter out stale IDs that no longer match any university in the DB.
@@ -221,6 +296,7 @@ export default function DashboardClient({ user, profile, family, education, scor
 
   const showMyUniSidebar = currentView === "my-universities";
   const showAppFormSidebar = currentView === "application-form";
+  const activeUniversity = activeUniId ? universities.find((u) => u.id === activeUniId) ?? null : null;
 
   // Default to first incomplete section when entering application form
   function enterApplicationForm(section?: AppSection) {
@@ -231,6 +307,14 @@ export default function DashboardClient({ user, profile, family, education, scor
       setActiveSection("personal");
     }
   }
+
+  const uniSectionStatuses = useMemo(() => getUniSectionStatuses(uniDraft), [uniDraft]);
+  const commonAppSectionsForReview = useMemo(() =>
+    sectionKeys
+      .filter((s): s is typeof s & { action: Exclude<AppSection, null> } => s.action !== null)
+      .map((s) => ({ key: s.action as string, label: t(s.key), status: s.status, action: s.action })),
+    [sectionKeys, t],
+  );
 
   return (
     <div className="flex min-h-screen">
@@ -338,47 +422,159 @@ export default function DashboardClient({ user, profile, family, education, scor
             </div>
           </div>
         ) : showMyUniSidebar ? (
-          <>
-            <nav className="flex-1 overflow-y-auto px-3 py-4">
-              <button
-                onClick={() => setCurrentView("dashboard")}
-                className="mb-3 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]"
-              >
-                <ArrowLeft size={18} />
-                {t("nav.back")}
-              </button>
+          /* ── My Universities Sidebar (Common App style, no back arrow) ── */
+          <div className="flex flex-1 flex-col">
+            <div className="flex flex-1 overflow-hidden">
+              {/* Icon strip */}
+              <div className="flex w-14 shrink-0 flex-col items-center border-r border-[#f0f0f0] py-3">
+                <button
+                  onClick={() => { setCurrentView("dashboard"); setActiveUniId(null); }}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title="Dashboard"
+                >
+                  <LayoutDashboard size={18} />
+                </button>
+                <button
+                  onClick={() => enterApplicationForm()}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.myApplication")}
+                >
+                  <FileText size={18} />
+                </button>
+                <button
+                  onClick={() => setCurrentView("university-search")}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.chooseUni")}
+                >
+                  <Search size={18} />
+                </button>
+                <button
+                  onClick={() => setActiveUniId(null)}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFF3D0] text-[#1a1a1a]"
+                  title={t("nav.myUniversities")}
+                >
+                  <Building2 size={18} />
+                </button>
+                <div className="flex-1" />
+                <button
+                  onClick={() => setShowSettings(true)}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.settings")}
+                >
+                  <Settings size={18} />
+                </button>
+                <button
+                  onClick={handleSignOut}
+                  className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg text-[#444] transition-colors hover:bg-[#f5f5f5]"
+                  title={t("nav.signOut")}
+                >
+                  <LogOut size={18} />
+                </button>
+              </div>
 
-              <h3 className="px-3 pb-2 text-lg font-bold text-[#1a1a1a]">
-                {t("nav.myUniversities")}
-              </h3>
+              {/* My Universities section list */}
+              <div className="flex-1 overflow-y-auto px-3 py-4">
+                <h3 className="px-3 pb-3 text-base font-bold text-[#1a1a1a]">
+                  {t("nav.myUniversities")}
+                </h3>
+                <button
+                  onClick={() => setActiveUniId(null)}
+                  className={`mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                    !activeUniId ? "bg-[#FFF3D0] text-[#1a1a1a]" : "text-[#444] hover:bg-[#f5f5f5]"
+                  }`}
+                >
+                  <Eye size={17} />
+                  {t("nav.overview")}
+                </button>
 
-              <button className="flex w-full items-center gap-3 rounded-lg bg-[#FFF3D0] px-3 py-2.5 text-[15px] font-medium text-[#1a1a1a]">
-                <Eye size={19} />
-                {t("nav.overview")}
-              </button>
+                {addedUniversities.map((uni) => {
+                  const isActive = activeUniId === uni.id;
+                  const label = locale === "th" && uni.name_th ? uni.name_th : uni.name;
+                  return (
+                    <div key={uni.id} className="mt-1">
+                      <button
+                        onClick={() => {
+                          if (isActive) {
+                            setUniExpanded((v) => !v);
+                          } else {
+                            openUniversity(uni.id);
+                          }
+                        }}
+                        className={`flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-[14px] font-medium transition-colors ${
+                          isActive ? "bg-[#f5f5f5] text-[#1a1a1a]" : "text-[#444] hover:bg-[#f5f5f5]"
+                        }`}
+                      >
+                        {isActive && uniExpanded
+                          ? <ChevronDown size={14} className="shrink-0 text-[#666]" />
+                          : <ChevronDown size={14} className="shrink-0 -rotate-90 text-[#ccc]" />}
+                        <span className="truncate">{label}</span>
+                      </button>
 
-              {addedUniversities.length > 0 && (
-                <div className="mt-3 max-h-[320px] space-y-0.5 overflow-y-auto">
-                  {addedUniversities.map((uni) => (
-                    <div key={uni.id} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#444]">
-                      <ChevronDown size={14} className="-rotate-90 text-[#ccc]" />
-                      <span className="truncate">{uni.name}</span>
+                      {isActive && uniExpanded && (
+                        <div className="ml-3 space-y-0.5 border-l border-[#e8e8e8] pl-2 pt-1">
+                          <UniSidebarItem
+                            label={locale === "th" ? "ข้อมูลมหาวิทยาลัย" : "University information"}
+                            active={activeUniSection === "info"}
+                            onClick={() => setActiveUniSection("info")}
+                          />
+                          <div className="px-3 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-wider text-[#999]">
+                            {locale === "th" ? "ใบสมัคร" : "Application"}
+                          </div>
+                          <UniSidebarItem
+                            label={locale === "th" ? "ข้อมูลทั่วไป" : "General"}
+                            active={activeUniSection === "general"}
+                            status={uniSectionStatuses.general}
+                            onClick={() => setActiveUniSection("general")}
+                          />
+                          <UniSidebarItem
+                            label={locale === "th" ? "สาขาวิชา" : "Academics"}
+                            active={activeUniSection === "academics"}
+                            status={uniSectionStatuses.academics}
+                            onClick={() => setActiveUniSection("academics")}
+                          />
+                          <UniSidebarItem
+                            label={locale === "th" ? "ข้อมูลเพิ่มเติม" : "Other requirements"}
+                            active={activeUniSection === "other"}
+                            status={uniSectionStatuses.other}
+                            onClick={() => setActiveUniSection("other")}
+                          />
+                          <UniSidebarItem
+                            label={locale === "th" ? "ตรวจและส่งใบสมัคร" : "Review and submit application"}
+                            active={activeUniSection === "review"}
+                            status={uniSectionStatuses.review}
+                            onClick={() => setActiveUniSection("review")}
+                          />
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  );
+                })}
+
+                <button
+                  onClick={() => setCurrentView("university-search")}
+                  className="mt-3 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium text-[#F4C430] transition-colors hover:bg-[#f5f5f5]"
+                >
+                  <PlusCircle size={17} />
+                  {t("nav.addUni")}
+                </button>
+              </div>
+            </div>
+
+            {/* Profile card at bottom */}
+            <div className="border-t border-[#f0f0f0] px-4 py-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F4C430] text-sm font-bold text-[#1a1a1a]">
+                  {(profile?.first_name?.[0] || user.email[0]).toUpperCase()}
                 </div>
-              )}
-
-              <button
-                onClick={() => setCurrentView("university-search")}
-                className="mt-3 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium text-[#F4C430] transition-colors hover:bg-[#f5f5f5]"
-              >
-                <PlusCircle size={19} />
-                {t("nav.addUni")}
-              </button>
-            </nav>
-
-            <BottomSection onSettings={() => setShowSettings(true)} onSignOut={handleSignOut} user={user} profile={profile} t={t} />
-          </>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-[#1a1a1a]">
+                    {profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` : user.email.split("@")[0]}
+                  </p>
+                  <p className="truncate text-xs text-[#888]">{user.email}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           <>
             <nav className="flex-1 space-y-1 px-3 py-4">
@@ -454,6 +650,7 @@ export default function DashboardClient({ user, profile, family, education, scor
             addedUniversities={addedUniversities}
             onSearchUniversities={() => setCurrentView("university-search")}
             onViewMyUniversities={() => setCurrentView("my-universities")}
+            onOpenUniversity={openUniversity}
             onSectionClick={(action: AppSection) => enterApplicationForm(action)}
             t={t}
           />
@@ -467,18 +664,41 @@ export default function DashboardClient({ user, profile, family, education, scor
             filteredUniversities={filteredUniversities}
             addedUniversityIds={addedUniversityIds}
             onToggleUniversity={toggleUniversity}
+            onOpenUniversity={openUniversity}
             onBack={() => setCurrentView("dashboard")}
             t={t}
           />
         )}
-        {currentView === "my-universities" && (
+        {currentView === "my-universities" && !activeUniversity && (
           <MyUniversitiesOverview
             locale={locale}
             setLocale={setLocale}
             addedUniversities={addedUniversities}
+            uniStatuses={uniStatuses}
+            onOpenUniversity={openUniversity}
             onAddMore={() => setCurrentView("university-search")}
             t={t}
           />
+        )}
+        {currentView === "my-universities" && activeUniversity && (
+          <div className="px-8 pb-8 pt-5">
+            <div className="mb-4 flex items-center justify-end">
+              <LangToggle locale={locale} setLocale={setLocale} />
+            </div>
+            <div className="max-h-[calc(100vh-130px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-10 py-10 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+              <UniversityAppView
+                university={activeUniversity}
+                activeSection={activeUniSection}
+                setActiveSection={setActiveUniSection}
+                draft={uniDraft}
+                onDraftChange={setUniDraft}
+                commonAppSections={commonAppSectionsForReview}
+                locale={locale as "en" | "th"}
+                onRemove={() => removeUniversity(activeUniversity.id)}
+                onJumpToCommonAppSection={(action) => { setActiveSection(action); setCurrentView("application-form"); }}
+              />
+            </div>
+          </div>
         )}
         {currentView === "application-form" && (
           <div className="px-8 pb-8 pt-5">
@@ -560,13 +780,15 @@ function BottomSection({ onSettings, onSignOut, user, profile, t }: {
 
 /* ══════════════════════════════════════════════ */
 
-function DashboardView({ greeting, firstName, locale, setLocale, applicationExpanded, setApplicationExpanded, universitiesExpanded, setUniversitiesExpanded, applicationRef, universitiesRef, sections, progress, addedUniversities, onSearchUniversities, onViewMyUniversities, onSectionClick, t }: {
+function DashboardView({ greeting, firstName, locale, setLocale, applicationExpanded, setApplicationExpanded, universitiesExpanded, setUniversitiesExpanded, applicationRef, universitiesRef, sections, progress, addedUniversities, onSearchUniversities, onViewMyUniversities, onOpenUniversity, onSectionClick, t }: {
   greeting: string; firstName: string; locale: string; setLocale: (l: "en" | "th") => void;
   applicationExpanded: boolean; setApplicationExpanded: (v: boolean) => void;
   universitiesExpanded: boolean; setUniversitiesExpanded: (v: boolean) => void;
   applicationRef: React.RefObject<HTMLDivElement | null>; universitiesRef: React.RefObject<HTMLDivElement | null>;
   sections: { label: string; status: SectionStatus; action: AppSection }[]; progress: number;
-  addedUniversities: University[]; onSearchUniversities: () => void; onViewMyUniversities: () => void; onSectionClick: (action: AppSection) => void; t: TFn;
+  addedUniversities: University[]; onSearchUniversities: () => void; onViewMyUniversities: () => void;
+  onOpenUniversity: (id: string) => void;
+  onSectionClick: (action: AppSection) => void; t: TFn;
 }) {
   return (
     <>
@@ -638,13 +860,17 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
                 <div>
                   <div className="divide-y divide-[#f0f0f0]">
                     {addedUniversities.slice(0, 3).map((uni) => (
-                      <div key={uni.id} className="flex items-center gap-3 py-2">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F4C430]/20 text-sm font-bold text-[#1a1a1a]">{uni.name[0]}</div>
+                      <button
+                        key={uni.id}
+                        onClick={() => onOpenUniversity(uni.id)}
+                        className="flex w-full items-center gap-3 rounded-md py-2 text-left transition-colors hover:bg-[#FFFBF0]"
+                      >
+                        <UniLogo uni={uni} size="sm" />
                         <div>
                           <p className="text-[15px] font-medium text-[#1a1a1a]">{uni.name}</p>
                           <p className="text-xs text-[#888]">{uni.name_th}</p>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                   {addedUniversities.length > 3 && <p className="mt-1 text-sm text-[#999]">+{addedUniversities.length - 3} {t("uni.more")}</p>}
@@ -668,11 +894,13 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
 
 /* ══════════════════════════════════════════════ */
 
-function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filteredUniversities, addedUniversityIds, onToggleUniversity, onBack, t }: {
+function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filteredUniversities, addedUniversityIds, onToggleUniversity, onOpenUniversity, onBack, t }: {
   locale: string; setLocale: (l: "en" | "th") => void;
   uniSearch: string; setUniSearch: (v: string) => void;
   filteredUniversities: University[]; addedUniversityIds: Set<string>;
-  onToggleUniversity: (id: string) => void; onBack: () => void; t: TFn;
+  onToggleUniversity: (id: string) => void;
+  onOpenUniversity: (id: string) => void;
+  onBack: () => void; t: TFn;
 }) {
   const [showFilters, setShowFilters] = useState(false);
   const [filterCity, setFilterCity] = useState("");
@@ -715,8 +943,11 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
             const isAdded = addedUniversityIds.has(uni.id);
             return (
               <div key={uni.id} className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#FFFBF0]">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#F4C430]/20 text-base font-bold text-[#1a1a1a]">{uni.name[0]}</div>
+                <button
+                  onClick={() => onOpenUniversity(uni.id)}
+                  className="flex flex-1 items-center gap-4 text-left"
+                >
+                  <UniLogo uni={uni} />
                   <div>
                     <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
                     <p className="text-sm text-[#888]">{uni.name_th}</p>
@@ -726,7 +957,7 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
                       </p>
                     )}
                   </div>
-                </div>
+                </button>
                 {isAdded ? (
                   <button onClick={() => onToggleUniversity(uni.id)} className="flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm font-semibold text-[#666] transition-colors hover:bg-[#f5f5f5]">
                     <X size={15} />{t("search.remove")}
@@ -780,10 +1011,26 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
 
 /* ══════════════════════════════════════════════ */
 
-function MyUniversitiesOverview({ locale, setLocale, addedUniversities, onAddMore, t }: {
+function MyUniversitiesOverview({ locale, setLocale, addedUniversities, uniStatuses, onOpenUniversity, onAddMore, t }: {
   locale: string; setLocale: (l: "en" | "th") => void;
-  addedUniversities: University[]; onAddMore: () => void; t: TFn;
+  addedUniversities: University[];
+  uniStatuses: Record<string, UniOverallStatus>;
+  onOpenUniversity: (id: string) => void;
+  onAddMore: () => void; t: TFn;
 }) {
+  const inProgressCount = addedUniversities.filter((u) => {
+    const s = uniStatuses[u.id];
+    return s === "in_progress" || s === "completed";
+  }).length;
+  const submittedCount = addedUniversities.filter((u) => uniStatuses[u.id] === "submitted").length;
+
+  const badgeFor = (s: UniOverallStatus | undefined) => {
+    if (s === "submitted") return { label: t("uni.submitted"), cls: "bg-green-50 text-green-700" };
+    if (s === "completed") return { label: locale === "th" ? "พร้อมส่ง" : "Ready to submit", cls: "bg-[#FFF3D0] text-[#8a6d17]" };
+    if (s === "in_progress") return { label: locale === "th" ? "กำลังดำเนินการ" : "In progress", cls: "bg-[#FFF3D0] text-[#8a6d17]" };
+    return { label: t("uni.notStarted"), cls: "bg-[#f0f0f0] text-[#666]" };
+  };
+
   return (
     <>
       <div className="flex items-center justify-between px-8 pb-1 pt-5">
@@ -813,11 +1060,11 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, onAddMor
               </div>
               <div className="rounded-xl border border-[#e8e8e8] bg-white px-5 py-4">
                 <p className="text-sm text-[#666]">{t("uni.inProgress")}</p>
-                <p className="mt-1 text-2xl font-bold text-[#F4C430]">0</p>
+                <p className="mt-1 text-2xl font-bold text-[#F4C430]">{inProgressCount}</p>
               </div>
               <div className="rounded-xl border border-[#e8e8e8] bg-white px-5 py-4">
                 <p className="text-sm text-[#666]">{t("uni.submitted")}</p>
-                <p className="mt-1 text-2xl font-bold text-green-500">0</p>
+                <p className="mt-1 text-2xl font-bold text-green-500">{submittedCount}</p>
               </div>
             </div>
 
@@ -826,18 +1073,25 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, onAddMor
                 <h2 className="text-lg font-bold text-[#1a1a1a]">{t("uni.yourUnis")}</h2>
               </div>
               <div className="max-h-[480px] divide-y divide-[#f0f0f0] overflow-y-auto">
-                {addedUniversities.map((uni) => (
-                  <div key={uni.id} className="flex items-center justify-between px-6 py-4">
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#F4C430]/20 text-base font-bold text-[#1a1a1a]">{uni.name[0]}</div>
-                      <div>
-                        <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
-                        <p className="text-sm text-[#888]">{uni.name_th}</p>
+                {addedUniversities.map((uni) => {
+                  const badge = badgeFor(uniStatuses[uni.id]);
+                  return (
+                    <button
+                      key={uni.id}
+                      onClick={() => onOpenUniversity(uni.id)}
+                      className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[#FFFBF0]"
+                    >
+                      <div className="flex items-center gap-4">
+                        <UniLogo uni={uni} />
+                        <div>
+                          <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
+                          <p className="text-sm text-[#888]">{uni.name_th}</p>
+                        </div>
                       </div>
-                    </div>
-                    <span className="rounded-full bg-[#f0f0f0] px-3 py-1 text-xs font-medium text-[#666]">{t("uni.notStarted")}</span>
-                  </div>
-                ))}
+                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge.cls}`}>{badge.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -860,6 +1114,42 @@ function LangToggle({ locale, setLocale }: { locale: string; setLocale: (l: "en"
     <div className="flex items-center gap-1 rounded-lg border border-[#e0e0e0] bg-white p-0.5">
       <button onClick={() => setLocale("en")} className={`rounded-md px-3.5 py-2 text-sm font-semibold transition-colors ${locale === "en" ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:text-[#1a1a1a]"}`}>EN</button>
       <button onClick={() => setLocale("th")} className={`rounded-md px-3.5 py-2 text-sm font-semibold transition-colors ${locale === "th" ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:text-[#1a1a1a]"}`}>TH</button>
+    </div>
+  );
+}
+
+function UniSidebarItem({ label, active, status, onClick }: {
+  label: string;
+  active: boolean;
+  status?: "completed" | "in_progress" | "not_started";
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-[14px] font-medium transition-colors ${
+        active ? "bg-[#FFF3D0] text-[#1a1a1a]" : "text-[#444] hover:bg-[#f5f5f5]"
+      }`}
+    >
+      {status && <UniStatusRing status={status} />}
+      <span className="truncate">{label}</span>
+    </button>
+  );
+}
+
+function UniLogo({ uni, size = "md" }: {
+  uni: Pick<University, "name" | "logo_url">;
+  size?: "sm" | "md" | "lg";
+}) {
+  const dims = size === "sm" ? "h-9 w-9 text-sm" : size === "lg" ? "h-14 w-14 text-lg" : "h-11 w-11 text-base";
+  return (
+    <div className={`${dims} flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#F4C430]/20 font-bold text-[#1a1a1a]`}>
+      {uni.logo_url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={uni.logo_url} alt="" className="h-full w-full object-contain" />
+      ) : (
+        <span>{uni.name[0]}</span>
+      )}
     </div>
   );
 }

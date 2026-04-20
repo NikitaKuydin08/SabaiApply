@@ -46,16 +46,37 @@ export default async function DashboardPage() {
       : { data: null },
     supabase
       .from("universities")
-      .select("id, name, name_th, website, faculties(id, programs(id))")
+      .select(`
+        id, name, name_th, website, logo_url,
+        faculties(
+          id, name, name_th,
+          programs(id, name, name_th, degree_type, is_international, tuition_per_semester)
+        )
+      `)
       .order("name"),
   ]);
 
+  type ProgramRow = {
+    id: string;
+    name: string;
+    name_th: string | null;
+    degree_type: string | null;
+    is_international: boolean | null;
+    tuition_per_semester: number | null;
+  };
+  type FacultyRow = {
+    id: string;
+    name: string;
+    name_th: string | null;
+    programs: ProgramRow[];
+  };
   type UniversityRow = {
     id: string;
     name: string;
     name_th: string | null;
     website: string | null;
-    faculties: { id: string; programs: { id: string }[] }[];
+    logo_url: string | null;
+    faculties: FacultyRow[];
   };
 
   const universities = (universitiesRes.data ?? []).map((u: UniversityRow) => ({
@@ -63,8 +84,22 @@ export default async function DashboardPage() {
     name: u.name,
     name_th: u.name_th ?? "",
     website: u.website,
+    logo_url: u.logo_url,
     facultyCount: u.faculties?.length ?? 0,
     programCount: (u.faculties ?? []).reduce((sum, f) => sum + (f.programs?.length ?? 0), 0),
+    faculties: (u.faculties ?? []).map((f) => ({
+      id: f.id,
+      name: f.name,
+      name_th: f.name_th ?? "",
+      programs: (f.programs ?? []).map((p) => ({
+        id: p.id,
+        name: p.name,
+        name_th: p.name_th ?? "",
+        degree_type: p.degree_type,
+        is_international: p.is_international ?? false,
+        tuition_per_semester: p.tuition_per_semester,
+      })),
+    })),
   }));
 
   return (
