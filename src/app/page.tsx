@@ -2,17 +2,17 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FFF9EC]">
       {/* ── Navbar ── */}
-      <nav className="flex items-center justify-between px-8 py-5">
+      <nav className="flex items-center justify-between px-4 py-3 md:px-8 md:py-5">
         <div className="flex items-center">
-          <img src="/logo-lotus.png" alt="" className="mr-2 h-9 w-9 object-contain" />
-          <span className="text-2xl font-bold tracking-tight text-[#1a1a1a]">
+          <img src="/logo-lotus.png" alt="" className="mr-1.5 h-7 w-7 object-contain md:mr-2 md:h-9 md:w-9" />
+          <span className="text-lg font-bold tracking-tight text-[#1a1a1a] md:text-2xl">
             Sabai<span className="text-[#F4C430]">Apply</span>
           </span>
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 md:gap-5">
           <a
             href="/admin/login"
-            className="text-sm text-[#999] hover:text-[#666] transition-colors"
+            className="hidden text-sm text-[#999] transition-colors hover:text-[#666] sm:inline"
           >
             Admin Portal
           </a>
@@ -24,7 +24,7 @@ export default function Home() {
           </a>
           <a
             href="/signup"
-            className="rounded-lg bg-[#F4C430] px-5 py-2.5 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+            className="rounded-lg bg-[#F4C430] px-4 py-2 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] md:px-5 md:py-2.5"
           >
             Sign up
           </a>
@@ -32,7 +32,7 @@ export default function Home() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative h-[85vh] min-h-[500px] overflow-hidden">
+      <section className="relative min-h-[440px] overflow-hidden py-14 md:h-[85vh] md:min-h-[500px] md:py-0">
         {/* Background image */}
         <img
           src="/hero-students.jpg"
@@ -40,32 +40,32 @@ export default function Home() {
           className="absolute inset-0 h-full w-full object-cover brightness-90 blur-[5px]"
         />
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/45 to-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/55 to-black/30 md:from-black/65 md:via-black/45 md:to-black/25" />
 
         {/* Content */}
-        <div className="relative z-10 flex h-full items-center px-8">
+        <div className="relative z-10 flex h-full items-center px-5 md:px-8">
           <div className="mx-auto w-full max-w-[1100px]">
-            <div className="mb-5 inline-block rounded-full bg-white/20 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-sm">
+            <div className="mb-4 inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm md:mb-5 md:px-4 md:py-1.5 md:text-sm">
               Thailand&apos;s University Application Platform
             </div>
-            <h1 className="mb-5 max-w-[600px] text-5xl font-extrabold leading-[1.1] tracking-tight text-white">
+            <h1 className="mb-4 max-w-[600px] text-3xl font-extrabold leading-[1.1] tracking-tight text-white md:mb-5 md:text-5xl">
               Apply once.<br />
               <span className="text-[#F4C430]">Go anywhere.</span>
             </h1>
-            <p className="mb-8 max-w-[460px] text-lg leading-relaxed text-white/80">
+            <p className="mb-6 max-w-[460px] text-base leading-relaxed text-white/80 md:mb-8 md:text-lg">
               One profile. One application form. Every Thai university.
               Built for Thai students and international applicants.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
               <a
                 href="/signup"
-                className="rounded-lg bg-[#F4C430] px-7 py-3.5 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+                className="rounded-lg bg-[#F4C430] px-6 py-3 text-center text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] md:px-7 md:py-3.5"
               >
                 Start your application
               </a>
               <a
                 href="/login"
-                className="rounded-lg border-2 border-white px-7 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white/10"
+                className="rounded-lg border-2 border-white px-6 py-3 text-center text-base font-semibold text-white transition-colors hover:bg-white/10 md:px-7 md:py-3.5"
               >
                 Log in
               </a>
@@ -75,15 +75,15 @@ export default function Home() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="bg-white py-20 px-8">
+      <section className="bg-white px-5 py-12 md:px-8 md:py-20">
         <div className="mx-auto max-w-[900px] text-center">
           <p className="mb-3 text-xs font-bold uppercase tracking-[1.5px] text-[#999]">
             How it works
           </p>
-          <h2 className="mb-14 text-3xl font-extrabold tracking-tight text-[#1a1a1a]">
+          <h2 className="mb-8 text-2xl font-extrabold tracking-tight text-[#1a1a1a] md:mb-14 md:text-3xl">
             Applying to university got easier
           </h2>
-          <div className="flex gap-8 flex-wrap justify-center">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-8">
             <StepCard
               number="1"
               title="Create your profile"
@@ -104,15 +104,15 @@ export default function Home() {
       </section>
 
       {/* ── Who it's for ── */}
-      <section className="py-20 px-8">
+      <section className="px-5 py-12 md:px-8 md:py-20">
         <div className="mx-auto max-w-[900px] text-center">
           <p className="mb-3 text-xs font-bold uppercase tracking-[1.5px] text-[#999]">
             Who it is for
           </p>
-          <h2 className="mb-14 text-3xl font-extrabold tracking-tight text-[#1a1a1a]">
+          <h2 className="mb-8 text-2xl font-extrabold tracking-tight text-[#1a1a1a] md:mb-14 md:text-3xl">
             Built for every student
           </h2>
-          <div className="flex gap-6 justify-center flex-wrap">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             <AudienceCard
               emoji="&#x1F1F9;&#x1F1ED;"
               title="Thai Students"
@@ -133,16 +133,16 @@ export default function Home() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="mx-auto max-w-[900px] px-8 pb-20">
-        <div className="rounded-2xl bg-[#1a1a1a] px-12 py-14 text-center">
-          <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-white">
+      <section className="mx-auto max-w-[900px] px-5 pb-12 md:px-8 md:pb-20">
+        <div className="rounded-2xl bg-[#E8A317] px-6 py-10 text-center md:px-12 md:py-14">
+          <h2 className="mb-3 text-2xl font-extrabold tracking-tight text-[#1a1a1a] md:text-3xl">
             Choosing a university is hard.<br />
-            <span className="text-[#F4C430]">Applying shouldn&apos;t be.</span>
+            <span className="text-white">Applying shouldn&apos;t be.</span>
           </h2>
-          <p className="mb-8 text-base text-[#888]">Make your experience sabai sabai.</p>
+          <p className="mb-6 text-sm text-[#4a3a08] md:mb-8 md:text-base">Make your experience sabai sabai.</p>
           <a
             href="/signup"
-            className="inline-block rounded-lg bg-[#F4C430] px-8 py-3.5 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+            className="inline-block rounded-lg bg-[#1a1a1a] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#333] md:px-8 md:py-3.5"
           >
             Get started for free
           </a>
@@ -150,23 +150,23 @@ export default function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[#e8e8e8] bg-white py-8 px-8">
+      <footer className="border-t border-[#e8e8e8] bg-white px-5 py-6 md:px-8 md:py-8">
         <div className="mx-auto max-w-[1100px]">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-center gap-5 md:flex-row md:justify-between">
             {/* Left - Logo */}
             <div className="flex items-center gap-2">
-              <img src="/logo-lotus.png" alt="" className="h-10 w-10 object-contain" />
-              <span className="text-3xl font-bold text-[#1a1a1a]">
+              <img src="/logo-lotus.png" alt="" className="h-8 w-8 object-contain md:h-10 md:w-10" />
+              <span className="text-2xl font-bold text-[#1a1a1a] md:text-3xl">
                 Sabai<span className="text-[#F4C430]">Apply</span>
               </span>
             </div>
 
             {/* Center - Links */}
-            <div className="flex items-center gap-6">
-              <button className="text-sm text-[#888] hover:text-[#444] transition-colors">
+            <div className="flex items-center gap-5 md:gap-6">
+              <button className="text-sm text-[#888] transition-colors hover:text-[#444]">
                 Privacy Policy
               </button>
-              <button className="text-sm text-[#888] hover:text-[#444] transition-colors">
+              <button className="text-sm text-[#888] transition-colors hover:text-[#444]">
                 Terms of Use
               </button>
             </div>
@@ -180,7 +180,7 @@ export default function Home() {
             </button>
           </div>
 
-          <p className="mt-5 text-center text-sm text-[#bbb]">
+          <p className="mt-5 text-center text-xs text-[#bbb] md:text-sm">
             &copy; 2026 SabaiApply &middot; Bangkok, Thailand
           </p>
         </div>
@@ -191,11 +191,11 @@ export default function Home() {
 
 function StepCard({ number, title, description }: { number: string; title: string; description: string }) {
   return (
-    <div className="rounded-2xl border border-[#e8e8e8] bg-[#FFF9EC] p-8 flex-1 min-w-[220px] max-w-[260px] text-left">
-      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#F4C430] text-sm font-extrabold text-[#1a1a1a]">
+    <div className="w-full flex-1 rounded-2xl border border-[#e8e8e8] bg-[#FFF9EC] p-6 text-left md:max-w-[260px] md:p-8">
+      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#F4C430] text-sm font-extrabold text-[#1a1a1a] md:mb-4 md:h-10 md:w-10">
         {number}
       </div>
-      <h3 className="mb-2 text-base font-bold text-[#1a1a1a]">{title}</h3>
+      <h3 className="mb-1.5 text-base font-bold text-[#1a1a1a] md:mb-2">{title}</h3>
       <p className="text-sm leading-relaxed text-[#666]">{description}</p>
     </div>
   );
@@ -203,8 +203,8 @@ function StepCard({ number, title, description }: { number: string; title: strin
 
 function AudienceCard({ emoji, title, description }: { emoji: string; title: string; description: string }) {
   return (
-    <div className="rounded-2xl border border-[#e8e8e8] bg-white p-7 flex-1 min-w-[220px] max-w-[260px] text-left shadow-sm">
-      <div className="mb-3 text-3xl" dangerouslySetInnerHTML={{ __html: emoji }} />
+    <div className="w-full flex-1 rounded-2xl border border-[#e8e8e8] bg-white p-5 text-left shadow-sm md:max-w-[260px] md:p-7">
+      <div className="mb-2.5 text-2xl md:mb-3 md:text-3xl" dangerouslySetInnerHTML={{ __html: emoji }} />
       <h3 className="mb-1.5 text-base font-bold text-[#1a1a1a]">{title}</h3>
       <p className="text-sm leading-relaxed text-[#777]">{description}</p>
     </div>
