@@ -455,7 +455,7 @@ export default function DashboardClient({ user, profile, family, education, scor
                   <button
                     key={section.label}
                     onClick={() => setActiveSection(section.action)}
-                    className={`mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                    className={`mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[15px] font-medium transition-colors ${
                       activeSection === section.action
                         ? "bg-[#FFF3D0] text-[#1a1a1a]"
                         : "text-[#444] hover:bg-[#f5f5f5]"
