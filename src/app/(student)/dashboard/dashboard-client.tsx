@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
 import { thaiUniversities, searchUniversities, type ThaiUniversity } from "../data/thai-universities";
@@ -52,8 +53,18 @@ type University = ThaiUniversity;
 
 const STORAGE_KEY = "sabaiapply-added-universities";
 
+const APP_SECTION_ORDER: Exclude<AppSection, null>[] = [
+  "personal",
+  "family",
+  "education",
+  "testScores",
+  "documents",
+  "activities",
+];
+
 export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems }: Props) {
   const { locale, setLocale, t } = useStudentLocale();
+  const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
   const [activeSection, setActiveSection] = useState<AppSection>(null);
   const [applicationExpanded, setApplicationExpanded] = useState(true);
@@ -75,6 +86,26 @@ export default function DashboardClient({ user, profile, family, education, scor
 
   const applicationRef = useRef<HTMLDivElement>(null);
   const universitiesRef = useRef<HTMLDivElement>(null);
+  const formScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeSection && formScrollRef.current) {
+      formScrollRef.current.scrollTop = 0;
+    }
+  }, [activeSection]);
+
+  function goToNextSection() {
+    if (!activeSection) return;
+    const idx = APP_SECTION_ORDER.indexOf(activeSection);
+    const next = APP_SECTION_ORDER[idx + 1];
+    router.refresh();
+    if (next) {
+      setActiveSection(next);
+    } else {
+      setCurrentView("dashboard");
+      setActiveSection(null);
+    }
+  }
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -438,15 +469,15 @@ export default function DashboardClient({ user, profile, family, education, scor
               </h1>
               <LangToggle locale={locale} setLocale={setLocale} />
             </div>
-            <div className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-8 py-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+            <div ref={formScrollRef} className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-8 py-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
               {activeSection === "personal" && (
-                <PersonalInfoSection profile={profile} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} userEmail={user.email} inline />
+                <PersonalInfoSection profile={profile} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} userEmail={user.email} inline onSaved={goToNextSection} />
               )}
               {activeSection === "family" && (
-                <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+                <FamilySection family={family} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline onSaved={goToNextSection} />
               )}
               {activeSection === "education" && (
-                <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+                <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline onSaved={goToNextSection} />
               )}
               {activeSection === "testScores" && (
                 <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
