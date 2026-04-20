@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
-import { thaiUniversities, searchUniversities, type ThaiUniversity } from "../data/thai-universities";
 import { faqCategories, searchFAQ, type FAQCategory } from "../data/faq";
+
+export interface University {
+  id: string;
+  name: string;
+  name_th: string;
+  website: string | null;
+  facultyCount: number;
+  programCount: number;
+}
 import {
   LayoutDashboard,
   Search,
@@ -42,14 +50,12 @@ interface Props {
   scores: StudentScore[];
   documents: StudentDocument[];
   portfolioItems: PortfolioItem[];
+  universities: University[];
 }
 
 type SectionStatus = "completed" | "in_progress" | "not_started";
 type AppSection = "personal" | "family" | "education" | "testScores" | "documents" | "activities" | null;
 type View = "dashboard" | "university-search" | "my-universities" | "application-form";
-
-// Re-export for use in sub-components
-type University = ThaiUniversity;
 
 const STORAGE_KEY = "sabaiapply-added-universities";
 
@@ -62,7 +68,7 @@ const APP_SECTION_ORDER: Exclude<AppSection, null>[] = [
   "activities",
 ];
 
-export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems }: Props) {
+export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems, universities }: Props) {
   const { locale, setLocale, t } = useStudentLocale();
   const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
@@ -73,16 +79,21 @@ export default function DashboardClient({ user, profile, family, education, scor
   const [uniSearch, setUniSearch] = useState("");
   const [addedUniversityIds, setAddedUniversityIds] = useState<Set<string>>(new Set());
 
-  // Load saved universities after hydration to avoid SSR mismatch
+  // Load saved universities after hydration to avoid SSR mismatch.
+  // Filter out stale IDs that no longer match any university in the DB.
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const ids = JSON.parse(saved) as string[];
-        if (ids.length > 0) setAddedUniversityIds(new Set(ids));
+      if (!saved) return;
+      const ids = JSON.parse(saved) as string[];
+      const validIds = new Set(universities.map((u) => u.id));
+      const kept = ids.filter((id) => validIds.has(id));
+      if (kept.length > 0) setAddedUniversityIds(new Set(kept));
+      if (kept.length !== ids.length) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(kept));
       }
     } catch { /* ignore */ }
-  }, []);
+  }, [universities]);
 
   const applicationRef = useRef<HTMLDivElement>(null);
   const universitiesRef = useRef<HTMLDivElement>(null);
@@ -181,9 +192,17 @@ export default function DashboardClient({ user, profile, family, education, scor
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const filteredUniversities = searchUniversities(uniSearch);
+  const filteredUniversities = useMemo(() => {
+    const q = uniSearch.trim().toLowerCase();
+    if (!q) return universities;
+    return universities.filter(
+      (uni) =>
+        uni.name.toLowerCase().includes(q) ||
+        uni.name_th.includes(uniSearch.trim()),
+    );
+  }, [uniSearch, universities]);
 
-  const addedUniversities = thaiUniversities.filter((u) =>
+  const addedUniversities = universities.filter((u) =>
     addedUniversityIds.has(u.id),
   );
 
@@ -701,6 +720,11 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
                   <div>
                     <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
                     <p className="text-sm text-[#888]">{uni.name_th}</p>
+                    {uni.programCount > 0 && (
+                      <p className="mt-0.5 text-xs text-[#999]">
+                        {uni.facultyCount} {uni.facultyCount === 1 ? "faculty" : "faculties"} · {uni.programCount} {uni.programCount === 1 ? "program" : "programs"}
+                      </p>
+                    )}
                   </div>
                 </div>
                 {isAdded ? (
