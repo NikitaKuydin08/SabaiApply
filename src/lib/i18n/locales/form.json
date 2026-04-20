@@ -189,7 +189,7 @@
   },
   "form.nickname": {
     "en": "Nickname / Preferred Name",
-    "th": "ชื่อเล่น / ชื่อที่เรียกปกติ"
+    "th": "ชื่อเล่น"
   },
   "form.firstLanguage": {
     "en": "First Language",
@@ -265,11 +265,11 @@
   },
   "form.ph.formerName": {
     "en": "Previous legal name",
-    "th": "ชื่อตามกฎหมายเดิม"
+    "th": "ชื่อเดิมตามบัตรประชาชน"
   },
   "form.ph.nickname": {
     "en": "What you prefer to be called",
-    "th": "ชื่อที่ต้องการให้เรียก"
+    "th": "ชื่อเล่น"
   },
   "form.ph.firstLanguage": {
     "en": "e.g. Chinese, Japanese",
