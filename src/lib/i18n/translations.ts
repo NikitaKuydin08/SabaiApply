@@ -4,6 +4,7 @@ import admin from './locales/admin.json';
 import app from './locales/app.json';
 import dash from './locales/dash.json';
 import faq from './locales/faq.json';
+import footer from './locales/footer.json';
 import form from './locales/form.json';
 import help from './locales/help.json';
 import login from './locales/login.json';
@@ -21,6 +22,7 @@ const translations = {
   ...app,
   ...dash,
   ...faq,
+  ...footer,
   ...form,
   ...help,
   ...login,

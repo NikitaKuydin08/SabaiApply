@@ -42,5 +42,13 @@
   "nav.addUni": {
     "en": "Add a university",
     "th": "เพิ่มมหาวิทยาลัย"
+  },
+  "nav.menu": {
+    "en": "Menu",
+    "th": "เมนู"
+  },
+  "nav.help": {
+    "en": "Help",
+    "th": "ช่วยเหลือ"
   }
 }

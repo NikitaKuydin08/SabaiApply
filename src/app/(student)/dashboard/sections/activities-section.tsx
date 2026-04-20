@@ -15,6 +15,7 @@ interface Props {
   studentId: string;
   onClose: () => void;
   inline?: boolean;
+  onSaved?: () => void;
 }
 
 const ITEM_TYPES: PortfolioItemType[] = [
@@ -36,7 +37,7 @@ const pillCls = (active: boolean) =>
       : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
   }`;
 
-export default function ActivitiesSection({ items, studentId, onClose, inline }: Props) {
+export default function ActivitiesSection({ items, studentId, onClose, inline, onSaved }: Props) {
   const { t, locale } = useLocale();
   const router = useRouter();
   const [localItems, setLocalItems] = useState<PortfolioItem[]>(items);
@@ -337,7 +338,21 @@ export default function ActivitiesSection({ items, studentId, onClose, inline }:
     </div>
   );
 
-  if (inline) return <div>{formContent}</div>;
+  if (inline) return (
+    <div>
+      {formContent}
+      {onSaved && (
+        <div className="mt-6 flex justify-end border-t border-[#f0f0f0] pt-5">
+          <button
+            onClick={onSaved}
+            className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
+          >
+            Finish
+          </button>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <SectionPanel title={t("form.activities")} onClose={onClose}>

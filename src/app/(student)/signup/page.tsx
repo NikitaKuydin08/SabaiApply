@@ -78,25 +78,25 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FFF9EC] px-4 py-10">
-      <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white px-10 py-10 shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+    <div className="flex min-h-screen items-center justify-center bg-[#FFF9EC] px-4 py-8 md:py-10">
+      <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white px-5 py-7 shadow-[0_8px_30px_rgba(0,0,0,0.08)] md:px-10 md:py-10">
         {/* Language toggle */}
-        <div className="mb-6 flex justify-end">
+        <div className="mb-4 flex justify-end md:mb-6">
           <LangToggle locale={locale} setLocale={setLocale} />
         </div>
 
-        <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center text-5xl font-bold tracking-tight text-[#1a1a1a]">
-            <img src="/logo-lotus.png" alt="" className="mr-2 h-10 w-10 object-contain" />
+        <div className="mb-6 text-center md:mb-8">
+          <Link href="/" className="inline-flex items-center text-3xl font-bold tracking-tight text-[#1a1a1a] md:text-5xl">
+            <img src="/logo-lotus.png" alt="" className="mr-1.5 h-8 w-8 object-contain md:mr-2 md:h-10 md:w-10" />
             Sabai<span className="text-[#F4C430]">Apply</span>
           </Link>
-          <h1 className="mt-4 text-3xl font-bold text-[#1a1a1a]">{t("signup.title")}</h1>
-          <p className="mt-2 text-base text-[#666]">{t("signup.subtitle")}</p>
+          <h1 className="mt-3 text-xl font-bold text-[#1a1a1a] md:mt-4 md:text-3xl">{t("signup.title")}</h1>
+          <p className="mt-1.5 text-sm text-[#666] md:mt-2 md:text-base">{t("signup.subtitle")}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
           {error && (
-            <div className="rounded-lg bg-red-50 px-5 py-4 text-base text-red-600">
+            <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 md:px-5 md:py-4 md:text-base">
               {error}
               {error.includes("already exists") && (
                 <Link href="/login" className="ml-1 font-semibold underline hover:text-red-800">
@@ -107,7 +107,7 @@ export default function SignUpPage() {
           )}
 
           <div>
-            <label htmlFor="email" className="block text-base font-medium text-[#1a1a1a] mb-2">
+            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-[#1a1a1a] md:mb-2 md:text-base">
               {t("signup.email")} <span className="text-red-500">*</span>
             </label>
             <input
@@ -116,13 +116,13 @@ export default function SignUpPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+              className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-[15px] outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20 md:py-3.5 md:text-base"
               placeholder={t("signup.emailPlaceholder")}
             />
           </div>
 
           <div>
-            <label htmlFor="confirmEmail" className="block text-base font-medium text-[#1a1a1a] mb-2">
+            <label htmlFor="confirmEmail" className="mb-1.5 block text-sm font-medium text-[#1a1a1a] md:mb-2 md:text-base">
               {t("signup.confirmEmail")} <span className="text-red-500">*</span>
             </label>
             <input
@@ -131,18 +131,18 @@ export default function SignUpPage() {
               required
               value={confirmEmail}
               onChange={(e) => setConfirmEmail(e.target.value)}
-              className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+              className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-[15px] outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20 md:py-3.5 md:text-base"
               placeholder={t("signup.retypePlaceholder")}
             />
             {confirmEmail && !emailsMatch && (
-              <p className="mt-2 text-sm text-red-500 flex items-center gap-1.5">
+              <p className="mt-1.5 flex items-center gap-1.5 text-xs text-red-500 md:mt-2 md:text-sm">
                 <span>✕</span> {t("signup.emailsMustMatch")}
               </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-base font-medium text-[#1a1a1a] mb-2">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-[#1a1a1a] md:mb-2 md:text-base">
               {t("signup.password")} <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -152,7 +152,7 @@ export default function SignUpPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 pr-12 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+                className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3 pr-11 text-[15px] outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20 md:py-3.5 md:pr-12 md:text-base"
               />
               <button
                 type="button"
@@ -162,13 +162,13 @@ export default function SignUpPage() {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            <div className="mt-3 space-y-1.5">
+            <div className="mt-2.5 space-y-1 md:mt-3 md:space-y-1.5">
               {passwordRules.map((rule) => {
                 const passes = password ? rule.test(password) : false;
                 return (
                   <p
                     key={rule.label}
-                    className={`text-sm flex items-center gap-1.5 ${
+                    className={`flex items-center gap-1.5 text-xs md:text-sm ${
                       !password ? "text-[#999]" : passes ? "text-green-600" : "text-red-500"
                     }`}
                   >
@@ -181,7 +181,7 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-base font-medium text-[#1a1a1a] mb-2">
+            <label htmlFor="confirmPassword" className="mb-1.5 block text-sm font-medium text-[#1a1a1a] md:mb-2 md:text-base">
               {t("signup.confirmPassword")} <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -191,7 +191,7 @@ export default function SignUpPage() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 pr-12 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+                className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3 pr-11 text-[15px] outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20 md:py-3.5 md:pr-12 md:text-base"
               />
               <button
                 type="button"
@@ -202,7 +202,7 @@ export default function SignUpPage() {
               </button>
             </div>
             {confirmPassword && !passwordsMatch && (
-              <p className="mt-2 text-sm text-red-500 flex items-center gap-1.5">
+              <p className="mt-1.5 flex items-center gap-1.5 text-xs text-red-500 md:mt-2 md:text-sm">
                 <span>✕</span> {t("signup.passwordsMustMatch")}
               </p>
             )}
@@ -211,13 +211,13 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={loading || !allRulesPass || !passwordsMatch || !emailsMatch}
-            className="w-full rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors"
+            className="w-full rounded-lg bg-[#F4C430] px-5 py-3.5 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50 md:py-4 md:text-lg"
           >
             {loading ? t("signup.submitting") : t("signup.submit")}
           </button>
         </form>
 
-        <p className="mt-8 text-center text-base text-[#666]">
+        <p className="mt-6 text-center text-sm text-[#666] md:mt-8 md:text-base">
           {t("signup.hasAccount")}{" "}
           <Link href="/login" className="font-medium text-[#1a1a1a] hover:underline">
             {t("signup.loginLink")}

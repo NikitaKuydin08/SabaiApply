@@ -43,11 +43,11 @@ import {
   ChevronUp,
   MessageCircle,
   HelpCircle,
-  ArrowLeft,
   Plus,
   X,
   Eye,
   PlusCircle,
+  Menu as MenuIcon,
 } from "lucide-react";
 import AccountSettingsModal from "./account-settings-modal";
 import UniversityAppView, {
@@ -116,6 +116,8 @@ export default function DashboardClient({ user, profile, family, education, scor
   const [uniSearch, setUniSearch] = useState("");
   const [addedUniversityIds, setAddedUniversityIds] = useState<Set<string>>(new Set());
   const [uniStatuses, setUniStatuses] = useState<Record<string, UniOverallStatus>>({});
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileHelpOpen, setMobileHelpOpen] = useState(false);
 
   const [uniDraft, setUniDraft] = useUniDraft(activeUniId ?? "");
 
@@ -214,12 +216,23 @@ export default function DashboardClient({ user, profile, family, education, scor
   const applicationRef = useRef<HTMLDivElement>(null);
   const universitiesRef = useRef<HTMLDivElement>(null);
   const formScrollRef = useRef<HTMLDivElement>(null);
+  const uniScrollRef = useRef<HTMLDivElement>(null);
 
+  // Scroll to top whenever the student lands on a new common-app section
+  // (triggered by clicking Continue, or navigating from the sidebar).
+  // Covers both the inner desktop scroll container AND the window scroll on mobile.
   useEffect(() => {
-    if (activeSection && formScrollRef.current) {
-      formScrollRef.current.scrollTop = 0;
-    }
+    if (!activeSection) return;
+    if (formScrollRef.current) formScrollRef.current.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, [activeSection]);
+
+  // Same for per-university sections (info/general/academics/other/review).
+  useEffect(() => {
+    if (currentView !== "my-universities" || !activeUniId) return;
+    if (uniScrollRef.current) uniScrollRef.current.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [activeUniSection, activeUniId, currentView]);
 
   function goToNextSection() {
     if (!activeSection) return;
@@ -358,9 +371,17 @@ export default function DashboardClient({ user, profile, family, education, scor
   );
 
   return (
-    <div className="flex min-h-screen">
-      {/* ── Left Sidebar ── */}
-      <aside className="flex w-[280px] shrink-0 flex-col border-r border-[#e8e8e8] bg-white">
+    <div className="flex min-h-screen flex-col">
+      {/* ── Mobile Top Bar (Menu · Logo · Help) ── */}
+      <MobileTopBar
+        onOpenMenu={() => setMobileMenuOpen(true)}
+        onOpenHelp={() => setMobileHelpOpen(true)}
+        t={t}
+      />
+
+      <div className="flex flex-1">
+      {/* ── Left Sidebar (desktop only) ── */}
+      <aside className="hidden md:flex w-[280px] shrink-0 flex-col border-r border-[#e8e8e8] bg-white">
         <div className="border-b border-[#f0f0f0] px-6 py-5">
           <div className="flex items-center">
             <img src="/logo-lotus.png" alt="" className="mr-2 h-9 w-9 object-contain" />
@@ -706,7 +727,6 @@ export default function DashboardClient({ user, profile, family, education, scor
             addedUniversityIds={addedUniversityIds}
             onToggleUniversity={toggleUniversity}
             onOpenUniversity={openUniversity}
-            onBack={() => setCurrentView("dashboard")}
             t={t}
           />
         )}
@@ -722,11 +742,11 @@ export default function DashboardClient({ user, profile, family, education, scor
           />
         )}
         {currentView === "my-universities" && activeUniversity && (
-          <div className="px-8 pb-8 pt-5">
+          <div className="px-4 pb-6 pt-4 md:px-8 md:pb-8 md:pt-5">
             <div className="mb-4 flex items-center justify-end">
               <LangToggle locale={locale} setLocale={setLocale} />
             </div>
-            <div className="max-h-[calc(100vh-130px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-10 py-10 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+            <div ref={uniScrollRef} className="overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-4 py-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] md:max-h-[calc(100vh-130px)] md:px-10 md:py-10">
               <UniversityAppView
                 university={activeUniversity}
                 activeSection={activeUniSection}
@@ -752,14 +772,14 @@ export default function DashboardClient({ user, profile, family, education, scor
           </div>
         )}
         {currentView === "application-form" && (
-          <div className="px-8 pb-8 pt-5">
-            <div className="mb-5 flex items-center justify-between">
-              <h1 className="text-2xl font-bold text-[#1a1a1a]">
+          <div className="px-4 pb-6 pt-4 md:px-8 md:pb-8 md:pt-5">
+            <div className="mb-4 flex items-center justify-between gap-3 md:mb-5">
+              <h1 className="text-xl font-bold text-[#1a1a1a] md:text-2xl">
                 {sections.find((s) => s.action === activeSection)?.label || t("app.title")}
               </h1>
               <LangToggle locale={locale} setLocale={setLocale} />
             </div>
-            <div ref={formScrollRef} className="max-h-[calc(100vh-140px)] overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-8 py-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+            <div ref={formScrollRef} className="overflow-y-auto rounded-2xl border border-[#e8e8e8] bg-white px-4 py-5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] md:max-h-[calc(100vh-140px)] md:px-8 md:py-8">
               {activeSection === "personal" && (
                 <PersonalInfoSection profile={profile} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} userEmail={user.email} inline onSaved={goToNextSection} />
               )}
@@ -770,21 +790,54 @@ export default function DashboardClient({ user, profile, family, education, scor
                 <EducationSection education={education} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline onSaved={goToNextSection} />
               )}
               {activeSection === "testScores" && (
-                <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+                <TestScoresSection scores={scores} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline onSaved={goToNextSection} />
               )}
               {activeSection === "documents" && (
-                <DocumentsSection documents={documents} studentId={profile?.id ?? ""} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+                <DocumentsSection documents={documents} studentId={profile?.id ?? ""} userId={user.id} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline onSaved={goToNextSection} />
               )}
               {activeSection === "activities" && (
-                <ActivitiesSection items={portfolioItems} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline />
+                <ActivitiesSection items={portfolioItems} studentId={profile?.id ?? ""} onClose={() => { setCurrentView("dashboard"); setActiveSection(null); }} inline onSaved={goToNextSection} />
               )}
             </div>
           </div>
         )}
       </main>
 
-      {/* ── Right Sidebar ── */}
+      {/* ── Right Sidebar (desktop only) ── */}
       <HelpSidebar locale={locale} t={t} />
+      </div>
+
+      {/* ── Mobile Footer (Privacy · Terms) ── */}
+      <MobileFooter t={t} />
+
+      {/* ── Mobile Menu Drawer ── */}
+      {mobileMenuOpen && (
+        <MobileMenuDrawer
+          onClose={() => setMobileMenuOpen(false)}
+          t={t}
+          user={user}
+          profile={profile}
+          addedUniversitiesCount={addedUniversities.length}
+          onDashboard={() => { setCurrentView("dashboard"); setActiveUniId(null); setActiveSection(null); }}
+          onChooseUni={() => setCurrentView("university-search")}
+          onMyApplication={() => enterApplicationForm()}
+          onMyUniversities={() => {
+            if (addedUniversities.length > 0) setCurrentView("my-universities");
+            else { setCurrentView("dashboard"); setTimeout(() => scrollTo(universitiesRef), 100); }
+          }}
+          onSettings={() => setShowSettings(true)}
+          onSignOut={handleSignOut}
+        />
+      )}
+
+      {/* ── Mobile Help Drawer ── */}
+      {mobileHelpOpen && (
+        <MobileHelpDrawer
+          locale={locale}
+          t={t}
+          onClose={() => setMobileHelpOpen(false)}
+        />
+      )}
 
       {showSettings && <AccountSettingsModal onClose={() => setShowSettings(false)} />}
 
@@ -843,39 +896,40 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
 }) {
   return (
     <>
-      <div className="flex items-center justify-between px-8 pb-1 pt-5">
+      <div className="flex items-center justify-between gap-3 px-4 pb-1 pt-3 md:px-8 md:pt-5">
         <div>
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("dash.title")}</h1>
-          <p className="mt-1 text-lg text-[#666]">{greeting}, {firstName}!</p>
+          <h1 className="text-lg font-bold text-[#1a1a1a] md:text-3xl">{t("dash.title")}</h1>
+          <p className="text-sm text-[#666] md:mt-1 md:text-lg">{greeting}, {firstName}!</p>
         </div>
         <LangToggle locale={locale} setLocale={setLocale} />
       </div>
 
-      <div className="space-y-4 px-8 pb-6 pt-4">
+      <div className="space-y-2.5 px-4 pb-3 pt-2 md:space-y-4 md:pb-6 md:pt-4 md:px-8">
         <div ref={applicationRef} className="rounded-xl border border-[#e8e8e8] bg-white">
-          <button onClick={() => setApplicationExpanded(!applicationExpanded)} className="flex w-full items-center justify-between px-6 py-3.5 text-left">
-            <h2 className="text-xl font-bold text-[#1a1a1a]">{t("app.title")}</h2>
-            {applicationExpanded ? <ChevronUp size={22} className="text-[#666]" /> : <ChevronDown size={22} className="text-[#666]" />}
+          <button onClick={() => setApplicationExpanded(!applicationExpanded)} className="flex w-full items-center justify-between px-4 py-2.5 text-left md:px-6 md:py-3.5">
+            <h2 className="text-base font-bold text-[#1a1a1a] md:text-xl">{t("app.title")}</h2>
+            {applicationExpanded ? <ChevronUp size={18} className="text-[#666] md:hidden" /> : <ChevronDown size={18} className="text-[#666] md:hidden" />}
+            {applicationExpanded ? <ChevronUp size={22} className="hidden text-[#666] md:block" /> : <ChevronDown size={22} className="hidden text-[#666] md:block" />}
           </button>
           {applicationExpanded && (
-            <div className="px-6 pb-4">
-              <div className="mb-3">
-                <div className="mb-1.5 flex items-center justify-between">
-                  <span className="text-sm text-[#666]">{t("app.progress")}</span>
-                  <span className="text-sm font-semibold text-[#1a1a1a]">{progress}%</span>
+            <div className="px-4 pb-3 md:px-6 md:pb-4">
+              <div className="mb-2 md:mb-3">
+                <div className="mb-1 flex items-center justify-between md:mb-1.5">
+                  <span className="text-xs text-[#666] md:text-sm">{t("app.progress")}</span>
+                  <span className="text-xs font-semibold text-[#1a1a1a] md:text-sm">{progress}%</span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-[#f0f0f0]">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#f0f0f0] md:h-2">
                   <div className="h-full rounded-full bg-[#F4C430] transition-all duration-500" style={{ width: `${progress}%` }} />
                 </div>
               </div>
               <div className="space-y-0">
                 {sections.map((section) => (
-                  <button key={section.label} onClick={() => onSectionClick(section.action)} className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#FFFBF0]">
-                    <div className="flex items-center gap-4">
+                  <button key={section.label} onClick={() => onSectionClick(section.action)} className="group flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-[#FFFBF0] md:px-3 md:py-2">
+                    <div className="flex items-center gap-3 md:gap-4">
                       <StatusDot status={section.status} />
-                      <span className="text-base font-medium text-[#1a1a1a]">{section.label}</span>
+                      <span className="text-sm font-medium text-[#1a1a1a] md:text-base">{section.label}</span>
                     </div>
-                    <ChevronDown size={18} className="-rotate-90 text-[#ccc] group-hover:text-[#999]" />
+                    <ChevronDown size={16} className="-rotate-90 text-[#ccc] group-hover:text-[#999] md:size-[18px]" />
                   </button>
                 ))}
               </div>
@@ -884,27 +938,28 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
         </div>
 
         <div ref={universitiesRef} className="rounded-xl border border-[#e8e8e8] bg-white">
-          <button onClick={() => setUniversitiesExpanded(!universitiesExpanded)} className="flex w-full items-center justify-between px-6 py-3.5 text-left">
-            <h2 className="text-xl font-bold text-[#1a1a1a]">
+          <button onClick={() => setUniversitiesExpanded(!universitiesExpanded)} className="flex w-full items-center justify-between px-4 py-2.5 text-left md:px-6 md:py-3.5">
+            <h2 className="text-base font-bold text-[#1a1a1a] md:text-xl">
               {t("uni.title")}
-              {addedUniversities.length > 0 && <span className="ml-2 text-base font-normal text-[#999]">({addedUniversities.length})</span>}
+              {addedUniversities.length > 0 && <span className="ml-2 text-sm font-normal text-[#999] md:text-base">({addedUniversities.length})</span>}
             </h2>
-            {universitiesExpanded ? <ChevronUp size={22} className="text-[#666]" /> : <ChevronDown size={22} className="text-[#666]" />}
+            {universitiesExpanded ? <ChevronUp size={18} className="text-[#666] md:hidden" /> : <ChevronDown size={18} className="text-[#666] md:hidden" />}
+            {universitiesExpanded ? <ChevronUp size={22} className="hidden text-[#666] md:block" /> : <ChevronDown size={22} className="hidden text-[#666] md:block" />}
           </button>
           {universitiesExpanded && (
-            <div className="px-6 pb-6">
+            <div className="px-4 pb-4 md:px-6 md:pb-6">
               {addedUniversities.length === 0 ? (
                 <div className="flex flex-col items-center text-center">
-                  <div className="my-3 text-[#ccc]">
-                    <svg width="110" height="70" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <div className="my-1.5 text-[#ccc] md:my-3">
+                    <svg width="80" height="52" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="md:h-[70px] md:w-[110px]">
                       <path d="M25 65 Q35 25 70 45 Q105 65 115 35" stroke="#ddd" strokeWidth="2" fill="none" strokeDasharray="4 4" />
                       <path d="M100 30 L115 35 L110 20" stroke="#F4C430" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                       <rect x="20" y="62" width="100" height="2" rx="1" fill="#eee" />
                     </svg>
                   </div>
-                  <p className="mb-4 text-base text-[#666]">{t("uni.empty")}</p>
-                  <button onClick={onSearchUniversities} className="inline-flex items-center gap-2 rounded-lg border-2 border-[#1a1a1a] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#f5f5f5]">
-                    <Search size={18} />{t("uni.searchBtn")}
+                  <p className="mb-2.5 text-sm text-[#666] md:mb-4 md:text-base">{t("uni.empty")}</p>
+                  <button onClick={onSearchUniversities} className="inline-flex items-center gap-2 rounded-lg border-2 border-[#1a1a1a] px-4 py-2 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#f5f5f5] md:px-6 md:py-3 md:text-base">
+                    <Search size={16} />{t("uni.searchBtn")}
                   </button>
                 </div>
               ) : (
@@ -945,13 +1000,13 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
 
 /* ══════════════════════════════════════════════ */
 
-function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filteredUniversities, addedUniversityIds, onToggleUniversity, onOpenUniversity, onBack, t }: {
+function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filteredUniversities, addedUniversityIds, onToggleUniversity, onOpenUniversity, t }: {
   locale: string; setLocale: (l: "en" | "th") => void;
   uniSearch: string; setUniSearch: (v: string) => void;
   filteredUniversities: University[]; addedUniversityIds: Set<string>;
   onToggleUniversity: (id: string) => void;
   onOpenUniversity: (id: string) => void;
-  onBack: () => void; t: TFn;
+  t: TFn;
 }) {
   const [showFilters, setShowFilters] = useState(false);
   const [filterCity, setFilterCity] = useState("");
@@ -959,17 +1014,12 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-8 pb-2 pt-5">
-        <div className="flex items-center gap-4">
-          <button onClick={onBack} className="rounded-lg p-2 text-[#666] transition-colors hover:bg-white hover:text-[#1a1a1a]">
-            <ArrowLeft size={22} />
-          </button>
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("search.title")}</h1>
-        </div>
+      <div className="flex items-center justify-between gap-3 px-4 pb-2 pt-4 md:px-8 md:pt-5">
+        <h1 className="truncate text-xl font-bold text-[#1a1a1a] md:text-3xl">{t("search.title")}</h1>
         <LangToggle locale={locale} setLocale={setLocale} />
       </div>
 
-      <div className="px-8 pt-3">
+      <div className="px-4 pt-3 md:px-8">
         <label className="mb-2 block text-base font-medium text-[#1a1a1a]">{t("search.label")}</label>
         <div className="relative">
           <input type="text" value={uniSearch} onChange={(e) => setUniSearch(e.target.value)} placeholder={t("search.placeholder")}
@@ -988,33 +1038,33 @@ function UniversitySearchView({ locale, setLocale, uniSearch, setUniSearch, filt
         </div>
       </div>
 
-      <div className="mt-3 px-8 pb-6">
-        <div className="max-h-[calc(100vh-320px)] divide-y divide-[#f0f0f0] overflow-y-auto rounded-xl border border-[#e8e8e8] bg-white">
+      <div className="mt-3 px-4 pb-6 md:px-8">
+        <div className="divide-y divide-[#f0f0f0] overflow-y-auto rounded-xl border border-[#e8e8e8] bg-white md:max-h-[calc(100vh-320px)]">
           {filteredUniversities.map((uni) => {
             const isAdded = addedUniversityIds.has(uni.id);
             return (
-              <div key={uni.id} className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-[#FFFBF0]">
+              <div key={uni.id} className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-[#FFFBF0] md:px-5 md:py-4">
                 <button
                   onClick={() => onOpenUniversity(uni.id)}
-                  className="flex flex-1 items-center gap-4 text-left"
+                  className="flex min-w-0 flex-1 items-center gap-3 text-left md:gap-4"
                 >
                   <UniLogo uni={uni} />
-                  <div>
-                    <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
-                    <p className="text-sm text-[#888]">{uni.name_th}</p>
+                  <div className="min-w-0">
+                    <p className="truncate text-[15px] font-semibold text-[#1a1a1a] md:text-base">{uni.name}</p>
+                    <p className="truncate text-sm text-[#888]">{uni.name_th}</p>
                     {uni.programCount > 0 && (
-                      <p className="mt-0.5 text-xs text-[#999]">
+                      <p className="mt-0.5 truncate text-xs text-[#999]">
                         {uni.facultyCount} {uni.facultyCount === 1 ? "faculty" : "faculties"} · {uni.programCount} {uni.programCount === 1 ? "program" : "programs"}
                       </p>
                     )}
                   </div>
                 </button>
                 {isAdded ? (
-                  <button onClick={() => onToggleUniversity(uni.id)} className="flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm font-semibold text-[#666] transition-colors hover:bg-[#f5f5f5]">
+                  <button onClick={() => onToggleUniversity(uni.id)} className="flex shrink-0 items-center gap-1 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-xs font-semibold text-[#666] transition-colors hover:bg-[#f5f5f5] md:gap-1.5 md:px-4 md:text-sm">
                     <X size={15} />{t("search.remove")}
                   </button>
                 ) : (
-                  <button onClick={() => onToggleUniversity(uni.id)} className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[#F4C430] px-4 py-2 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]">
+                  <button onClick={() => onToggleUniversity(uni.id)} className="flex shrink-0 items-center gap-1 rounded-lg bg-[#F4C430] px-3 py-2 text-xs font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] md:gap-1.5 md:px-4 md:text-sm">
                     <Plus size={16} />{t("search.add")}
                   </button>
                 )}
@@ -1084,17 +1134,17 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, uniStatu
 
   return (
     <>
-      <div className="flex items-center justify-between px-8 pb-1 pt-5">
-        <div>
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("uni.title")}</h1>
-          <p className="mt-1 text-lg text-[#666]">
+      <div className="flex items-center justify-between gap-3 px-4 pb-1 pt-4 md:px-8 md:pt-5">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-[#1a1a1a] md:text-3xl">{t("uni.title")}</h1>
+          <p className="mt-1 text-base text-[#666] md:text-lg">
             {addedUniversities.length} {addedUniversities.length === 1 ? t("uni.one") : t("uni.many")} {t("uni.onList")}
           </p>
         </div>
         <LangToggle locale={locale} setLocale={setLocale} />
       </div>
 
-      <div className="px-8 pb-6 pt-4">
+      <div className="px-4 pb-6 pt-4 md:px-8">
         {addedUniversities.length === 0 ? (
           <div className="rounded-xl border border-[#e8e8e8] bg-white px-6 py-10 text-center">
             <p className="mb-4 text-base text-[#666]">{t("uni.noUnis")}</p>
@@ -1104,18 +1154,18 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, uniStatu
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="rounded-xl border border-[#e8e8e8] bg-white px-5 py-4">
-                <p className="text-sm text-[#666]">{t("uni.many")}</p>
-                <p className="mt-1 text-2xl font-bold text-[#1a1a1a]">{addedUniversities.length}</p>
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              <div className="rounded-xl border border-[#e8e8e8] bg-white px-3 py-3 md:px-5 md:py-4">
+                <p className="text-xs text-[#666] md:text-sm">{t("uni.many")}</p>
+                <p className="mt-1 text-xl font-bold text-[#1a1a1a] md:text-2xl">{addedUniversities.length}</p>
               </div>
-              <div className="rounded-xl border border-[#e8e8e8] bg-white px-5 py-4">
-                <p className="text-sm text-[#666]">{t("uni.inProgress")}</p>
-                <p className="mt-1 text-2xl font-bold text-[#F4C430]">{inProgressCount}</p>
+              <div className="rounded-xl border border-[#e8e8e8] bg-white px-3 py-3 md:px-5 md:py-4">
+                <p className="text-xs text-[#666] md:text-sm">{t("uni.inProgress")}</p>
+                <p className="mt-1 text-xl font-bold text-[#F4C430] md:text-2xl">{inProgressCount}</p>
               </div>
-              <div className="rounded-xl border border-[#e8e8e8] bg-white px-5 py-4">
-                <p className="text-sm text-[#666]">{t("uni.submitted")}</p>
-                <p className="mt-1 text-2xl font-bold text-green-500">{submittedCount}</p>
+              <div className="rounded-xl border border-[#e8e8e8] bg-white px-3 py-3 md:px-5 md:py-4">
+                <p className="text-xs text-[#666] md:text-sm">{t("uni.submitted")}</p>
+                <p className="mt-1 text-xl font-bold text-green-500 md:text-2xl">{submittedCount}</p>
               </div>
             </div>
 
@@ -1130,16 +1180,16 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, uniStatu
                     <button
                       key={uni.id}
                       onClick={() => onOpenUniversity(uni.id)}
-                      className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[#FFFBF0]"
+                      className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-[#FFFBF0] md:px-6 md:py-4"
                     >
-                      <div className="flex items-center gap-4">
+                      <div className="flex min-w-0 items-center gap-3 md:gap-4">
                         <UniLogo uni={uni} />
-                        <div>
-                          <p className="text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
-                          <p className="text-sm text-[#888]">{uni.name_th}</p>
+                        <div className="min-w-0">
+                          <p className="truncate text-base font-semibold text-[#1a1a1a]">{uni.name}</p>
+                          <p className="truncate text-sm text-[#888]">{uni.name_th}</p>
                         </div>
                       </div>
-                      <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge.cls}`}>{badge.label}</span>
+                      <span className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-medium md:px-3 md:text-xs ${badge.cls}`}>{badge.label}</span>
                     </button>
                   );
                 })}
@@ -1206,18 +1256,26 @@ function UniLogo({ uni, size = "md" }: {
 function StatusDot({ status }: { status: SectionStatus }) {
   if (status === "completed") {
     return (
-      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 md:h-6 md:w-6">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="md:h-3.5 md:w-3.5">
           <path d="M3 7L5.5 9.5L11 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     );
   }
-  if (status === "in_progress") return <div className="h-6 w-6 rounded-full border-2 border-[#F4C430] bg-[#FFF3D0]" />;
-  return <div className="h-6 w-6 rounded-full border-2 border-[#ddd]" />;
+  if (status === "in_progress") return <div className="h-5 w-5 rounded-full border-2 border-[#F4C430] bg-[#FFF3D0] md:h-6 md:w-6" />;
+  return <div className="h-5 w-5 rounded-full border-2 border-[#ddd] md:h-6 md:w-6" />;
 }
 
 function HelpSidebar({ locale, t }: { locale: string; t: TFn }) {
+  return (
+    <aside className="hidden md:flex w-[300px] shrink-0 flex-col border-l border-[#e8e8e8] bg-[#F8F9FB]">
+      <HelpContent locale={locale} t={t} />
+    </aside>
+  );
+}
+
+function HelpContent({ locale, t, onClose }: { locale: string; t: TFn; onClose?: () => void }) {
   const [faqSearch, setFaqSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<FAQCategory | "all">("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -1235,72 +1293,77 @@ function HelpSidebar({ locale, t }: { locale: string; t: TFn }) {
 
   return (
     <>
-      <aside className="flex w-[300px] shrink-0 flex-col border-l border-[#e8e8e8] bg-[#F8F9FB]">
-        {/* Header + Search */}
-        <div className="border-b border-[#e8e8e8] px-5 py-4">
-          <div className="mb-3 flex items-center gap-2">
+      {/* Header + Search */}
+      <div className="border-b border-[#e8e8e8] px-5 py-4">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
             <HelpCircle size={18} className="text-[#666]" />
             <h2 className="text-base font-bold text-[#1a1a1a]">{t("help.title")}</h2>
           </div>
-          <div className="relative">
-            <input
-              type="text"
-              value={faqSearch}
-              onChange={(e) => setFaqSearch(e.target.value)}
-              placeholder={t("help.searchPlaceholder")}
-              className="w-full rounded-lg border border-[#e0e0e0] bg-white py-2 pl-3 pr-9 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
-            />
-            <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999]" />
-          </div>
-        </div>
-
-        {/* Category tabs */}
-        <CategoryTabs locale={locale} activeCategory={activeCategory} setActiveCategory={setActiveCategory} t={t} />
-
-        {/* FAQ list */}
-        <div className="max-h-[637px] overflow-y-auto px-5 py-4">
-          {filtered.length === 0 ? (
-            <p className="py-4 text-center text-sm text-[#999]">{t("help.noResults")}</p>
-          ) : (
-            <div className="space-y-3">
-              {filtered.map((entry) => {
-                const question = t(entry.questionKey);
-                const answer = t(entry.answerKey);
-                const isExpanded = expandedId === entry.id;
-                return (
-                  <div key={entry.id}>
-                    <h3 className="text-sm font-semibold leading-snug text-[#1a1a1a]">{question}</h3>
-                    <p className="mt-1 text-xs leading-relaxed text-[#666]">
-                      {isExpanded ? answer : answer.slice(0, 70) + "..."}
-                    </p>
-                    <button
-                      onClick={() => setExpandedId(isExpanded ? null : entry.id)}
-                      className="mt-0.5 text-xs font-medium text-[#F4C430] hover:text-[#e6b82a]"
-                    >
-                      {isExpanded ? t("help.showLess") : t("help.readMore")}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+          {onClose && (
+            <button onClick={onClose} className="rounded-lg p-1 text-[#666] hover:bg-[#f0f0f0]" aria-label="Close">
+              <X size={18} />
+            </button>
           )}
         </div>
-
-        {/* Chat button */}
-        <div className="border-t border-[#e8e8e8] px-5 py-3">
-          <button
-            onClick={() => setShowChatModal(true)}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#1a1a1a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#333]"
-          >
-            <MessageCircle size={16} />
-            {t("help.chat")}
-          </button>
+        <div className="relative">
+          <input
+            type="text"
+            value={faqSearch}
+            onChange={(e) => setFaqSearch(e.target.value)}
+            placeholder={t("help.searchPlaceholder")}
+            className="w-full rounded-lg border border-[#e0e0e0] bg-white py-2 pl-3 pr-9 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+          />
+          <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999]" />
         </div>
-      </aside>
+      </div>
+
+      {/* Category tabs */}
+      <CategoryTabs locale={locale} activeCategory={activeCategory} setActiveCategory={setActiveCategory} t={t} />
+
+      {/* FAQ list */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 md:max-h-[637px]">
+        {filtered.length === 0 ? (
+          <p className="py-4 text-center text-sm text-[#999]">{t("help.noResults")}</p>
+        ) : (
+          <div className="space-y-3">
+            {filtered.map((entry) => {
+              const question = t(entry.questionKey);
+              const answer = t(entry.answerKey);
+              const isExpanded = expandedId === entry.id;
+              return (
+                <div key={entry.id}>
+                  <h3 className="text-sm font-semibold leading-snug text-[#1a1a1a]">{question}</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-[#666]">
+                    {isExpanded ? answer : answer.slice(0, 70) + "..."}
+                  </p>
+                  <button
+                    onClick={() => setExpandedId(isExpanded ? null : entry.id)}
+                    className="mt-0.5 text-xs font-medium text-[#F4C430] hover:text-[#e6b82a]"
+                  >
+                    {isExpanded ? t("help.showLess") : t("help.readMore")}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Chat button */}
+      <div className="border-t border-[#e8e8e8] px-5 py-3">
+        <button
+          onClick={() => setShowChatModal(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#1a1a1a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#333]"
+        >
+          <MessageCircle size={16} />
+          {t("help.chat")}
+        </button>
+      </div>
 
       {/* Chat Coming Soon Modal */}
       {showChatModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowChatModal(false)} />
           <div className="relative mx-4 w-full max-w-sm rounded-xl bg-white px-8 py-8 text-center shadow-xl">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F4C430]/20">
@@ -1318,6 +1381,142 @@ function HelpSidebar({ locale, t }: { locale: string; t: TFn }) {
         </div>
       )}
     </>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   Mobile Shell (top bar · menu drawer · help drawer · footer)
+   ══════════════════════════════════════════════ */
+
+function MobileTopBar({ onOpenMenu, onOpenHelp, t }: {
+  onOpenMenu: () => void; onOpenHelp: () => void; t: TFn;
+}) {
+  return (
+    <header className="sticky top-0 z-30 flex h-12 items-center justify-between border-b border-[#e8e8e8] bg-white px-3 md:hidden">
+      <button
+        onClick={onOpenMenu}
+        className="flex items-center gap-1 rounded-lg px-1.5 py-1 text-[#444] transition-colors hover:bg-[#f5f5f5]"
+        aria-label={t("nav.menu")}
+      >
+        <MenuIcon size={20} />
+        <span className="text-xs font-medium">{t("nav.menu")}</span>
+      </button>
+      <div className="flex items-center">
+        <img src="/logo-lotus.png" alt="" className="mr-1 h-6 w-6 object-contain" />
+        <span className="text-lg font-bold tracking-tight text-[#1a1a1a]">
+          Sabai<span className="text-[#F4C430]">Apply</span>
+        </span>
+      </div>
+      <button
+        onClick={onOpenHelp}
+        className="flex items-center gap-1 rounded-lg px-1.5 py-1 text-[#444] transition-colors hover:bg-[#f5f5f5]"
+        aria-label={t("nav.help")}
+      >
+        <HelpCircle size={18} />
+        <span className="text-xs font-medium">{t("nav.help")}</span>
+      </button>
+    </header>
+  );
+}
+
+function MobileFooter({ t }: { t: TFn }) {
+  return (
+    <footer className="flex items-center justify-center gap-3 border-t border-[#e8e8e8] bg-white px-4 py-2 text-[11px] text-[#666] md:hidden">
+      <a href="#" className="hover:text-[#1a1a1a] hover:underline">{t("footer.privacy")}</a>
+      <span className="text-[#ccc]">·</span>
+      <a href="#" className="hover:text-[#1a1a1a] hover:underline">{t("footer.terms")}</a>
+      <span className="text-[#ccc]">·</span>
+      <span className="text-[#999]">© {new Date().getFullYear()}</span>
+    </footer>
+  );
+}
+
+function MobileMenuDrawer({ onClose, t, user, profile, addedUniversitiesCount, onDashboard, onChooseUni, onMyApplication, onMyUniversities, onSettings, onSignOut }: {
+  onClose: () => void; t: TFn;
+  user: { email: string; id: string }; profile: StudentProfile | null;
+  addedUniversitiesCount: number;
+  onDashboard: () => void; onChooseUni: () => void;
+  onMyApplication: () => void; onMyUniversities: () => void;
+  onSettings: () => void; onSignOut: () => void;
+}) {
+  const navigate = (fn: () => void) => { fn(); onClose(); };
+  return (
+    <div className="fixed inset-0 z-50 md:hidden">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="absolute left-0 top-0 flex h-full w-[85%] max-w-[320px] flex-col bg-white shadow-xl">
+        <div className="flex items-center justify-between border-b border-[#f0f0f0] px-5 py-4">
+          <div className="flex items-center">
+            <img src="/logo-lotus.png" alt="" className="mr-2 h-8 w-8 object-contain" />
+            <span className="text-2xl font-bold tracking-tight text-[#1a1a1a]">
+              Sabai<span className="text-[#F4C430]">Apply</span>
+            </span>
+          </div>
+          <button onClick={onClose} className="rounded-lg p-1.5 text-[#666] hover:bg-[#f5f5f5]" aria-label="Close">
+            <X size={20} />
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto px-3 py-4">
+          <button onClick={() => navigate(onDashboard)} className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]">
+            <LayoutDashboard size={20} />{t("nav.dashboard")}
+          </button>
+
+          <div className="px-3 pb-1 pt-5">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#999]">{t("nav.explore")}</span>
+          </div>
+          <button onClick={() => navigate(onChooseUni)} className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]">
+            <Search size={20} />{t("nav.chooseUni")}
+          </button>
+
+          <div className="px-3 pb-1 pt-5">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#999]">{t("nav.apply")}</span>
+          </div>
+          <button onClick={() => navigate(onMyApplication)} className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]">
+            <FileText size={20} />{t("nav.myApplication")}
+          </button>
+          <button onClick={() => navigate(onMyUniversities)} className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]">
+            <Building2 size={20} />{t("nav.myUniversities")}
+            {addedUniversitiesCount > 0 && <span className="ml-auto text-sm text-[#999]">({addedUniversitiesCount})</span>}
+          </button>
+        </nav>
+
+        <div className="space-y-1 border-t border-[#f0f0f0] px-3 py-3">
+          <button onClick={() => navigate(onSettings)} className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]">
+            <Settings size={20} />{t("nav.settings")}
+          </button>
+          <button onClick={() => navigate(onSignOut)} className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-[15px] font-medium text-[#444] transition-colors hover:bg-[#f5f5f5]">
+            <LogOut size={20} />{t("nav.signOut")}
+          </button>
+        </div>
+
+        <div className="border-t border-[#f0f0f0] px-5 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F4C430] text-sm font-bold text-[#1a1a1a]">
+              {(profile?.first_name?.[0] || user.email[0]).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-[15px] font-medium text-[#1a1a1a]">
+                {profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` : user.email.split("@")[0]}
+              </p>
+              <p className="truncate text-sm text-[#888]">{user.email}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileHelpDrawer({ locale, t, onClose }: {
+  locale: string; t: TFn; onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 md:hidden">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="absolute right-0 top-0 flex h-full w-[85%] max-w-[340px] flex-col bg-[#F8F9FB] shadow-xl">
+        <HelpContent locale={locale} t={t} onClose={onClose} />
+      </div>
+    </div>
   );
 }
 
