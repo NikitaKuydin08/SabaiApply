@@ -1,0 +1,578 @@
+{
+  "uniApp.applyTo": {
+    "en": "Apply to ",
+    "th": "สมัครเข้าที่ "
+  },
+  "uniApp.phone": {
+    "en": "Phone",
+    "th": "โทร"
+  },
+  "uniApp.deadlines": {
+    "en": "Application deadlines",
+    "th": "กำหนดเวลารับสมัคร"
+  },
+  "uniApp.deadlinesTBA": {
+    "en": "To be announced — see website.",
+    "th": "กำลังจะแจ้งให้ทราบเร็วๆ นี้ — ดูที่เว็บไซต์"
+  },
+  "uniApp.links": {
+    "en": "Links",
+    "th": "ลิงก์"
+  },
+  "uniApp.websiteLink": {
+    "en": "University website",
+    "th": "เว็บไซต์มหาวิทยาลัย"
+  },
+  "uniApp.websiteNotProvided": {
+    "en": "Website — not provided",
+    "th": "เว็บไซต์ — ไม่มีข้อมูล"
+  },
+  "uniApp.aboutLink": {
+    "en": "About the university",
+    "th": "เกี่ยวกับมหาวิทยาลัย"
+  },
+  "uniApp.admissionsLink": {
+    "en": "Admissions office",
+    "th": "สำนักทะเบียน"
+  },
+  "uniApp.admissionsNotProvided": {
+    "en": "Admissions office — not provided",
+    "th": "สำนักทะเบียน — ไม่มีข้อมูล"
+  },
+  "uniApp.campusMapLink": {
+    "en": "Campus map",
+    "th": "แผนที่ภายในมหาวิทยาลัย"
+  },
+  "uniApp.financialAidLink": {
+    "en": "Financial aid",
+    "th": "ทุนการศึกษา"
+  },
+  "uniApp.financialAidNotProvided": {
+    "en": "Financial aid — not provided",
+    "th": "ทุนการศึกษา — ไม่มีข้อมูล"
+  },
+  "uniApp.appInfo": {
+    "en": "Application information",
+    "th": "ข้อมูลการสมัคร"
+  },
+  "uniApp.appFees": {
+    "en": "Application Fees",
+    "th": "ค่าสมัคร"
+  },
+  "uniApp.feeIntlFirstYear": {
+    "en": "First Year International Fee — TBD",
+    "th": "นักศึกษาต่างชาติ ปี 1 — ไม่มีข้อมูล"
+  },
+  "uniApp.feeDomesticFirstYear": {
+    "en": "First Year Domestic Fee — TBD",
+    "th": "นักศึกษาไทย ปี 1 — ไม่มีข้อมูล"
+  },
+  "uniApp.testPolicy": {
+    "en": "Standardized test policy",
+    "th": "นโยบายการสอบมาตรฐาน"
+  },
+  "uniApp.flexible": {
+    "en": "Flexible",
+    "th": "ยืดหยุ่น"
+  },
+  "uniApp.seeWebsite": {
+    "en": "See website",
+    "th": "ดูที่เว็บไซต์"
+  },
+  "uniApp.englishTests": {
+    "en": "Accepted English proficiency tests",
+    "th": "ผลคะแนนภาษาอังกฤษที่ยอมรับ"
+  },
+  "uniApp.coursesGrades": {
+    "en": "Courses & Grades",
+    "th": "รายวิชาและผลการเรียน"
+  },
+  "uniApp.notUsed": {
+    "en": "Not Used",
+    "th": "ไม่ได้ใช้"
+  },
+  "uniApp.recommendations": {
+    "en": "Recommendations",
+    "th": "หนังสือแนะนำ"
+  },
+  "uniApp.schoolReport": {
+    "en": "School Report (as required)",
+    "th": "รายงานจากโรงเรียน (ตามที่กำหนด)"
+  },
+  "uniApp.counselorRec": {
+    "en": "Counselor Recommendation (as required)",
+    "th": "หนังสือแนะนำจากที่ปรึกษา (ตามที่กำหนด)"
+  },
+  "uniApp.finalReport": {
+    "en": "Final Report (as required)",
+    "th": "รายงานผลปลายภาค (ตามที่กำหนด)"
+  },
+  "uniApp.additionalInfo": {
+    "en": "Additional information",
+    "th": "ข้อมูลเพิ่มเติม"
+  },
+  "uniApp.admissionsPolicy": {
+    "en": "{{name}} operates an inclusive admissions policy. Please refer to the university website for authoritative information.",
+    "th": "{{name}} พิจารณาใบสมัครตามคุณสมบัติรายบุคคล โปรดอ้างอิงข้อมูลจากเว็บไซต์ของมหาวิทยาลัย"
+  },
+  "uniApp.writing": {
+    "en": "Writing requirements",
+    "th": "ข้อกำหนดการเขียน"
+  },
+  "uniApp.commonAppEssay": {
+    "en": "Common App personal essay",
+    "th": "เรียงความส่วนตัว (Common App)"
+  },
+  "uniApp.collegeQuestions": {
+    "en": "College Questions",
+    "th": "คำถามเฉพาะของมหาวิทยาลัย"
+  },
+  "uniApp.writingSupplement": {
+    "en": "Writing Supplement",
+    "th": "เรียงความเสริม"
+  },
+  "uniApp.writingSupplementDesc": {
+    "en": "This university does not use a writing supplement for any additional writing requirements.",
+    "th": "มหาวิทยาลัยนี้ยังไม่ได้ระบุข้อกำหนดเรียงความเสริม"
+  },
+  "uniApp.notProvided": {
+    "en": "Not provided",
+    "th": "ไม่มีข้อมูล"
+  },
+  "uniApp.specificInfo": {
+    "en": "Use of specific information",
+    "th": "การใช้ข้อมูลเฉพาะ"
+  },
+  "uniApp.specificInfoDesc": {
+    "en": "This area does not have any default text. If no text is provided, no 'Criminal & Disciplinary Explanation' icon or link will be shown on the application pages.",
+    "th": "ยังไม่มีข้อมูลจากทางมหาวิทยาลัยในส่วนนี้ หากไม่มีการระบุข้อความ จะไม่แสดงไอคอนหรือลิงก์ \"คำอธิบายด้านวินัยหรือประวัติทางอาญา\" ในหน้าสมัคร"
+  },
+  "uniApp.removeTitle": {
+    "en": "Remove from my universities",
+    "th": "ลบออกจากรายการของฉัน"
+  },
+  "uniApp.removeDesc": {
+    "en": "Any unsubmitted application data will be cleared.",
+    "th": "ข้อมูลใบสมัครที่ยังไม่ได้ส่งจะถูกลบออก"
+  },
+  "uniApp.remove": {
+    "en": "Remove",
+    "th": "ลบ"
+  },
+  "uniApp.general": {
+    "en": "General",
+    "th": "ข้อมูลทั่วไป"
+  },
+  "uniApp.generalSpecific": {
+    "en": "General (university-specific)",
+    "th": "ข้อมูลทั่วไป (เฉพาะมหาวิทยาลัย)"
+  },
+  "uniApp.preferredRound": {
+    "en": "Preferred admission round",
+    "th": "รอบที่ต้องการสมัคร"
+  },
+  "uniApp.preferredPlan": {
+    "en": "Preferred admission plan",
+    "th": "แผนการเข้าศึกษา"
+  },
+  "uniApp.round1": {
+    "en": "Round 1 (Portfolio)",
+    "th": "รอบ 1 (Portfolio)"
+  },
+  "uniApp.round2": {
+    "en": "Round 2 (Quota)",
+    "th": "รอบ 2 (Quota)"
+  },
+  "uniApp.round4": {
+    "en": "Round 4 (Admission)",
+    "th": "รอบ 4 (Admission)"
+  },
+  "uniApp.planRegular": {
+    "en": "Regular",
+    "th": "รอบปกติ"
+  },
+  "uniApp.planInternational": {
+    "en": "International",
+    "th": "หลักสูตรนานาชาติ"
+  },
+  "uniApp.planQuota": {
+    "en": "Quota",
+    "th": "โควตา"
+  },
+  "uniApp.academics": {
+    "en": "Academics",
+    "th": "สาขาวิชา"
+  },
+  "uniApp.noFaculties": {
+    "en": "This university doesn't have any faculty or program data in the system yet.",
+    "th": "มหาวิทยาลัยนี้ยังไม่มีข้อมูลคณะและหลักสูตรในระบบ"
+  },
+  "uniApp.selectFaculty": {
+    "en": "Select faculty",
+    "th": "เลือกคณะ"
+  },
+  "uniApp.selectProgram": {
+    "en": "Select program",
+    "th": "เลือกหลักสูตร"
+  },
+  "uniApp.noPrograms": {
+    "en": "No programs listed for this faculty yet.",
+    "th": "คณะนี้ยังไม่มีหลักสูตร"
+  },
+  "uniApp.selectOption": {
+    "en": "— Select —",
+    "th": "— เลือก —"
+  },
+  "uniApp.other": {
+    "en": "Other requirements",
+    "th": "ข้อมูลเพิ่มเติม"
+  },
+  "uniApp.essayPrompt": {
+    "en": "Why do you want to study at this university?",
+    "th": "เหตุผลที่ต้องการเข้าศึกษาที่มหาวิทยาลัยนี้"
+  },
+  "uniApp.essayPlaceholder": {
+    "en": "At least 50 characters...",
+    "th": "อย่างน้อย 50 ตัวอักษร..."
+  },
+  "uniApp.characters": {
+    "en": "characters",
+    "th": "ตัวอักษร"
+  },
+  "uniApp.reviewAndSubmit": {
+    "en": "Review and submit application",
+    "th": "ตรวจและส่งใบสมัคร"
+  },
+  "uniApp.reviewAndSubmitShort": {
+    "en": "Review and Submit",
+    "th": "ตรวจและส่งใบสมัคร"
+  },
+  "uniApp.readyToSubmit": {
+    "en": "Ready to submit",
+    "th": "พร้อมส่ง"
+  },
+  "uniApp.inProgress": {
+    "en": "In progress",
+    "th": "กำลังดำเนินการ"
+  },
+  "uniApp.completionIntroIncomplete": {
+    "en": "You are in the process of applying to {{name}}. Before we can review your application, please complete the following sections:",
+    "th": "คุณกำลังสมัครเข้า {{name}} ก่อนที่เราจะตรวจใบสมัคร กรุณากรอกข้อมูลในส่วนต่อไปนี้ให้ครบถ้วน:"
+  },
+  "uniApp.completionHint": {
+    "en": "Once all required components are completed, you will see the option to Review and Submit your application on this screen.",
+    "th": "เมื่อทุกส่วนครบถ้วนแล้ว ปุ่มตรวจและส่งใบสมัครจะปรากฎบนหน้านี้"
+  },
+  "uniApp.readyIntro": {
+    "en": "You are ready to review and submit your application to {{name}}! The submission process includes the following steps:",
+    "th": "คุณพร้อมที่จะตรวจและส่งใบสมัครไปยัง {{name}} แล้ว! กระบวนการส่งประกอบด้วยขั้นตอนต่อไปนี้:"
+  },
+  "uniApp.step1Title": {
+    "en": "Step 1: Review your application",
+    "th": "ขั้นตอนที่ 1: ตรวจสอบใบสมัคร"
+  },
+  "uniApp.step1Desc": {
+    "en": "Review a PDF preview of your application.",
+    "th": "ดูตัวอย่าง PDF ของใบสมัคร"
+  },
+  "uniApp.step1Essay": {
+    "en": "Pay special attention to the essay prompt you selected for {{name}}.",
+    "th": "ใส่ใจเป็นพิเศษกับคำถามเรียงความที่คุณเลือกสำหรับ {{name}}"
+  },
+  "uniApp.step2Title": {
+    "en": "Step 2: Pay the application fee (if applicable)",
+    "th": "ขั้นตอนที่ 2: ชำระค่าสมัคร (ถ้ามี)"
+  },
+  "uniApp.step2Desc1": {
+    "en": "Application fees vary by university.",
+    "th": "ค่าสมัครแตกต่างกันไปตามมหาวิทยาลัย"
+  },
+  "uniApp.step2Desc2": {
+    "en": "Fees are collected by the university directly — SabaiApply does not process payments during the beta.",
+    "th": "ค่าสมัครจัดเก็บโดยมหาวิทยาลัยโดยตรง — SabaiApply ยังไม่รองรับการชำระเงินในช่วงทดสอบ"
+  },
+  "uniApp.signatureWarning": {
+    "en": "By signing your application, you confirm the information you provided is accurate to the best of your knowledge.",
+    "th": "การลงชื่อในใบสมัคร หมายความว่าคุณรับรองความถูกต้องของข้อมูลที่ให้ไว้ตามความรู้ความสามารถของคุณ"
+  },
+  "uniApp.step3Title": {
+    "en": "Step 3: Submit your application",
+    "th": "ขั้นตอนที่ 3: ส่งใบสมัคร"
+  },
+  "uniApp.step3Desc": {
+    "en": "After you submit, you will not be able to edit your application.",
+    "th": "หลังจากส่งใบสมัครแล้ว คุณจะไม่สามารถแก้ไขได้"
+  },
+  "uniApp.stageReview": {
+    "en": "Final Review",
+    "th": "ตรวจสอบขั้นสุดท้าย"
+  },
+  "uniApp.stagePayment": {
+    "en": "Payment",
+    "th": "ชำระเงิน"
+  },
+  "uniApp.stageSignature": {
+    "en": "Signature & Submission",
+    "th": "ลายเซ็นและส่ง"
+  },
+  "uniApp.close": {
+    "en": "Close",
+    "th": "ปิด"
+  },
+  "uniApp.cancel": {
+    "en": "Cancel",
+    "th": "ยกเลิก"
+  },
+  "uniApp.continue": {
+    "en": "Continue",
+    "th": "ถัดไป"
+  },
+  "uniApp.submitting": {
+    "en": "Submitting...",
+    "th": "กำลังส่ง..."
+  },
+  "uniApp.submit": {
+    "en": "Submit application",
+    "th": "ส่งใบสมัคร"
+  },
+  "uniApp.programRequired": {
+    "en": "Please select a program in the Academics section before submitting.",
+    "th": "กรุณาเลือกหลักสูตรในส่วน 'สาขาวิชา'"
+  },
+  "uniApp.roundRequired": {
+    "en": "Please select an admission round in the General section before submitting.",
+    "th": "กรุณาเลือกรอบการสมัครในส่วน 'ข้อมูลทั่วไป'"
+  },
+  "uniApp.submitFailed": {
+    "en": "Submission failed",
+    "th": "ส่งไม่สำเร็จ"
+  },
+  "uniApp.reviewIntro": {
+    "en": "Please review your complete application before continuing. If you need to make changes, click Cancel and return to the relevant section.",
+    "th": "ตรวจสอบใบสมัครของคุณก่อนส่ง หากจำเป็นต้องแก้ไข กดปุ่มยกเลิกแล้วกลับไปแก้ไขส่วนที่เกี่ยวข้อง"
+  },
+  "uniApp.previewLabel": {
+    "en": "University Application",
+    "th": "ใบสมัครมหาวิทยาลัย"
+  },
+  "uniApp.previewProfile": {
+    "en": "Profile",
+    "th": "โปรไฟล์"
+  },
+  "uniApp.previewPersonal": {
+    "en": "Personal information",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "uniApp.rowName": {
+    "en": "Name",
+    "th": "ชื่อ"
+  },
+  "uniApp.rowNameTh": {
+    "en": "Name (Thai)",
+    "th": "ชื่อ (ไทย)"
+  },
+  "uniApp.rowBirthdate": {
+    "en": "Birthdate",
+    "th": "วันเกิด"
+  },
+  "uniApp.rowNationality": {
+    "en": "Nationality",
+    "th": "สัญชาติ"
+  },
+  "uniApp.rowGender": {
+    "en": "Gender",
+    "th": "เพศ"
+  },
+  "uniApp.rowIdType": {
+    "en": "ID type",
+    "th": "ประเภทบัตร"
+  },
+  "uniApp.rowIdNumber": {
+    "en": "ID number",
+    "th": "เลขบัตร"
+  },
+  "uniApp.previewContact": {
+    "en": "Contact details",
+    "th": "ข้อมูลติดต่อ"
+  },
+  "uniApp.rowPhone": {
+    "en": "Phone",
+    "th": "โทรศัพท์"
+  },
+  "uniApp.rowAddress": {
+    "en": "Address",
+    "th": "ที่อยู่"
+  },
+  "uniApp.previewFamily": {
+    "en": "Family",
+    "th": "ครอบครัว"
+  },
+  "uniApp.previewFather": {
+    "en": "Father",
+    "th": "บิดา"
+  },
+  "uniApp.previewMother": {
+    "en": "Mother",
+    "th": "มารดา"
+  },
+  "uniApp.rowOccupation": {
+    "en": "Occupation",
+    "th": "อาชีพ"
+  },
+  "uniApp.rowEducation": {
+    "en": "Education",
+    "th": "การศึกษา"
+  },
+  "uniApp.previewHousehold": {
+    "en": "Household",
+    "th": "ครัวเรือน"
+  },
+  "uniApp.rowHouseholdIncome": {
+    "en": "Household income (THB/month)",
+    "th": "รายได้ครัวเรือน (บาท/เดือน)"
+  },
+  "uniApp.rowSiblings": {
+    "en": "Number of siblings",
+    "th": "จำนวนพี่น้อง"
+  },
+  "uniApp.noFamilyData": {
+    "en": "No data reported.",
+    "th": "ไม่มีข้อมูล"
+  },
+  "uniApp.previewEducation": {
+    "en": "Education",
+    "th": "การศึกษา"
+  },
+  "uniApp.previewSchool": {
+    "en": "Current or most recent secondary school",
+    "th": "โรงเรียนปัจจุบันหรือล่าสุด"
+  },
+  "uniApp.rowSchoolName": {
+    "en": "School name",
+    "th": "ชื่อโรงเรียน"
+  },
+  "uniApp.rowProvince": {
+    "en": "Province",
+    "th": "จังหวัด"
+  },
+  "uniApp.rowCurriculum": {
+    "en": "Curriculum type",
+    "th": "ประเภทหลักสูตร"
+  },
+  "uniApp.rowStudyPlan": {
+    "en": "Study plan",
+    "th": "แผนการเรียน"
+  },
+  "uniApp.rowGradYear": {
+    "en": "Graduation year",
+    "th": "ปีที่จบการศึกษา"
+  },
+  "uniApp.rowGradeLevel": {
+    "en": "Current grade level",
+    "th": "ระดับชั้นปัจจุบัน"
+  },
+  "uniApp.noEducationData": {
+    "en": "No education data reported.",
+    "th": "ไม่มีข้อมูลการศึกษา"
+  },
+  "uniApp.previewTesting": {
+    "en": "Testing",
+    "th": "ผลการสอบ"
+  },
+  "uniApp.noTestScores": {
+    "en": "There are no test scores to report.",
+    "th": "ไม่มีผลการสอบ"
+  },
+  "uniApp.previewDocuments": {
+    "en": "Documents",
+    "th": "เอกสาร"
+  },
+  "uniApp.noDocumentsAttached": {
+    "en": "No documents attached.",
+    "th": "ไม่มีเอกสารที่แนบ"
+  },
+  "uniApp.previewActivities": {
+    "en": "Activities",
+    "th": "กิจกรรม"
+  },
+  "uniApp.noActivitiesToReport": {
+    "en": "There are no activities to report.",
+    "th": "ไม่มีกิจกรรม"
+  },
+  "uniApp.uniQuestions": {
+    "en": "{{name}} questions",
+    "th": "คำถามของ {{name}}"
+  },
+  "uniApp.previewGeneral": {
+    "en": "General",
+    "th": "ข้อมูลทั่วไป"
+  },
+  "uniApp.rowPreferredRound": {
+    "en": "Preferred admission round",
+    "th": "รอบที่ต้องการ"
+  },
+  "uniApp.rowPreferredPlan": {
+    "en": "Preferred admission plan",
+    "th": "แผนการเข้าศึกษา"
+  },
+  "uniApp.previewAcademics": {
+    "en": "Academics",
+    "th": "สาขาวิชา"
+  },
+  "uniApp.rowFaculty": {
+    "en": "Faculty",
+    "th": "คณะ"
+  },
+  "uniApp.rowProgram": {
+    "en": "Program",
+    "th": "หลักสูตร"
+  },
+  "uniApp.essayLabel": {
+    "en": "Essay: Why do you want to study at this university?",
+    "th": "เรียงความ: เหตุผลที่ต้องการเข้าศึกษาที่มหาวิทยาลัยนี้"
+  },
+  "uniApp.paymentTitle": {
+    "en": "Application fee",
+    "th": "ค่าสมัคร"
+  },
+  "uniApp.noFeeMVP": {
+    "en": "No fee configured yet (MVP)",
+    "th": "ยังไม่มีการเก็บค่าสมัคร (MVP)"
+  },
+  "uniApp.betaSkipNote": {
+    "en": "During the beta, payment is not yet wired to a provider. Click Continue to skip this step.",
+    "th": "ในระหว่างช่วงเบต้า ยังไม่มีการผูกกับบริการชำระเงิน กดถัดไปเพื่อข้ามขั้นตอนนี้"
+  },
+  "uniApp.signatureTitle": {
+    "en": "Signature",
+    "th": "ลายเซ็น"
+  },
+  "uniApp.signatureDesc": {
+    "en": "Type your full legal name to electronically sign this application.",
+    "th": "พิมพ์ชื่อ-นามสกุลของคุณเพื่อเซ็นใบสมัครอิเล็กทรอนิกส์"
+  },
+  "uniApp.signaturePlaceholder": {
+    "en": "First name  Last name",
+    "th": "ชื่อ นามสกุล"
+  },
+  "uniApp.affirmationsTitle": {
+    "en": "Affirmations",
+    "th": "การยืนยัน"
+  },
+  "uniApp.affirmationText": {
+    "en": "I affirm that the information in this application is accurate, complete, and true to the best of my knowledge. I have read and agree to the SabaiApply terms and the university's application policies.",
+    "th": "ข้าพเจ้ายืนยันว่าข้อมูลในใบสมัครนี้ถูกต้อง ครบถ้วน และเป็นความจริงตามที่ทราบ ข้าพเจ้าเข้าใจและยอมรับข้อตกลงและเงื่อนไขของ SabaiApply รวมทั้งนโยบายการยื่นใบสมัครของมหาวิทยาลัย"
+  },
+  "uniApp.finalWarning": {
+    "en": "Once you submit, the application can no longer be edited. Please make sure everything is correct.",
+    "th": "เมื่อส่งใบสมัครแล้ว คุณจะไม่สามารถแก้ไขได้อีก โปรดตรวจสอบให้แน่ใจ"
+  },
+  "uniApp.step1EssayShort": {
+    "en": "{{name}} requires your personal essay.",
+    "th": "{{name}} ต้องการเรียงความส่วนตัวของคุณ"
+  },
+  "uniApp.submissionIntroIncompleteAlt": {
+    "en": "In order to begin the submission process, you must complete the following items:",
+    "th": "ในการเริ่มกระบวนการส่ง คุณต้องดำเนินการต่อไปนี้ให้ครบถ้วน:"
+  }
+}

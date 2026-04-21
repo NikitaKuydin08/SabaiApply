@@ -2,7 +2,7 @@
 
 import { AdminSidebar } from "@/components/admin-sidebar";
 import { LanguageToggle } from "@/components/language-toggle";
-import { LocaleProvider } from "@/lib/i18n/context";
+import { LocaleProvider, useLocale } from "@/lib/i18n/context";
 import { signOut } from "./actions";
 import type { UserRole } from "@/types/database";
 
@@ -23,33 +23,48 @@ export function AdminLayoutClient({
 }: AdminLayoutClientProps) {
   return (
     <LocaleProvider defaultLocale="en" storageKey="sabaiapply-student-locale">
-      <div className="min-h-screen bg-[#fafafa]">
-        <AdminSidebar
-          fullName={fullName}
-          email={email}
-          role={role}
-          universityName={universityName}
-        />
-
-        <div className="ml-64">
-          <header className="flex items-center justify-between border-b border-[#e0e0e0] bg-white px-6 py-3">
-            <div />
-            <div className="flex items-center gap-3">
-              <LanguageToggle />
-              <form action={signOut}>
-                <button
-                  type="submit"
-                  className="rounded-lg px-4 py-2 text-base text-[#666] hover:bg-[#fafafa] hover:text-[#1a1a1a] transition-colors"
-                >
-                  Sign Out
-                </button>
-              </form>
-            </div>
-          </header>
-
-          <main className="p-6">{children}</main>
-        </div>
-      </div>
+      <AdminShell fullName={fullName} email={email} role={role} universityName={universityName}>
+        {children}
+      </AdminShell>
     </LocaleProvider>
+  );
+}
+
+function AdminShell({
+  children,
+  fullName,
+  email,
+  role,
+  universityName,
+}: AdminLayoutClientProps) {
+  const { t } = useLocale();
+  return (
+    <div className="min-h-screen bg-[#fafafa]">
+      <AdminSidebar
+        fullName={fullName}
+        email={email}
+        role={role}
+        universityName={universityName}
+      />
+
+      <div className="ml-64">
+        <header className="flex items-center justify-between border-b border-[#e0e0e0] bg-white px-6 py-3">
+          <div />
+          <div className="flex items-center gap-3">
+            <LanguageToggle />
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="rounded-lg px-4 py-2 text-base text-[#666] hover:bg-[#fafafa] hover:text-[#1a1a1a] transition-colors"
+              >
+                {t("sign_out")}
+              </button>
+            </form>
+          </div>
+        </header>
+
+        <main className="p-6">{children}</main>
+      </div>
+    </div>
   );
 }

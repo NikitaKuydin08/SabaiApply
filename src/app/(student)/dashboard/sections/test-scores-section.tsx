@@ -318,7 +318,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
             onClick={onSaved}
             className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
           >
-            Continue
+            {t("form.continue")}
           </button>
         </div>
       )}

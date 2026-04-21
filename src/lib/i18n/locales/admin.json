@@ -922,5 +922,157 @@
   "status_updated": {
     "en": "Status updated.",
     "th": "อัปเดตสถานะแล้ว"
+  },
+  "view_profile": {
+    "en": "View Profile",
+    "th": "ดูโปรไฟล์"
+  },
+  "admin_default_name": {
+    "en": "Admin",
+    "th": "ผู้ดูแล"
+  },
+  "login_failed": {
+    "en": "Login failed.",
+    "th": "เข้าสู่ระบบไม่สำเร็จ"
+  },
+  "set_new_password_desc": {
+    "en": "Enter your new password below.",
+    "th": "กรอกรหัสผ่านใหม่ด้านล่าง"
+  },
+  "loading_invite": {
+    "en": "Loading invite...",
+    "th": "กำลังโหลดคำเชิญ..."
+  },
+  "account_created": {
+    "en": "Account Created!",
+    "th": "สร้างบัญชีเรียบร้อย!"
+  },
+  "verify_email_prompt": {
+    "en": "Please check your email at {{email}} to verify your account, then sign in.",
+    "th": "กรุณาตรวจสอบอีเมลที่ {{email}} เพื่อยืนยันบัญชี จากนั้นเข้าสู่ระบบ"
+  },
+  "confirm_password_placeholder": {
+    "en": "Confirm your password",
+    "th": "ยืนยันรหัสผ่าน"
+  },
+  "full_name_placeholder": {
+    "en": "Dr. Somchai Jaidee",
+    "th": "เช่น ดร.สมชาย ใจดี"
+  },
+  "min_password_hint": {
+    "en": "Minimum 6 characters",
+    "th": "อย่างน้อย 6 ตัวอักษร"
+  },
+  "super_dashboard_subtitle": {
+    "en": "Overview of the entire SabaiApply platform",
+    "th": "ภาพรวมของแพลตฟอร์ม SabaiApply ทั้งหมด"
+  },
+  "stat_universities": {
+    "en": "Universities",
+    "th": "มหาวิทยาลัย"
+  },
+  "stat_students": {
+    "en": "Students",
+    "th": "นักเรียน"
+  },
+  "stat_admins": {
+    "en": "Admins",
+    "th": "ผู้ดูแล"
+  },
+  "stat_applications": {
+    "en": "Applications",
+    "th": "ใบสมัคร"
+  },
+  "delete_uni_confirm": {
+    "en": "Delete \"{{name}}\"? This will delete all faculties, programs, and data under it.",
+    "th": "ลบ \"{{name}}\"? การดำเนินการนี้จะลบคณะ หลักสูตร และข้อมูลทั้งหมดภายใต้มหาวิทยาลัยนี้"
+  },
+  "manage_universities_subtitle": {
+    "en": "Manage universities on the platform ({{count}})",
+    "th": "จัดการมหาวิทยาลัยในระบบ ({{count}})"
+  },
+  "create_university_btn": {
+    "en": "+ Create University",
+    "th": "+ สร้างมหาวิทยาลัย"
+  },
+  "create": {
+    "en": "Create",
+    "th": "สร้าง"
+  },
+  "creating": {
+    "en": "Creating...",
+    "th": "กำลังสร้าง..."
+  },
+  "no_universities_found": {
+    "en": "No universities found.",
+    "th": "ไม่พบมหาวิทยาลัย"
+  },
+  "profile_saved": {
+    "en": "Profile saved successfully.",
+    "th": "บันทึกโปรไฟล์เรียบร้อยแล้ว"
+  },
+  "current_password_incorrect": {
+    "en": "Current password is incorrect.",
+    "th": "รหัสผ่านปัจจุบันไม่ถูกต้อง"
+  },
+  "password_changed": {
+    "en": "Password changed successfully.",
+    "th": "เปลี่ยนรหัสผ่านเรียบร้อยแล้ว"
+  },
+  "select_image_file": {
+    "en": "Please select an image file.",
+    "th": "กรุณาเลือกไฟล์รูปภาพ"
+  },
+  "image_too_large": {
+    "en": "Image must be less than 2MB.",
+    "th": "ขนาดรูปภาพต้องไม่เกิน 2MB"
+  },
+  "role_uni_admin": {
+    "en": "University Admin",
+    "th": "ผู้ดูแลมหาวิทยาลัย"
+  },
+  "role_faculty_admin": {
+    "en": "Faculty Admin",
+    "th": "ผู้ดูแลคณะ"
+  },
+  "profile_title": {
+    "en": "Profile",
+    "th": "โปรไฟล์"
+  },
+  "profile_subtitle": {
+    "en": "Manage your account information",
+    "th": "จัดการข้อมูลบัญชีของคุณ"
+  },
+  "personal_info": {
+    "en": "Personal Information",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "change_photo": {
+    "en": "Change",
+    "th": "เปลี่ยน"
+  },
+  "profile_photo": {
+    "en": "Profile Photo",
+    "th": "รูปโปรไฟล์"
+  },
+  "click_to_change_photo": {
+    "en": "Click to change (max 2MB)",
+    "th": "คลิกเพื่อเปลี่ยน (สูงสุด 2MB)"
+  },
+  "change_password_title": {
+    "en": "Change Password",
+    "th": "เปลี่ยนรหัสผ่าน"
+  },
+  "current_password": {
+    "en": "Current Password",
+    "th": "รหัสผ่านปัจจุบัน"
+  },
+  "current_password_placeholder": {
+    "en": "Enter current password",
+    "th": "กรอกรหัสผ่านปัจจุบัน"
+  },
+  "changing_password": {
+    "en": "Changing...",
+    "th": "กำลังเปลี่ยน..."
   }
 }

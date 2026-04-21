@@ -1,0 +1,134 @@
+{
+  "landing.nav.adminPortal": {
+    "en": "Admin Portal",
+    "th": "พอร์ทัลผู้ดูแลระบบ"
+  },
+  "landing.nav.login": {
+    "en": "Log in",
+    "th": "เข้าสู่ระบบ"
+  },
+  "landing.nav.signup": {
+    "en": "Sign up",
+    "th": "สมัครสมาชิก"
+  },
+  "landing.hero.badge": {
+    "en": "Thailand's University Application Platform",
+    "th": "แพลตฟอร์มการสมัครมหาวิทยาลัยแห่งประเทศไทย"
+  },
+  "landing.hero.headlineA": {
+    "en": "Apply once.",
+    "th": "สมัครครั้งเดียว"
+  },
+  "landing.hero.headlineB": {
+    "en": "Go anywhere.",
+    "th": "เข้าได้ทุกที่"
+  },
+  "landing.hero.subtitle": {
+    "en": "One profile. One application form. Every Thai university. Built for Thai students and international applicants.",
+    "th": "หนึ่งโปรไฟล์ หนึ่งใบสมัคร ครบทุกมหาวิทยาลัยในไทย สร้างขึ้นสำหรับนักเรียนไทยและนักเรียนต่างชาติ"
+  },
+  "landing.hero.ctaStart": {
+    "en": "Start your application",
+    "th": "เริ่มใบสมัครของคุณ"
+  },
+  "landing.hero.ctaLogin": {
+    "en": "Log in",
+    "th": "เข้าสู่ระบบ"
+  },
+  "landing.how.eyebrow": {
+    "en": "How it works",
+    "th": "วิธีการใช้งาน"
+  },
+  "landing.how.title": {
+    "en": "Applying to university got easier",
+    "th": "การสมัครมหาวิทยาลัยง่ายขึ้นกว่าที่เคย"
+  },
+  "landing.how.step1.title": {
+    "en": "Create your profile",
+    "th": "สร้างโปรไฟล์ของคุณ"
+  },
+  "landing.how.step1.desc": {
+    "en": "Fill in your information and upload your documents once. That's it.",
+    "th": "กรอกข้อมูลและอัปโหลดเอกสารเพียงครั้งเดียว เท่านั้นเอง"
+  },
+  "landing.how.step2.title": {
+    "en": "Choose universities",
+    "th": "เลือกมหาวิทยาลัย"
+  },
+  "landing.how.step2.desc": {
+    "en": "Browse Thai universities, compare programs, and add them to your list.",
+    "th": "ค้นหามหาวิทยาลัยไทย เปรียบเทียบหลักสูตร และเพิ่มลงในรายการของคุณ"
+  },
+  "landing.how.step3.title": {
+    "en": "Apply everywhere",
+    "th": "สมัครได้ทุกที่"
+  },
+  "landing.how.step3.desc": {
+    "en": "Submit to multiple universities with one click. Track every application in one place.",
+    "th": "ส่งใบสมัครไปหลายมหาวิทยาลัยได้ในคลิกเดียว ติดตามทุกใบสมัครได้ที่เดียว"
+  },
+  "landing.who.eyebrow": {
+    "en": "Who it is for",
+    "th": "เหมาะสำหรับใคร"
+  },
+  "landing.who.title": {
+    "en": "Built for every student",
+    "th": "สร้างมาเพื่อทุกคน"
+  },
+  "landing.who.thai.title": {
+    "en": "Thai Students",
+    "th": "นักเรียนไทย"
+  },
+  "landing.who.thai.desc": {
+    "en": "Stop filling out the same form for every university. Apply everywhere from one place.",
+    "th": "ไม่ต้องกรอกใบสมัครซ้ำสำหรับทุกมหาวิทยาลัย สมัครได้ทุกที่จากที่เดียว"
+  },
+  "landing.who.intl.title": {
+    "en": "International Students",
+    "th": "นักเรียนต่างชาติ"
+  },
+  "landing.who.intl.desc": {
+    "en": "Applying to Thailand from abroad? We make it simple, clear, and available in your language.",
+    "th": "สมัครเรียนที่ไทยจากต่างประเทศใช่ไหม เราทำให้ขั้นตอนเรียบง่าย ชัดเจน และรองรับภาษาของคุณ"
+  },
+  "landing.who.uni.title": {
+    "en": "Universities",
+    "th": "มหาวิทยาลัย"
+  },
+  "landing.who.uni.desc": {
+    "en": "Receive standardized applications from a wider pool of students — less admin, more applicants.",
+    "th": "รับใบสมัครที่เป็นมาตรฐานจากผู้สมัครในวงกว้าง ลดภาระงาน เพิ่มจำนวนผู้สมัคร"
+  },
+  "landing.cta.headlineA": {
+    "en": "Choosing a university is hard.",
+    "th": "การเลือกมหาวิทยาลัยเป็นเรื่องยาก"
+  },
+  "landing.cta.headlineB": {
+    "en": "Applying shouldn't be.",
+    "th": "การสมัครไม่ควรเป็นเช่นนั้น"
+  },
+  "landing.cta.subtitle": {
+    "en": "Make your experience sabai sabai.",
+    "th": "ทำให้ประสบการณ์ของคุณสบายสบาย"
+  },
+  "landing.cta.button": {
+    "en": "Get started for free",
+    "th": "เริ่มต้นใช้งานฟรี"
+  },
+  "landing.footer.privacy": {
+    "en": "Privacy Policy",
+    "th": "นโยบายความเป็นส่วนตัว"
+  },
+  "landing.footer.terms": {
+    "en": "Terms of Use",
+    "th": "เงื่อนไขการใช้งาน"
+  },
+  "landing.footer.chat": {
+    "en": "24/7 Support Chat",
+    "th": "แชทสนับสนุน 24/7"
+  },
+  "landing.footer.copyright": {
+    "en": "© 2026 SabaiApply · Bangkok, Thailand",
+    "th": "© 2026 SabaiApply · กรุงเทพมหานคร ประเทศไทย"
+  }
+}

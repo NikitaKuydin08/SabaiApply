@@ -347,7 +347,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
             onClick={onSaved}
             className="rounded-lg bg-[#F4C430] px-6 py-3 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
           >
-            Finish
+            {t("form.finish")}
           </button>
         </div>
       )}

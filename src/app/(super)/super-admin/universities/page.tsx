@@ -5,6 +5,8 @@ import Link from "next/link";
 import { getAllUniversities, createUniversity, deleteUniversity } from "../actions";
 import { searchUniversities } from "@/lib/thai-universities";
 import type { ThaiUniversity } from "@/lib/thai-universities";
+import { useLocale } from "@/lib/i18n/context";
+import { tReplace } from "@/lib/i18n/translations";
 
 interface UniRow {
   id: string;
@@ -15,6 +17,7 @@ interface UniRow {
 }
 
 export default function SuperUniversitiesPage() {
+  const { t, locale } = useLocale();
   const [universities, setUniversities] = useState<UniRow[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -78,7 +81,7 @@ export default function SuperUniversitiesPage() {
   async function handleDelete(e: React.MouseEvent, uni: UniRow) {
     e.preventDefault();
     e.stopPropagation();
-    if (!confirm(`Delete "${uni.name}"? This will delete all faculties, programs, and data under it.`)) return;
+    if (!confirm(tReplace("delete_uni_confirm", locale, { name: uni.name }))) return;
 
     const result = await deleteUniversity(uni.id);
     if (result.error) { alert(result.error); return; }
@@ -91,29 +94,29 @@ export default function SuperUniversitiesPage() {
     return u.name.toLowerCase().includes(q) || (u.name_th ?? "").includes(search);
   });
 
-  if (loading) return <div className="p-8"><p className="text-[#666]">Loading...</p></div>;
+  if (loading) return <div className="p-8"><p className="text-[#666]">{t("loading")}</p></div>;
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">All Universities</h1>
-          <p className="mt-2 text-base text-[#666]">Manage universities on the platform ({universities.length})</p>
+          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("all_universities")}</h1>
+          <p className="mt-2 text-base text-[#666]">{tReplace("manage_universities_subtitle", locale, { count: String(universities.length) })}</p>
         </div>
         <button onClick={() => setShowCreate(true)} className="rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] transition-colors">
-          + Create University
+          {t("create_university_btn")}
         </button>
       </div>
 
       {/* Create Form */}
       {showCreate && (
         <div className="mt-6 max-w-lg rounded-xl border border-[#e8e8e8] bg-white p-6">
-          <h2 className="text-lg font-bold text-[#1a1a1a] mb-4">Create University</h2>
+          <h2 className="text-lg font-bold text-[#1a1a1a] mb-4">{t("create_university")}</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="space-y-2 relative">
-              <label className="block text-base font-medium text-[#1a1a1a]">University Name</label>
+              <label className="block text-base font-medium text-[#1a1a1a]">{t("university_name")}</label>
               <input
-                placeholder="Search by English or Thai name..."
+                placeholder={t("search_uni")}
                 value={uniQuery}
                 onChange={(e) => handleUniSearch(e.target.value)}
                 required
@@ -135,17 +138,17 @@ export default function SuperUniversitiesPage() {
               )}
             </div>
             <div className="space-y-2">
-              <label className="block text-base font-medium text-[#1a1a1a]">Website</label>
+              <label className="block text-base font-medium text-[#1a1a1a]">{t("website")}</label>
               <input type="url" placeholder="https://..." value={website} onChange={(e) => setWebsite(e.target.value)}
                 className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base text-[#1a1a1a] placeholder:text-[#999] focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/30 focus:outline-none transition-colors" />
             </div>
             {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>}
             <div className="flex gap-2">
               <button type="submit" disabled={saving} className="rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors">
-                {saving ? "Creating..." : "Create"}
+                {saving ? t("creating") : t("create")}
               </button>
               <button type="button" onClick={() => setShowCreate(false)} className="rounded-lg px-5 py-4 text-base text-[#666] hover:bg-[#fafafa] transition-colors">
-                Cancel
+                {t("cancel")}
               </button>
             </div>
           </form>
@@ -154,7 +157,7 @@ export default function SuperUniversitiesPage() {
 
       {/* Search */}
       <div className="mt-6">
-        <input placeholder="Search universities..." value={search} onChange={(e) => setSearch(e.target.value)}
+        <input placeholder={t("search_uni")} value={search} onChange={(e) => setSearch(e.target.value)}
           className="w-full max-w-md rounded-lg border border-[#e0e0e0] px-4 py-3 text-base text-[#1a1a1a] placeholder:text-[#999] focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/30 focus:outline-none transition-colors" />
       </div>
 
@@ -171,13 +174,13 @@ export default function SuperUniversitiesPage() {
               <div className="flex items-center gap-3">
                 <span className="text-sm text-[#999]">{new Date(uni.created_at).toLocaleDateString()}</span>
                 <button onClick={(e) => handleDelete(e, uni)} className="rounded-lg px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">
-                  Delete
+                  {t("delete")}
                 </button>
               </div>
             </div>
           </Link>
         ))}
-        {filtered.length === 0 && <p className="text-base text-[#999]">No universities found.</p>}
+        {filtered.length === 0 && <p className="text-base text-[#999]">{t("no_universities_found")}</p>}
       </div>
     </div>
   );

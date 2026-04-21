@@ -12,6 +12,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [emailExists, setEmailExists] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -69,7 +70,8 @@ export default function SignUpPage() {
 
     // If user already exists, Supabase returns empty identities
     if (data.user && data.user.identities && data.user.identities.length === 0) {
-      setError("An account with this email already exists. Please log in instead.");
+      setError(t("signup.errorEmailExists"));
+      setEmailExists(true);
       setLoading(false);
       return;
     }
@@ -98,9 +100,9 @@ export default function SignUpPage() {
           {error && (
             <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 md:px-5 md:py-4 md:text-base">
               {error}
-              {error.includes("already exists") && (
+              {emailExists && (
                 <Link href="/login" className="ml-1 font-semibold underline hover:text-red-800">
-                  Go to Login
+                  {t("signup.goToLogin")}
                 </Link>
               )}
             </div>
