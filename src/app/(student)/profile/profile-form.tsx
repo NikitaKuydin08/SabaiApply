@@ -4,28 +4,46 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import type { StudentProfile } from "@/types/database";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
 
-const nationalities = [
-  "Thai",
-  "American",
-  "British",
-  "Chinese",
-  "Indian",
-  "Japanese",
-  "Korean",
-  "Malaysian",
-  "Singaporean",
-  "Vietnamese",
-  "Other",
+interface NationalityOption {
+  value: string;
+  labelKey: TranslationKey;
+}
+
+const nationalities: NationalityOption[] = [
+  { value: "Thai", labelKey: "form.nationality.thai" },
+  { value: "American", labelKey: "form.nationality.american" },
+  { value: "British", labelKey: "form.nationality.british" },
+  { value: "Chinese", labelKey: "form.nationality.chinese" },
+  { value: "Indian", labelKey: "form.nationality.indian" },
+  { value: "Japanese", labelKey: "form.nationality.japanese" },
+  { value: "Korean", labelKey: "form.nationality.korean" },
+  { value: "Malaysian", labelKey: "form.nationality.malaysian" },
+  { value: "Singaporean", labelKey: "form.nationality.singaporean" },
+  { value: "Vietnamese", labelKey: "form.nationality.vietnamese" },
+  { value: "Other", labelKey: "form.gender.other" },
 ];
 
-const genders = ["Male", "Female", "Non-binary", "Prefer not to say"];
+interface GenderOption {
+  value: string;
+  labelKey: TranslationKey;
+}
+
+const genders: GenderOption[] = [
+  { value: "Male", labelKey: "form.gender.male" },
+  { value: "Female", labelKey: "form.gender.female" },
+  { value: "Non-binary", labelKey: "form.gender.nonBinary" },
+  { value: "Prefer not to say", labelKey: "form.gender.preferNotToSay" },
+];
 
 interface Props {
   profile: StudentProfile;
 }
 
 export default function ProfileForm({ profile }: Props) {
+  const { t } = useLocale();
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -84,148 +102,155 @@ export default function ProfileForm({ profile }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      {error && (
-        <div className="rounded-lg bg-red-50 px-5 py-4 text-base text-red-600">
-          {error}
-        </div>
-      )}
-      {success && (
-        <div className="rounded-lg bg-green-50 px-5 py-4 text-base text-green-700">
-          Profile saved successfully.
-        </div>
-      )}
+    <>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("form.myProfile")}</h1>
+        <p className="text-base text-[#666] mt-2">{t("form.profileSubtitle")}</p>
+      </div>
 
-      {/* Name (English) */}
-      <fieldset className="space-y-5">
-        <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
-          Name (English)
-        </legend>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <InputField
-            label="First Name"
-            value={form.first_name}
-            onChange={(v) => updateField("first_name", v)}
-            placeholder="e.g. Somchai"
-          />
-          <InputField
-            label="Last Name"
-            value={form.last_name}
-            onChange={(v) => updateField("last_name", v)}
-            placeholder="e.g. Jaidee"
-          />
-        </div>
-      </fieldset>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {error && (
+          <div className="rounded-lg bg-red-50 px-5 py-4 text-base text-red-600">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="rounded-lg bg-green-50 px-5 py-4 text-base text-green-700">
+            {t("form.profileSaved")}
+          </div>
+        )}
 
-      {/* Name (Thai) */}
-      <fieldset className="space-y-5">
-        <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
-          Name (Thai)
-        </legend>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <InputField
-            label="First Name"
-            value={form.first_name_th}
-            onChange={(v) => updateField("first_name_th", v)}
-            placeholder="e.g. สมชาย"
-          />
-          <InputField
-            label="Last Name"
-            value={form.last_name_th}
-            onChange={(v) => updateField("last_name_th", v)}
-            placeholder="e.g. ใจดี"
-          />
-        </div>
-      </fieldset>
+        {/* Name (English) */}
+        <fieldset className="space-y-5">
+          <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
+            {t("form.nameEnLegend")}
+          </legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <InputField
+              label={t("form.firstName")}
+              value={form.first_name}
+              onChange={(v) => updateField("first_name", v)}
+              placeholder={t("form.ph.firstNameEn")}
+            />
+            <InputField
+              label={t("form.lastName")}
+              value={form.last_name}
+              onChange={(v) => updateField("last_name", v)}
+              placeholder={t("form.ph.lastNameEn")}
+            />
+          </div>
+        </fieldset>
 
-      {/* Personal Details */}
-      <fieldset className="space-y-5">
-        <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
-          Personal Details
-        </legend>
+        {/* Name (Thai) */}
+        <fieldset className="space-y-5">
+          <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
+            {t("form.nameThLegend")}
+          </legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <InputField
+              label={t("form.firstName")}
+              value={form.first_name_th}
+              onChange={(v) => updateField("first_name_th", v)}
+              placeholder={t("form.ph.firstNameTh")}
+            />
+            <InputField
+              label={t("form.lastName")}
+              value={form.last_name_th}
+              onChange={(v) => updateField("last_name_th", v)}
+              placeholder={t("form.ph.lastNameTh")}
+            />
+          </div>
+        </fieldset>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div>
-            <label className="block text-base font-medium text-[#1a1a1a] mb-2">
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              value={form.dob}
-              onChange={(e) => updateField("dob", e.target.value)}
-              className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+        {/* Personal Details */}
+        <fieldset className="space-y-5">
+          <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
+            {t("form.personalDetailsLegend")}
+          </legend>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-base font-medium text-[#1a1a1a] mb-2">
+                {t("form.dob")}
+              </label>
+              <input
+                type="date"
+                value={form.dob}
+                onChange={(e) => updateField("dob", e.target.value)}
+                className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20"
+              />
+            </div>
+
+            <SelectField
+              label={t("form.gender")}
+              value={form.gender}
+              onChange={(v) => updateField("gender", v)}
+              options={genders.map((g) => ({ value: g.value, label: t(g.labelKey) }))}
+              placeholder={t("form.ph.selectGender")}
             />
           </div>
 
           <SelectField
-            label="Gender"
-            value={form.gender}
-            onChange={(v) => updateField("gender", v)}
-            options={genders}
-            placeholder="Select gender"
+            label={t("form.nationality")}
+            value={form.nationality}
+            onChange={(v) => updateField("nationality", v)}
+            options={nationalities.map((n) => ({ value: n.value, label: t(n.labelKey) }))}
+            placeholder={t("form.ph.selectNationality")}
           />
+        </fieldset>
+
+        {/* Contact */}
+        <fieldset className="space-y-5">
+          <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
+            {t("form.contactLegend")}
+          </legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <InputField
+              label={t("form.phone")}
+              value={form.phone}
+              onChange={(v) => updateField("phone", v)}
+              placeholder={t("form.ph.phone")}
+            />
+            <InputField
+              label={t("form.lineId")}
+              value={form.line_id}
+              onChange={(v) => updateField("line_id", v)}
+              placeholder={t("form.ph.lineId")}
+            />
+          </div>
+        </fieldset>
+
+        {/* Address */}
+        <fieldset className="space-y-5">
+          <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
+            {t("form.addressLegend")}
+          </legend>
+          <div>
+            <label className="block text-base font-medium text-[#1a1a1a] mb-2">
+              {t("form.fullAddress")}
+            </label>
+            <textarea
+              value={form.address}
+              onChange={(e) => updateField("address", e.target.value)}
+              rows={4}
+              className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20 resize-none"
+              placeholder={t("form.ph.address")}
+            />
+          </div>
+        </fieldset>
+
+        {/* Submit */}
+        <div className="flex justify-end pt-2">
+          <button
+            type="submit"
+            disabled={saving}
+            className="rounded-lg bg-[#F4C430] px-8 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors"
+          >
+            {saving ? t("form.saving") : t("form.saveProfile")}
+          </button>
         </div>
-
-        <SelectField
-          label="Nationality"
-          value={form.nationality}
-          onChange={(v) => updateField("nationality", v)}
-          options={nationalities}
-          placeholder="Select nationality"
-        />
-      </fieldset>
-
-      {/* Contact */}
-      <fieldset className="space-y-5">
-        <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
-          Contact Information
-        </legend>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <InputField
-            label="Phone Number"
-            value={form.phone}
-            onChange={(v) => updateField("phone", v)}
-            placeholder="e.g. 081-234-5678"
-          />
-          <InputField
-            label="LINE ID"
-            value={form.line_id}
-            onChange={(v) => updateField("line_id", v)}
-            placeholder="e.g. somchai_j"
-          />
-        </div>
-      </fieldset>
-
-      {/* Address */}
-      <fieldset className="space-y-5">
-        <legend className="text-lg font-semibold text-[#1a1a1a] mb-1">
-          Address
-        </legend>
-        <div>
-          <label className="block text-base font-medium text-[#1a1a1a] mb-2">
-            Full Address
-          </label>
-          <textarea
-            value={form.address}
-            onChange={(e) => updateField("address", e.target.value)}
-            rows={4}
-            className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20 resize-none"
-            placeholder="House number, street, district, province, postal code"
-          />
-        </div>
-      </fieldset>
-
-      {/* Submit */}
-      <div className="flex justify-end pt-2">
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-lg bg-[#F4C430] px-8 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors"
-        >
-          {saving ? "Saving..." : "Save Profile"}
-        </button>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 
@@ -266,7 +291,7 @@ function SelectField({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  options: string[];
+  options: { value: string; label: string }[];
   placeholder?: string;
 }) {
   return (
@@ -281,8 +306,8 @@ function SelectField({
       >
         <option value="">{placeholder}</option>
         {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>

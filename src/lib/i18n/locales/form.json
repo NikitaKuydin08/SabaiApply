@@ -367,6 +367,122 @@
     "en": "Save",
     "th": "บันทึก"
   },
+  "form.saveProfile": {
+    "en": "Save Profile",
+    "th": "บันทึกโปรไฟล์"
+  },
+  "form.profileSaved": {
+    "en": "Profile saved successfully.",
+    "th": "บันทึกโปรไฟล์เรียบร้อยแล้ว"
+  },
+  "form.myProfile": {
+    "en": "My Profile",
+    "th": "โปรไฟล์ของฉัน"
+  },
+  "form.profileSubtitle": {
+    "en": "Personal information used for your university applications",
+    "th": "ข้อมูลส่วนตัวที่ใช้สำหรับการสมัครเข้ามหาวิทยาลัย"
+  },
+  "form.nameEnLegend": {
+    "en": "Name (English)",
+    "th": "ชื่อ (ภาษาอังกฤษ)"
+  },
+  "form.nameThLegend": {
+    "en": "Name (Thai)",
+    "th": "ชื่อ (ภาษาไทย)"
+  },
+  "form.personalDetailsLegend": {
+    "en": "Personal Details",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "form.contactLegend": {
+    "en": "Contact Information",
+    "th": "ข้อมูลติดต่อ"
+  },
+  "form.addressLegend": {
+    "en": "Address",
+    "th": "ที่อยู่"
+  },
+  "form.ph.firstNameEn": {
+    "en": "e.g. Somchai",
+    "th": "เช่น สมชาย (ภาษาอังกฤษ)"
+  },
+  "form.ph.lastNameEn": {
+    "en": "e.g. Jaidee",
+    "th": "เช่น ใจดี (ภาษาอังกฤษ)"
+  },
+  "form.ph.firstNameTh": {
+    "en": "e.g. สมชาย",
+    "th": "เช่น สมชาย"
+  },
+  "form.ph.lastNameTh": {
+    "en": "e.g. ใจดี",
+    "th": "เช่น ใจดี"
+  },
+  "form.ph.selectGender": {
+    "en": "Select gender",
+    "th": "เลือกเพศ"
+  },
+  "form.ph.selectNationality": {
+    "en": "Select nationality",
+    "th": "เลือกสัญชาติ"
+  },
+  "form.ph.phone": {
+    "en": "e.g. 081-234-5678",
+    "th": "เช่น 081-234-5678"
+  },
+  "form.ph.lineId": {
+    "en": "e.g. somchai_j",
+    "th": "เช่น somchai_j"
+  },
+  "form.ph.address": {
+    "en": "House number, street, district, province, postal code",
+    "th": "บ้านเลขที่ ถนน เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
+  },
+  "form.nationality.thai": {
+    "en": "Thai",
+    "th": "ไทย"
+  },
+  "form.nationality.american": {
+    "en": "American",
+    "th": "อเมริกัน"
+  },
+  "form.nationality.british": {
+    "en": "British",
+    "th": "อังกฤษ"
+  },
+  "form.nationality.chinese": {
+    "en": "Chinese",
+    "th": "จีน"
+  },
+  "form.nationality.indian": {
+    "en": "Indian",
+    "th": "อินเดีย"
+  },
+  "form.nationality.japanese": {
+    "en": "Japanese",
+    "th": "ญี่ปุ่น"
+  },
+  "form.nationality.korean": {
+    "en": "Korean",
+    "th": "เกาหลี"
+  },
+  "form.nationality.malaysian": {
+    "en": "Malaysian",
+    "th": "มาเลเซีย"
+  },
+  "form.nationality.singaporean": {
+    "en": "Singaporean",
+    "th": "สิงคโปร์"
+  },
+  "form.nationality.vietnamese": {
+    "en": "Vietnamese",
+    "th": "เวียดนาม"
+  },
+  "form.gender.nonBinary": {
+    "en": "Non-binary",
+    "th": "นอน-ไบนารี"
+  },
   "form.continue": {
     "en": "Continue",
     "th": "ดำเนินการต่อ"
