@@ -5,8 +5,20 @@ import { useParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Invite } from "@/types/database";
 import { PasswordInput } from "@/components/password-input";
+import { LocaleProvider, useLocale } from "@/lib/i18n/context";
+import { LanguageToggle } from "@/components/language-toggle";
+import { tReplace } from "@/lib/i18n/translations";
 
 export default function AcceptInvitePage() {
+  return (
+    <LocaleProvider defaultLocale="en" storageKey="sabaiapply-admin-locale">
+      <AcceptInviteContent />
+    </LocaleProvider>
+  );
+}
+
+function AcceptInviteContent() {
+  const { t, locale } = useLocale();
   const params = useParams();
   const token = params.token as string;
 
@@ -24,7 +36,6 @@ export default function AcceptInvitePage() {
     async function init() {
       const supabase = createClient();
 
-      // Sign out any currently logged-in user so this page is clean
       await supabase.auth.signOut();
 
       const { data, error: fetchError } = await supabase
@@ -34,19 +45,19 @@ export default function AcceptInvitePage() {
         .single();
 
       if (fetchError || !data) {
-        setInvalidReason("This invite link is invalid.");
+        setInvalidReason(t("invite_invalid"));
         setLoading(false);
         return;
       }
 
       if (data.accepted_at) {
-        setInvalidReason("This invite has already been used.");
+        setInvalidReason(t("invite_already_used"));
         setLoading(false);
         return;
       }
 
       if (new Date(data.expires_at) < new Date()) {
-        setInvalidReason("This invite has expired. Please ask your admin to send a new one.");
+        setInvalidReason(t("invite_expired"));
         setLoading(false);
         return;
       }
@@ -56,6 +67,7 @@ export default function AcceptInvitePage() {
     }
 
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   async function handleAccept(e: React.FormEvent) {
@@ -64,13 +76,13 @@ export default function AcceptInvitePage() {
     setSubmitting(true);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("passwords_not_match"));
       setSubmitting(false);
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError(t("password_too_short"));
       setSubmitting(false);
       return;
     }
@@ -79,7 +91,6 @@ export default function AcceptInvitePage() {
 
     const supabase = createClient();
 
-    // Create the auth user
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: invite.email,
       password,
@@ -98,7 +109,6 @@ export default function AcceptInvitePage() {
     }
 
     if (authData.user) {
-      // Derive university_id from faculty or invite
       let universityId: string | null = invite.university_id ?? null;
 
       if (!universityId && invite.faculty_id) {
@@ -110,13 +120,11 @@ export default function AcceptInvitePage() {
         if (faculty) universityId = faculty.university_id;
       }
 
-      // Update profile with full name and university_id
       await supabase
         .from("profiles")
         .update({ full_name: fullName, university_id: universityId })
         .eq("id", authData.user.id);
 
-      // Link to faculty
       if (invite.faculty_id) {
         await supabase.from("faculty_admins").insert({
           user_id: authData.user.id,
@@ -125,14 +133,12 @@ export default function AcceptInvitePage() {
         });
       }
 
-      // Mark invite as accepted
       await supabase
         .from("invites")
         .update({ accepted_at: new Date().toISOString() })
         .eq("id", invite.id);
     }
 
-    // Sign out — user must verify email then login themselves
     await supabase.auth.signOut();
     setSuccess(true);
     setSubmitting(false);
@@ -141,7 +147,7 @@ export default function AcceptInvitePage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafafa]">
-        <p className="text-[#666]">Loading invite...</p>
+        <p className="text-[#666]">{t("loading_invite")}</p>
       </div>
     );
   }
@@ -150,11 +156,11 @@ export default function AcceptInvitePage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafafa] p-4">
         <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white p-8 text-center">
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">Invalid Invite</h1>
+          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("invalid_invite")}</h1>
           <p className="text-base text-[#666] mt-3">{invalidReason}</p>
           <a href="/admin/login">
             <button className="mt-6 w-full rounded-lg border border-[#e0e0e0] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#fafafa] transition-colors">
-              Go to Login
+              {t("go_to_login")}
             </button>
           </a>
         </div>
@@ -166,13 +172,13 @@ export default function AcceptInvitePage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafafa] p-4">
         <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white p-8 text-center">
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">Account Created!</h1>
+          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("account_created")}</h1>
           <p className="text-base text-[#666] mt-3">
-            Please check your email at <strong>{invite?.email}</strong> to verify your account, then sign in.
+            {tReplace("verify_email_prompt", locale, { email: invite?.email ?? "" })}
           </p>
           <a href="/admin/login">
             <button className="mt-6 w-full rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] transition-colors">
-              Go to Login
+              {t("go_to_login")}
             </button>
           </a>
         </div>
@@ -183,14 +189,17 @@ export default function AcceptInvitePage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#fafafa] p-4">
       <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white p-8">
+        <div className="mb-4 flex justify-end">
+          <LanguageToggle />
+        </div>
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#1a1a1a]">SabaiApply</h1>
-          <p className="text-base text-[#666] mt-2">Set up your account</p>
+          <p className="text-base text-[#666] mt-2">{t("setup_account")}</p>
         </div>
 
         <form onSubmit={handleAccept} className="space-y-5">
           <div className="space-y-2">
-            <label className="block text-base font-medium text-[#1a1a1a]">Email</label>
+            <label className="block text-base font-medium text-[#1a1a1a]">{t("email")}</label>
             <input
               type="email"
               value={invite?.email ?? ""}
@@ -200,12 +209,12 @@ export default function AcceptInvitePage() {
           </div>
           <div className="space-y-2">
             <label htmlFor="fullName" className="block text-base font-medium text-[#1a1a1a]">
-              Full Name
+              {t("full_name")}
             </label>
             <input
               id="fullName"
               type="text"
-              placeholder="Dr. Somchai Jaidee"
+              placeholder={t("full_name_placeholder")}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
@@ -214,25 +223,25 @@ export default function AcceptInvitePage() {
           </div>
           <div className="space-y-2">
             <label htmlFor="password" className="block text-base font-medium text-[#1a1a1a]">
-              Password
+              {t("password")}
             </label>
             <PasswordInput
               id="password"
-              placeholder="At least 6 characters"
+              placeholder={t("min_6_chars")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full rounded-lg border border-[#e0e0e0] px-4 py-3.5 text-base text-[#1a1a1a] placeholder:text-[#999] focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/30 focus:outline-none transition-colors"
             />
-            <p className="text-sm text-[#999]">Minimum 6 characters</p>
+            <p className="text-sm text-[#999]">{t("min_password_hint")}</p>
           </div>
           <div className="space-y-2">
             <label htmlFor="confirmPassword" className="block text-base font-medium text-[#1a1a1a]">
-              Confirm Password
+              {t("confirm_password")}
             </label>
             <PasswordInput
               id="confirmPassword"
-              placeholder="Confirm your password"
+              placeholder={t("confirm_password_placeholder")}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -249,7 +258,7 @@ export default function AcceptInvitePage() {
             disabled={submitting}
             className="w-full rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors"
           >
-            {submitting ? "Creating account..." : "Create Account"}
+            {submitting ? t("creating_account") : t("create_account")}
           </button>
         </form>
       </div>

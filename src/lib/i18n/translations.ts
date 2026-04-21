@@ -7,6 +7,7 @@ import faq from './locales/faq.json';
 import footer from './locales/footer.json';
 import form from './locales/form.json';
 import help from './locales/help.json';
+import landing from './locales/landing.json';
 import login from './locales/login.json';
 import nav from './locales/nav.json';
 import pw from './locales/pw.json';
@@ -14,6 +15,7 @@ import search from './locales/search.json';
 import settings from './locales/settings.json';
 import signup from './locales/signup.json';
 import uni from './locales/uni.json';
+import uniApp from './locales/uni_app.json';
 
 export type Locale = "en" | "th";
 
@@ -25,6 +27,7 @@ const translations = {
   ...footer,
   ...form,
   ...help,
+  ...landing,
   ...login,
   ...nav,
   ...pw,
@@ -32,6 +35,7 @@ const translations = {
   ...settings,
   ...signup,
   ...uni,
+  ...uniApp,
 } as const;
 
 export type TranslationKey = keyof typeof translations;

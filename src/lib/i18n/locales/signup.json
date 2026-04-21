@@ -66,5 +66,37 @@
   "signup.errorPasswordsNoMatch": {
     "en": "Passwords do not match.",
     "th": "รหัสผ่านไม่ตรงกัน"
+  },
+  "signup.errorEmailExists": {
+    "en": "An account with this email already exists. Please log in instead.",
+    "th": "มีบัญชีที่ใช้อีเมลนี้อยู่แล้ว กรุณาเข้าสู่ระบบ"
+  },
+  "signup.goToLogin": {
+    "en": "Go to Login",
+    "th": "ไปหน้าเข้าสู่ระบบ"
+  },
+  "checkEmail.title": {
+    "en": "Check your email",
+    "th": "ตรวจสอบอีเมลของคุณ"
+  },
+  "checkEmail.sentTo": {
+    "en": "We sent a confirmation link to",
+    "th": "เราได้ส่งลิงก์ยืนยันไปที่"
+  },
+  "checkEmail.activate": {
+    "en": "Click the link in your email to activate your account. Once confirmed, you can log in from any device.",
+    "th": "คลิกลิงก์ในอีเมลของคุณเพื่อเปิดใช้งานบัญชี เมื่อยืนยันแล้ว คุณสามารถเข้าสู่ระบบจากอุปกรณ์ใดก็ได้"
+  },
+  "checkEmail.goToLogin": {
+    "en": "Go to Login",
+    "th": "ไปหน้าเข้าสู่ระบบ"
+  },
+  "checkEmail.spamHint": {
+    "en": "Didn't receive the email? Check your spam folder.",
+    "th": "ไม่ได้รับอีเมล? ตรวจสอบโฟลเดอร์สแปม"
+  },
+  "loading": {
+    "en": "Loading...",
+    "th": "กำลังโหลด..."
   }
 }

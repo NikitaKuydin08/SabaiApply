@@ -28,12 +28,6 @@ export default async function ProfilePage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#1a1a1a]">My Profile</h1>
-        <p className="text-base text-[#666] mt-2">
-          Personal information used for your university applications
-        </p>
-      </div>
       <ProfileForm profile={profile!} />
     </div>
   );

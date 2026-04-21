@@ -4,8 +4,10 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { Suspense } from "react";
+import { useLocale } from "@/lib/i18n/context";
 
 function CheckEmailContent() {
+  const { t } = useLocale();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
@@ -26,15 +28,15 @@ function CheckEmailContent() {
         </div>
 
         {/* Message */}
-        <h1 className="mb-3 text-2xl font-bold text-[#1a1a1a]">Check your email</h1>
+        <h1 className="mb-3 text-2xl font-bold text-[#1a1a1a]">{t("checkEmail.title")}</h1>
         <p className="mb-2 text-base leading-relaxed text-[#666]">
-          We sent a confirmation link to
+          {t("checkEmail.sentTo")}
         </p>
         {email && (
           <p className="mb-4 text-base font-semibold text-[#1a1a1a]">{email}</p>
         )}
         <p className="mb-8 text-sm leading-relaxed text-[#999]">
-          Click the link in your email to activate your account. Once confirmed, you can log in from any device.
+          {t("checkEmail.activate")}
         </p>
 
         {/* Login button */}
@@ -42,24 +44,29 @@ function CheckEmailContent() {
           href="/login?confirmed=pending"
           className="inline-block w-full rounded-lg bg-[#F4C430] px-6 py-3.5 text-base font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a]"
         >
-          Go to Login
+          {t("checkEmail.goToLogin")}
         </Link>
 
         <p className="mt-6 text-sm text-[#999]">
-          Didn&apos;t receive the email? Check your spam folder.
+          {t("checkEmail.spamHint")}
         </p>
       </div>
     </div>
   );
 }
 
+function CheckEmailFallback() {
+  const { t } = useLocale();
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#FFF9EC]">
+      <p className="text-[#666]">{t("loading")}</p>
+    </div>
+  );
+}
+
 export default function CheckEmailPage() {
   return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-[#FFF9EC]">
-        <p className="text-[#666]">Loading...</p>
-      </div>
-    }>
+    <Suspense fallback={<CheckEmailFallback />}>
       <CheckEmailContent />
     </Suspense>
   );

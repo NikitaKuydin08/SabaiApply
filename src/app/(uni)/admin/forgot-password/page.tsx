@@ -3,8 +3,19 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { LocaleProvider, useLocale } from "@/lib/i18n/context";
+import { LanguageToggle } from "@/components/language-toggle";
 
 export default function ForgotPasswordPage() {
+  return (
+    <LocaleProvider defaultLocale="en" storageKey="sabaiapply-admin-locale">
+      <ForgotPasswordContent />
+    </LocaleProvider>
+  );
+}
+
+function ForgotPasswordContent() {
+  const { t } = useLocale();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
@@ -36,14 +47,16 @@ export default function ForgotPasswordPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafafa] p-4">
         <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white p-8 text-center">
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">Check Your Email</h1>
+          <div className="mb-4 flex justify-end">
+            <LanguageToggle />
+          </div>
+          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("check_email")}</h1>
           <p className="text-base text-[#666] mt-3">
-            We sent a password reset link to <strong>{email}</strong>.
-            Click the link to set a new password.
+            {t("reset_link_sent")} <strong>{email}</strong>.
           </p>
           <Link href="/admin/login">
             <button className="mt-6 w-full rounded-lg border border-[#e0e0e0] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#fafafa] transition-colors">
-              Back to Login
+              {t("back_to_login")}
             </button>
           </Link>
         </div>
@@ -54,17 +67,20 @@ export default function ForgotPasswordPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#fafafa] p-4">
       <div className="w-full max-w-[520px] rounded-2xl border border-[#e8e8e8] bg-white p-8">
+        <div className="mb-4 flex justify-end">
+          <LanguageToggle />
+        </div>
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#1a1a1a]">Forgot Password</h1>
+          <h1 className="text-3xl font-bold text-[#1a1a1a]">{t("forgot_password_title")}</h1>
           <p className="text-base text-[#666] mt-2">
-            Enter your email and we&apos;ll send you a reset link.
+            {t("forgot_password_desc")}
           </p>
         </div>
 
         <form onSubmit={handleReset} className="space-y-5">
           <div className="space-y-2">
             <label htmlFor="email" className="block text-base font-medium text-[#1a1a1a]">
-              Email
+              {t("email")}
             </label>
             <input
               id="email"
@@ -86,13 +102,13 @@ export default function ForgotPasswordPage() {
             disabled={loading}
             className="w-full rounded-lg bg-[#F4C430] px-5 py-4 text-lg font-semibold text-[#1a1a1a] hover:bg-[#e6b82a] disabled:opacity-50 transition-colors"
           >
-            {loading ? "Sending..." : "Send Reset Link"}
+            {loading ? t("sending") : t("send_reset_link")}
           </button>
         </form>
 
         <p className="mt-5 text-center text-base">
           <Link href="/admin/login" className="text-[#F4C430] font-medium hover:underline">
-            Back to Login
+            {t("back_to_login")}
           </Link>
         </p>
       </div>
