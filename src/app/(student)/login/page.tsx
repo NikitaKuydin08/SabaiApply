@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, X } from "lucide-react";
-import { useStudentLocale } from "../i18n/context";
+import { useLocale } from "@/lib/i18n/context";
 import { Suspense } from "react";
 
 function LoginContent() {
@@ -17,7 +17,7 @@ function LoginContent() {
   const [showBanner, setShowBanner] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { locale, setLocale, t } = useStudentLocale();
+  const { locale, setLocale, t } = useLocale();
   const isFromSignup = searchParams.get("confirmed") === "pending";
 
   async function handleSubmit(e: React.FormEvent) {

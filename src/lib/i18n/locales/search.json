@@ -1,0 +1,70 @@
+{
+  "search.title": {
+    "en": "University Search",
+    "th": "ค้นหามหาวิทยาลัย"
+  },
+  "search.label": {
+    "en": "University or City Name",
+    "th": "ชื่อมหาวิทยาลัยหรือเมือง"
+  },
+  "search.placeholder": {
+    "en": "Search by name or city...",
+    "th": "ค้นหาด้วยชื่อหรือเมือง..."
+  },
+  "search.result": {
+    "en": "result",
+    "th": "ผลลัพธ์"
+  },
+  "search.results": {
+    "en": "results",
+    "th": "ผลลัพธ์"
+  },
+  "search.sortBy": {
+    "en": "Sort by: Name",
+    "th": "เรียงตาม: ชื่อ"
+  },
+  "search.add": {
+    "en": "Add",
+    "th": "เพิ่ม"
+  },
+  "search.remove": {
+    "en": "Remove",
+    "th": "ลบ"
+  },
+  "search.noResults": {
+    "en": "No universities found matching your search.",
+    "th": "ไม่พบมหาวิทยาลัยที่ตรงกับการค้นหา"
+  },
+  "search.moreFilters": {
+    "en": "More filters",
+    "th": "ตัวกรองเพิ่มเติม"
+  },
+  "search.filtersTitle": {
+    "en": "Filters",
+    "th": "ตัวกรอง"
+  },
+  "search.city": {
+    "en": "City",
+    "th": "เมือง"
+  },
+  "search.cityPlaceholder": {
+    "en": "e.g. Bangkok, Chiang Mai",
+    "th": "เช่น กรุงเทพฯ, เชียงใหม่"
+  },
+  "search.distance": {
+    "en": "Distance from zip code",
+    "th": "ระยะทางจากรหัสไปรษณีย์"
+  },
+  "search.distancePlaceholder": {
+    "en": "e.g. 10100",
+    "th": "เช่น 10100"
+  },
+  "search.clearFilters": {
+    "en": "Clear filters",
+    "th": "ล้างตัวกรอง"
+  },
+  "search.show": {
+    "en": "Show",
+    "th": "แสดง"
+  }
+}

@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabase/client";
 import type { StudentDocument, DocType } from "@/types/database";
 import { Upload, CheckCircle, FileText } from "lucide-react";
 import SectionPanel from "./section-panel";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
+import { tReplace } from "@/lib/i18n/translations";
 
 interface Props {
   documents: StudentDocument[];
@@ -18,27 +21,28 @@ interface Props {
 
 interface DocSlot {
   type: DocType;
-  label: string;
+  labelKey: TranslationKey;
   required: boolean;
 }
 
 const DOCUMENT_SLOTS: DocSlot[] = [
-  { type: "transcript", label: "High School Transcript", required: true },
-  { type: "id_copy", label: "National ID Card / Passport Copy", required: true },
-  { type: "photo", label: "Profile Photo", required: true },
-  { type: "high_school_diploma", label: "High School Diploma", required: true },
-  { type: "student_status_cert", label: "Student Status Certificate (if still studying)", required: false },
-  { type: "high_school_equivalency", label: "High School Equivalency Certificate (GED/IB)", required: false },
-  { type: "gpa_equivalency_cert", label: "GPA Equivalency Certificate", required: false },
-  { type: "score_certificate", label: "Test Score Certificate(s)", required: true },
-  { type: "english_proficiency_cert", label: "English Proficiency Certificate", required: false },
-  { type: "passport_copy", label: "Passport Copy (for non-Thai)", required: false },
-  { type: "name_change_cert", label: "Name Change Certificate", required: false },
-  { type: "recommendation_letter", label: "Recommendation Letter", required: false },
-  { type: "certificate", label: "Other Certificate / Award", required: false },
+  { type: "transcript", labelKey: "form.doc.transcript", required: true },
+  { type: "id_copy", labelKey: "form.doc.idCopy", required: true },
+  { type: "photo", labelKey: "form.doc.photo", required: true },
+  { type: "high_school_diploma", labelKey: "form.doc.highSchoolDiploma", required: true },
+  { type: "student_status_cert", labelKey: "form.doc.studentStatusCert", required: false },
+  { type: "high_school_equivalency", labelKey: "form.doc.gedIb", required: false },
+  { type: "gpa_equivalency_cert", labelKey: "form.doc.gpaEquiv", required: false },
+  { type: "score_certificate", labelKey: "form.doc.scoreCert", required: true },
+  { type: "english_proficiency_cert", labelKey: "form.doc.englishCert", required: false },
+  { type: "passport_copy", labelKey: "form.doc.passportCopy", required: false },
+  { type: "name_change_cert", labelKey: "form.doc.nameChange", required: false },
+  { type: "recommendation_letter", labelKey: "form.doc.recommendation", required: false },
+  { type: "certificate", labelKey: "form.doc.otherCert", required: false },
 ];
 
 export default function DocumentsSection({ documents, studentId, userId, onClose, inline, onSaved }: Props) {
+  const { t, locale } = useLocale();
   const router = useRouter();
   const [localDocs, setLocalDocs] = useState<StudentDocument[]>(documents);
   useEffect(() => { setLocalDocs(documents); }, [documents]);
@@ -77,7 +81,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
       .upload(filePath, file);
 
     if (uploadError) {
-      setError(`Upload failed: ${uploadError.message}`);
+      setError(tReplace("form.validation.uploadFail", locale, { error: uploadError.message }));
       setUploading(null);
       resetFileInput();
       return;
@@ -113,7 +117,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
       .single();
 
     if (insertError) {
-      setError(`Save failed: ${insertError.message}`);
+      setError(tReplace("form.validation.saveFail", locale, { error: insertError.message }));
       setUploading(null);
       resetFileInput();
       return;
@@ -154,7 +158,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
 
         {/* Documents */}
         <div>
-          <h3 className="mb-3 text-base font-semibold text-[#1a1a1a]">Documents</h3>
+          <h3 className="mb-3 text-base font-semibold text-[#1a1a1a]">{t("form.documents")}</h3>
           <div className="space-y-2">
             {DOCUMENT_SLOTS.map((slot) => {
               const doc = getDocForType(slot.type);
@@ -173,8 +177,8 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
                     )}
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-[#1a1a1a]">
-                        {slot.label}
-                        {slot.required ? <span className="ml-0.5 text-red-500">*</span> : <span className="ml-1 text-xs font-normal text-[#999]">(optional)</span>}
+                        {t(slot.labelKey)}
+                        {slot.required ? <span className="ml-0.5 text-red-500">*</span> : <span className="ml-1 text-xs font-normal text-[#999]">{t("form.optional")}</span>}
                       </p>
                       {doc && (
                         <p className="truncate text-xs text-[#888]">{doc.file_name}</p>
@@ -186,7 +190,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
                     disabled={isUploading}
                     className="ml-3 shrink-0 rounded-lg border border-[#e0e0e0] px-3 py-1.5 text-xs font-medium text-[#666] transition-colors hover:bg-[#f5f5f5] disabled:opacity-50"
                   >
-                    {isUploading ? "Uploading..." : doc ? "Replace" : "Upload"}
+                    {isUploading ? t("form.uploading") : doc ? t("form.replace") : t("form.upload")}
                   </button>
                 </div>
               );
@@ -214,7 +218,7 @@ export default function DocumentsSection({ documents, studentId, userId, onClose
   );
 
   return (
-    <SectionPanel title="Documents" onClose={onClose}>
+    <SectionPanel title={t("form.documents")} onClose={onClose}>
       {formContent}
     </SectionPanel>
   );

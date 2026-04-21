@@ -1,0 +1,742 @@
+{
+  "form.identity": {
+    "en": "Identity",
+    "th": "ข้อมูลตัวตน"
+  },
+  "form.prefix": {
+    "en": "Prefix",
+    "th": "คำนำหน้า"
+  },
+  "form.prefix.mr": {
+    "en": "Mr.",
+    "th": "นาย"
+  },
+  "form.prefix.ms": {
+    "en": "Ms.",
+    "th": "นางสาว"
+  },
+  "form.prefix.mrs": {
+    "en": "Mrs.",
+    "th": "นาง"
+  },
+  "form.prefix.master": {
+    "en": "Master",
+    "th": "เด็กชาย"
+  },
+  "form.prefix.miss": {
+    "en": "Miss",
+    "th": "เด็กหญิง"
+  },
+  "form.idType": {
+    "en": "ID Type",
+    "th": "ประเภทบัตร"
+  },
+  "form.idType.thai": {
+    "en": "Thai ID",
+    "th": "บัตรประชาชนไทย"
+  },
+  "form.idType.passport": {
+    "en": "Passport",
+    "th": "หนังสือเดินทาง"
+  },
+  "form.idType.gcode": {
+    "en": "G-Code",
+    "th": "G-Code"
+  },
+  "form.idNumber": {
+    "en": "ID Number",
+    "th": "หมายเลขบัตร"
+  },
+  "form.nameEN": {
+    "en": "Name (English)",
+    "th": "ชื่อ (ภาษาอังกฤษ)"
+  },
+  "form.nameTH": {
+    "en": "Name (Thai)",
+    "th": "ชื่อ (ภาษาไทย)"
+  },
+  "form.firstName": {
+    "en": "First Name",
+    "th": "ชื่อ"
+  },
+  "form.lastName": {
+    "en": "Last Name",
+    "th": "นามสกุล"
+  },
+  "form.personalInfo": {
+    "en": "Personal Information",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "form.personalDetails": {
+    "en": "Personal Details",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "form.dob": {
+    "en": "Date of Birth",
+    "th": "วันเกิด"
+  },
+  "form.nationality": {
+    "en": "Nationality",
+    "th": "สัญชาติ"
+  },
+  "form.gender": {
+    "en": "Gender",
+    "th": "เพศ"
+  },
+  "form.gender.male": {
+    "en": "Male",
+    "th": "ชาย"
+  },
+  "form.gender.female": {
+    "en": "Female",
+    "th": "หญิง"
+  },
+  "form.gender.other": {
+    "en": "Other",
+    "th": "อื่นๆ"
+  },
+  "form.gender.preferNotToSay": {
+    "en": "Prefer not to say",
+    "th": "ไม่ระบุ"
+  },
+  "form.contact": {
+    "en": "Contact",
+    "th": "ช่องทางติดต่อ"
+  },
+  "form.phone": {
+    "en": "Phone",
+    "th": "โทรศัพท์"
+  },
+  "form.lineId": {
+    "en": "LINE ID",
+    "th": "LINE ID"
+  },
+  "form.contactEmail": {
+    "en": "Contact Email",
+    "th": "อีเมลติดต่อ"
+  },
+  "form.registeredEmail": {
+    "en": "This is your registered email",
+    "th": "นี่คืออีเมลที่ลงทะเบียน"
+  },
+  "form.address": {
+    "en": "Address",
+    "th": "ที่อยู่"
+  },
+  "form.country": {
+    "en": "Country",
+    "th": "ประเทศ"
+  },
+  "form.province": {
+    "en": "Province",
+    "th": "จังหวัด"
+  },
+  "form.cityDistrict": {
+    "en": "City / District",
+    "th": "เขต / อำเภอ"
+  },
+  "form.zipCode": {
+    "en": "Zip Code",
+    "th": "รหัสไปรษณีย์"
+  },
+  "form.addressLine": {
+    "en": "Address Line",
+    "th": "ที่อยู่"
+  },
+  "form.fullAddress": {
+    "en": "Full Address",
+    "th": "ที่อยู่เต็ม"
+  },
+  "form.mailingAddress": {
+    "en": "Mailing Address",
+    "th": "ที่อยู่สำหรับจัดส่งเอกสาร"
+  },
+  "form.sameAsPermanent": {
+    "en": "Same as permanent address",
+    "th": "เหมือนกับที่อยู่ตามทะเบียนบ้าน"
+  },
+  "form.additionalInfo": {
+    "en": "Additional Information",
+    "th": "ข้อมูลเพิ่มเติม"
+  },
+  "form.religion": {
+    "en": "Religion",
+    "th": "ศาสนา"
+  },
+  "form.religion.buddhism": {
+    "en": "Buddhism",
+    "th": "พุทธ"
+  },
+  "form.religion.islam": {
+    "en": "Islam",
+    "th": "อิสลาม"
+  },
+  "form.religion.christianity": {
+    "en": "Christianity",
+    "th": "คริสต์"
+  },
+  "form.religion.hinduism": {
+    "en": "Hinduism",
+    "th": "ฮินดู"
+  },
+  "form.religion.other": {
+    "en": "Other",
+    "th": "อื่นๆ"
+  },
+  "form.formerName": {
+    "en": "Former Name",
+    "th": "ชื่อเดิม"
+  },
+  "form.nickname": {
+    "en": "Nickname / Preferred Name",
+    "th": "ชื่อเล่น"
+  },
+  "form.firstLanguage": {
+    "en": "First Language",
+    "th": "ภาษาหลัก"
+  },
+  "form.languageAtHome": {
+    "en": "Language Spoken at Home",
+    "th": "ภาษาที่พูดที่บ้าน"
+  },
+  "form.ifNotThaiEnglish": {
+    "en": "(if not Thai/English)",
+    "th": "(หากไม่ใช่ไทย/อังกฤษ)"
+  },
+  "form.ifChanged": {
+    "en": "(if changed)",
+    "th": "(หากมีการเปลี่ยน)"
+  },
+  "form.ph.idNumber.thai": {
+    "en": "Enter 13-digit Thai ID (e.g. 1100123456789)",
+    "th": "กรอกเลขบัตรประชาชน 13 หลัก (เช่น 1100123456789)"
+  },
+  "form.ph.idNumber.passport": {
+    "en": "Enter passport number (e.g. AA1234567)",
+    "th": "กรอกหมายเลขหนังสือเดินทาง (เช่น AA1234567)"
+  },
+  "form.ph.idNumber.gcode": {
+    "en": "Enter G-Code issued by Ministry of Education",
+    "th": "กรอก G-Code ที่ออกโดยกระทรวงศึกษาธิการ"
+  },
+  "form.ph.firstName": {
+    "en": "First name",
+    "th": "ชื่อ"
+  },
+  "form.ph.lastName": {
+    "en": "Last name",
+    "th": "นามสกุล"
+  },
+  "form.ph.nationality": {
+    "en": "Search or select nationality...",
+    "th": "ค้นหาหรือเลือกสัญชาติ..."
+  },
+  "form.ph.phoneNumber": {
+    "en": "Phone number",
+    "th": "หมายเลขโทรศัพท์"
+  },
+  "form.ph.country": {
+    "en": "Search or select country...",
+    "th": "ค้นหาหรือเลือกประเทศ..."
+  },
+  "form.ph.province": {
+    "en": "Select province...",
+    "th": "เลือกจังหวัด..."
+  },
+  "form.ph.cityDistrict": {
+    "en": "District / อำเภอ",
+    "th": "เขต / อำเภอ"
+  },
+  "form.ph.zipCode": {
+    "en": "10100",
+    "th": "10100"
+  },
+  "form.ph.addressLine": {
+    "en": "House number, street, soi...",
+    "th": "เลขที่บ้าน, ถนน, ซอย..."
+  },
+  "form.ph.fullAddress": {
+    "en": "Full address including city, state/province, postal code",
+    "th": "ที่อยู่เต็ม รวมถึงเมือง จังหวัด รหัสไปรษณีย์"
+  },
+  "form.ph.fullMailingAddress": {
+    "en": "Full mailing address",
+    "th": "ที่อยู่สำหรับจัดส่งเอกสารแบบเต็ม"
+  },
+  "form.ph.formerName": {
+    "en": "Previous legal name",
+    "th": "ชื่อเดิมตามบัตรประชาชน"
+  },
+  "form.ph.nickname": {
+    "en": "What you prefer to be called",
+    "th": "ชื่อเล่น"
+  },
+  "form.ph.firstLanguage": {
+    "en": "e.g. Chinese, Japanese",
+    "th": "เช่น จีน, ญี่ปุ่น"
+  },
+  "form.ph.languageAtHome": {
+    "en": "e.g. Thai, English",
+    "th": "เช่น ไทย, อังกฤษ"
+  },
+  "form.ph.relationship": {
+    "en": "e.g. Uncle, Aunt, Grandparent",
+    "th": "เช่น ลุง, ป้า, ปู่ย่าตายาย"
+  },
+  "form.ph.schoolProvince": {
+    "en": "e.g. Bangkok, Chiang Mai",
+    "th": "เช่น กรุงเทพฯ, เชียงใหม่"
+  },
+  "form.ph.title": {
+    "en": "e.g. Science Fair Project, Volunteer Work",
+    "th": "เช่น โครงงานวิทยาศาสตร์, งานอาสาสมัคร"
+  },
+  "form.ph.description": {
+    "en": "Describe your role, what you did, what you learned...",
+    "th": "อธิบายบทบาทของคุณ สิ่งที่คุณทำ สิ่งที่คุณได้เรียนรู้..."
+  },
+  "form.ph.organizer": {
+    "en": "e.g. KMITL, Thai Red Cross",
+    "th": "เช่น สจล., สภากาชาดไทย"
+  },
+  "form.ph.resultAward": {
+    "en": "e.g. Gold Medal, 1st Place, Participant",
+    "th": "เช่น รางวัลเหรียญทอง, อันดับที่ 1, ผู้เข้าร่วม"
+  },
+  "form.validation.nameRequired": {
+    "en": "First name and last name (English) are required.",
+    "th": "ต้องระบุชื่อและนามสกุล (ภาษาอังกฤษ)"
+  },
+  "form.validation.idRequired": {
+    "en": "ID number is required.",
+    "th": "ต้องระบุเลขบัตรประชาชนหรือหนังสือเดินทาง"
+  },
+  "form.validation.thaiIdDigits": {
+    "en": "Thai ID must contains exactly 13 numeric digits.",
+    "th": "เลขบัตรประชาชนไทยต้องประกอบด้วยตัวเลข 13 หลัก"
+  },
+  "form.validation.invalidThaiId": {
+    "en": "Invalid Thai ID number. Please check your ID number and try again.",
+    "th": "เลขบัตรประชาชนไทยไม่ถูกต้อง โปรดตรวจสอบอีกครั้ง"
+  },
+  "form.validation.dobRequired": {
+    "en": "Date of birth is required.",
+    "th": "ต้องระบุวันเกิด"
+  },
+  "form.validation.nationalityRequired": {
+    "en": "Nationality is required.",
+    "th": "ต้องระบุสัญชาติ"
+  },
+  "form.validation.genderRequired": {
+    "en": "Gender is required.",
+    "th": "ต้องระบุเพศ"
+  },
+  "form.validation.phoneRequired": {
+    "en": "Phone number is required.",
+    "th": "ต้องระบุหมายเลขโทรศัพท์"
+  },
+  "form.validation.addressRequired": {
+    "en": "Address is required.",
+    "th": "ต้องระบุที่อยู่"
+  },
+  "form.validation.invalidGpa": {
+    "en": "GPA must be between 0.00 and 4.00.",
+    "th": "เกรดเฉลี่ยต้องอยู่ระหว่าง 0.00 ถึง 4.00"
+  },
+  "form.validation.required": {
+    "en": "{{field}} is required.",
+    "th": "ต้องระบุ {{field}}"
+  },
+  "form.validation.portfolioFail": {
+    "en": "Failed to create portfolio.",
+    "th": "สร้างแฟ้มสะสมผลงานไม่สำเร็จ"
+  },
+  "form.validation.uploadFail": {
+    "en": "Upload failed: {{error}}",
+    "th": "อัปโหลดไม่สำเร็จ: {{error}}"
+  },
+  "form.validation.saveFail": {
+    "en": "Save failed: {{error}}",
+    "th": "บันทึกข้อมูลไม่สำเร็จ: {{error}}"
+  },
+  "form.optional": {
+    "en": "(optional)",
+    "th": "(ไม่บังคับ)"
+  },
+  "form.save": {
+    "en": "Save",
+    "th": "บันทึก"
+  },
+  "form.continue": {
+    "en": "Continue",
+    "th": "ดำเนินการต่อ"
+  },
+  "form.saving": {
+    "en": "Saving...",
+    "th": "กำลังบันทึก..."
+  },
+  "form.searchSelect": {
+    "en": "Search or select...",
+    "th": "ค้นหาหรือเลือก..."
+  },
+  "form.noResults": {
+    "en": "No results",
+    "th": "ไม่พบผลลัพธ์"
+  },
+  "form.familyInfo": {
+    "en": "Family Information",
+    "th": "ข้อมูลครอบครัว"
+  },
+  "form.father": {
+    "en": "Father",
+    "th": "บิดา"
+  },
+  "form.mother": {
+    "en": "Mother",
+    "th": "มารดา"
+  },
+  "form.guardian": {
+    "en": "Guardian",
+    "th": "ผู้ปกครอง"
+  },
+  "form.hasGuardian": {
+    "en": "I have a separate guardian",
+    "th": "ฉันมีผู้ปกครองแยกต่างหาก"
+  },
+  "form.relationship": {
+    "en": "Relationship",
+    "th": "ความสัมพันธ์"
+  },
+  "form.occupation": {
+    "en": "Occupation",
+    "th": "อาชีพ"
+  },
+  "form.educationLevel": {
+    "en": "Education Level",
+    "th": "ระดับการศึกษา"
+  },
+  "form.edu.belowHighSchool": {
+    "en": "Below high school",
+    "th": "ต่ำกว่ามัธยมปลาย"
+  },
+  "form.edu.highSchool": {
+    "en": "High school",
+    "th": "มัธยมปลาย"
+  },
+  "form.edu.bachelor": {
+    "en": "Bachelor",
+    "th": "ปริญญาตรี"
+  },
+  "form.edu.master": {
+    "en": "Master",
+    "th": "ปริญญาโท"
+  },
+  "form.edu.doctorate": {
+    "en": "Doctorate",
+    "th": "ปริญญาเอก"
+  },
+  "form.household": {
+    "en": "Household",
+    "th": "ครัวเรือน"
+  },
+  "form.income": {
+    "en": "Household Income (THB/month)",
+    "th": "รายได้ครัวเรือน (บาท/เดือน)"
+  },
+  "form.siblings": {
+    "en": "Number of Siblings",
+    "th": "จำนวนพี่น้อง"
+  },
+  "form.siblingOrder": {
+    "en": "Sibling Order",
+    "th": "ลำดับพี่น้อง"
+  },
+  "form.parentNote": {
+    "en": "Fill in if applicable. At least one parent is required.",
+    "th": "กรอกข้อมูลตามความเหมาะสม ต้องกรอกอย่างน้อยหนึ่งคน"
+  },
+  "form.education": {
+    "en": "Education",
+    "th": "การศึกษา"
+  },
+  "form.school": {
+    "en": "School",
+    "th": "โรงเรียน"
+  },
+  "form.schoolProvince": {
+    "en": "School Province",
+    "th": "จังหวัดของโรงเรียน"
+  },
+  "form.schoolName": {
+    "en": "School Name",
+    "th": "ชื่อโรงเรียน"
+  },
+  "form.curriculum": {
+    "en": "Curriculum Type",
+    "th": "ประเภทหลักสูตร"
+  },
+  "form.curriculum.thaiNational": {
+    "en": "Thai National",
+    "th": "หลักสูตรไทย"
+  },
+  "form.curriculum.international": {
+    "en": "International",
+    "th": "หลักสูตรนานาชาติ"
+  },
+  "form.curriculum.ged": {
+    "en": "GED",
+    "th": "GED"
+  },
+  "form.curriculum.overseas": {
+    "en": "Overseas",
+    "th": "หลักสูตรต่างประเทศ"
+  },
+  "form.studyPlan": {
+    "en": "Study Plan",
+    "th": "แผนการเรียน"
+  },
+  "form.academic": {
+    "en": "Academic",
+    "th": "วิชาการ"
+  },
+  "form.gpa": {
+    "en": "GPA",
+    "th": "เกรดเฉลี่ย"
+  },
+  "form.gradYear": {
+    "en": "Graduation Year",
+    "th": "ปีที่จบการศึกษา"
+  },
+  "form.gradeLevel": {
+    "en": "Current Grade Level",
+    "th": "ระดับชั้นปัจจุบัน"
+  },
+  "form.grade.graduated": {
+    "en": "Graduated",
+    "th": "จบการศึกษาแล้ว"
+  },
+  "form.transcript": {
+    "en": "Transcript",
+    "th": "ใบแสดงผลการเรียน"
+  },
+  "form.viewTranscript": {
+    "en": "View uploaded transcript",
+    "th": "ดูใบแสดงผลการเรียนที่อัปโหลด"
+  },
+  "form.scoreType": {
+    "en": "Score Type",
+    "th": "ประเภทคะแนน"
+  },
+  "form.subType": {
+    "en": "Sub Type",
+    "th": "ประเภทย่อย"
+  },
+  "form.scoreValue": {
+    "en": "Score Value",
+    "th": "คะแนน"
+  },
+  "form.totalPossible": {
+    "en": "Total Possible",
+    "th": "คะแนนเต็ม"
+  },
+  "form.testDate": {
+    "en": "Test Date",
+    "th": "วันที่สอบ"
+  },
+  "form.cefrLevel": {
+    "en": "CEFR Level",
+    "th": "ระดับ CEFR"
+  },
+  "form.addScore": {
+    "en": "Add Score",
+    "th": "เพิ่มคะแนน"
+  },
+  "form.addNewScore": {
+    "en": "Add New Score",
+    "th": "เพิ่มคะแนนใหม่"
+  },
+  "form.noScores": {
+    "en": "No test scores added yet.",
+    "th": "ยังไม่มีคะแนนสอบ"
+  },
+  "form.cancel": {
+    "en": "Cancel",
+    "th": "ยกเลิก"
+  },
+  "form.activities": {
+    "en": "Activities & Achievements",
+    "th": "กิจกรรมและผลงาน"
+  },
+  "form.type": {
+    "en": "Type",
+    "th": "ประเภท"
+  },
+  "form.title": {
+    "en": "Title",
+    "th": "หัวข้อ/ชื่อ"
+  },
+  "form.description": {
+    "en": "Description",
+    "th": "รายละเอียด"
+  },
+  "form.organizer": {
+    "en": "Organizer / Institution",
+    "th": "ผู้จัด/สถาบัน"
+  },
+  "form.startDate": {
+    "en": "Start Date",
+    "th": "วันที่เริ่ม"
+  },
+  "form.endDate": {
+    "en": "End Date",
+    "th": "วันที่สิ้นสุด"
+  },
+  "form.compLevel": {
+    "en": "Competition Level",
+    "th": "ระดับการแข่งขัน"
+  },
+  "form.resultAward": {
+    "en": "Result / Award",
+    "th": "ผลการแข่งขัน/รางวัล"
+  },
+  "form.addActivity": {
+    "en": "Add Activity or Achievement",
+    "th": "เพิ่มกิจกรรมหรือผลงาน"
+  },
+  "form.addNewItem": {
+    "en": "Add New Item",
+    "th": "เพิ่มรายการใหม่"
+  },
+  "form.noActivities": {
+    "en": "No activities or achievements added yet.",
+    "th": "ยังไม่มีกิจกรรมหรือผลงาน"
+  },
+  "form.addActivityNote": {
+    "en": "Add your projects, competitions, awards, and more.",
+    "th": "เพิ่มโครงงาน การแข่งขัน รางวัล และอื่นๆ ของคุณ"
+  },
+  "form.item.project": {
+    "en": "Project",
+    "th": "โครงงาน/โปรเจกต์"
+  },
+  "form.item.activity": {
+    "en": "Activity",
+    "th": "กิจกรรม"
+  },
+  "form.item.competition": {
+    "en": "Competition",
+    "th": "การแข่งขัน"
+  },
+  "form.item.camp": {
+    "en": "Academic Camp",
+    "th": "ค่ายวิชาการ"
+  },
+  "form.item.course": {
+    "en": "Course / Certification",
+    "th": "หลักสูตร/ใบประกาศนียบัตร"
+  },
+  "form.item.award": {
+    "en": "Award / Achievement",
+    "th": "รางวัล/ความสำเร็จ"
+  },
+  "form.item.other": {
+    "en": "Other",
+    "th": "อื่นๆ"
+  },
+  "form.level.school": {
+    "en": "School",
+    "th": "ระดับโรงเรียน"
+  },
+  "form.level.regional": {
+    "en": "Regional",
+    "th": "ระดับภูมิภาค"
+  },
+  "form.level.national": {
+    "en": "National",
+    "th": "ระดับประเทศ"
+  },
+  "form.level.international": {
+    "en": "International",
+    "th": "ระดับนานาชาติ"
+  },
+  "form.documents": {
+    "en": "Documents",
+    "th": "เอกสาร"
+  },
+  "form.upload": {
+    "en": "Upload",
+    "th": "อัปโหลด"
+  },
+  "form.replace": {
+    "en": "Replace",
+    "th": "เปลี่ยน"
+  },
+  "form.uploading": {
+    "en": "Uploading...",
+    "th": "กำลังอัปโหลด..."
+  },
+  "form.ph.subType": {
+    "en": "e.g. PAT-1, Math",
+    "th": "เช่น PAT-1, คณิตศาสตร์"
+  },
+  "form.ph.score": {
+    "en": "Score",
+    "th": "คะแนน"
+  },
+  "form.ph.total": {
+    "en": "e.g. 300",
+    "th": "เช่น 300"
+  },
+  "form.doc.transcript": {
+    "en": "High School Transcript",
+    "th": "ใบแสดงผลการเรียน (Transcript)"
+  },
+  "form.doc.idCopy": {
+    "en": "National ID Card / Passport Copy",
+    "th": "สำเนาบัตรประชาชน / หนังสือเดินทาง"
+  },
+  "form.doc.photo": {
+    "en": "Profile Photo",
+    "th": "รูปถ่าย"
+  },
+  "form.doc.highSchoolDiploma": {
+    "en": "High School Diploma",
+    "th": "วุฒิการศึกษามัธยมปลาย"
+  },
+  "form.doc.studentStatusCert": {
+    "en": "Student Status Certificate (if still studying)",
+    "th": "หนังสือรับรองสภาพการเป็นนักเรียน (กรณีที่ยังศึกษาอยู่)"
+  },
+  "form.doc.gedIb": {
+    "en": "High School Equivalency Certificate (GED/IB)",
+    "th": "วุฒิเทียบเท่ามัธยมปลาย (GED/IB)"
+  },
+  "form.doc.gpaEquiv": {
+    "en": "GPA Equivalency Certificate",
+    "th": "หนังสือรับรองการเทียบเกรด (GPA)"
+  },
+  "form.doc.scoreCert": {
+    "en": "Test Score Certificate(s)",
+    "th": "ใบรายงานคะแนนสอบ"
+  },
+  "form.doc.englishCert": {
+    "en": "English Proficiency Certificate",
+    "th": "ใบรับรองความสามารถทางภาษาอังกฤษ"
+  },
+  "form.doc.passportCopy": {
+    "en": "Passport Copy (for non-Thai)",
+    "th": "สำเนาหนังสือเดินทาง (สำหรับชาวต่างชาติ)"
+  },
+  "form.doc.nameChange": {
+    "en": "Name Change Certificate",
+    "th": "ใบเปลี่ยนชื่อ/นามสกุล"
+  },
+  "form.doc.recommendation": {
+    "en": "Recommendation Letter",
+    "th": "จดหมายแนะนำ (Recommendation Letter)"
+  },
+  "form.doc.otherCert": {
+    "en": "Other Certificate / Award",
+    "th": "ประกาศนียบัตร / รางวัลอื่นๆ"
+  }
+}

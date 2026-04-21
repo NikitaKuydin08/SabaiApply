@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import type { StudentScore, ScoreType } from "@/types/database";
 import { Plus, Trash2 } from "lucide-react";
 import SectionPanel from "./section-panel";
+import { useLocale } from "@/lib/i18n/context";
+import { tReplace } from "@/lib/i18n/translations";
 
 interface Props {
   scores: StudentScore[];
@@ -36,6 +38,7 @@ const SCORE_TYPES: ScoreType[] = [
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 export default function TestScoresSection({ scores, studentId, onClose, inline, onSaved }: Props) {
+  const { t, locale } = useLocale();
   const router = useRouter();
   const [localScores, setLocalScores] = useState<StudentScore[]>(scores);
   useEffect(() => { setLocalScores(scores); }, [scores]);
@@ -67,7 +70,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
 
   async function handleAddScore() {
     if (!newScoreValue) {
-      setError("Score value is required.");
+      setError(tReplace("form.validation.required", locale, { field: t("form.scoreValue") }));
       return;
     }
 
@@ -136,7 +139,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
         {/* Existing scores */}
         {localScores.length === 0 && !showAddForm && (
           <div className="rounded-lg border border-dashed border-[#e0e0e0] px-6 py-8 text-center">
-            <p className="text-sm text-[#888]">No test scores added yet.</p>
+            <p className="text-sm text-[#888]">{t("form.noScores")}</p>
           </div>
         )}
 
@@ -182,24 +185,24 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
         {/* Add score form */}
         {showAddForm ? (
           <div className="rounded-lg border border-[#F4C430]/40 bg-[#FFFBF0] p-4">
-            <h3 className="mb-4 text-sm font-semibold text-[#1a1a1a]">Add New Score</h3>
+            <h3 className="mb-4 text-sm font-semibold text-[#1a1a1a]">{t("form.addNewScore")}</h3>
             <div className="space-y-4">
               <div className="space-y-4">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">Score Type</label>
+                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">{t("form.scoreType")}</label>
                   <div className="flex gap-2 flex-wrap">
-                    {SCORE_TYPES.map((t) => (
+                    {SCORE_TYPES.map((t_val) => (
                       <button
-                        key={t}
+                        key={t_val}
                         type="button"
-                        onClick={() => setNewScoreType(t)}
+                        onClick={() => setNewScoreType(t_val)}
                         className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-                          newScoreType === t
+                          newScoreType === t_val
                             ? "border-[#F4C430] bg-[#FFF3D0] text-[#1a1a1a]"
                             : "border-[#e0e0e0] text-[#666] hover:border-[#ccc]"
                         }`}
                       >
-                        {t}
+                        {t_val}
                       </button>
                     ))}
                   </div>
@@ -207,12 +210,12 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">Sub Type</label>
+                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">{t("form.subType")}</label>
                   <input
                     type="text"
                     value={newSubType}
                     onChange={(e) => setNewSubType(e.target.value)}
-                    placeholder="e.g. PAT-1, Math"
+                    placeholder={t("form.ph.subType")}
                     className={inputCls}
                   />
                 </div>
@@ -220,33 +223,33 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">Score Value</label>
+                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">{t("form.scoreValue")}</label>
                   <input
                     type="number"
                     step="0.01"
                     value={newScoreValue}
                     onChange={(e) => setNewScoreValue(e.target.value)}
-                    placeholder="Score"
+                    placeholder={t("form.ph.score")}
                     className={inputCls}
                   />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">
-                    Total Possible <span className="font-normal text-[#888]">(optional)</span>
+                    {t("form.totalPossible")} <span className="font-normal text-[#888]">{t("form.optional")}</span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
                     value={newTotalPossible}
                     onChange={(e) => setNewTotalPossible(e.target.value)}
-                    placeholder="e.g. 300"
+                    placeholder={t("form.ph.total")}
                     className={inputCls}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">Test Date</label>
+                <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">{t("form.testDate")}</label>
                 <input
                   type="date"
                   value={newTestDate}
@@ -257,7 +260,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
 
               {isLanguageTest && (
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">CEFR Level</label>
+                  <label className="mb-1.5 block text-sm font-medium text-[#1a1a1a]">{t("form.cefrLevel")}</label>
                   <div className="flex gap-2 flex-wrap">
                     {CEFR_LEVELS.map((l) => (
                       <button
@@ -283,13 +286,13 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
                   disabled={saving}
                   className="rounded-lg bg-[#F4C430] px-5 py-2.5 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50"
                 >
-                  {saving ? "Saving..." : "Add Score"}
+                  {saving ? t("form.saving") : t("form.addScore")}
                 </button>
                 <button
                   onClick={resetForm}
                   className="rounded-lg border border-[#e0e0e0] px-5 py-2.5 text-sm font-medium text-[#666] transition-colors hover:bg-[#f5f5f5]"
                 >
-                  Cancel
+                  {t("form.cancel")}
                 </button>
               </div>
             </div>
@@ -300,7 +303,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
             className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#e0e0e0] px-4 py-3 text-sm font-medium text-[#666] transition-colors hover:border-[#F4C430] hover:text-[#1a1a1a]"
           >
             <Plus size={16} />
-            Add Score
+            {t("form.addScore")}
           </button>
         )}
       </div>
@@ -323,7 +326,7 @@ export default function TestScoresSection({ scores, studentId, onClose, inline, 
   );
 
   return (
-    <SectionPanel title="Test Scores" onClose={onClose}>
+    <SectionPanel title={t("app.testScores")} onClose={onClose}>
       {formContent}
     </SectionPanel>
   );

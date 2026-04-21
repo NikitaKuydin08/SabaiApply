@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentProfile } from "@/types/database";
-import { faqCategories, searchFAQ, type FAQCategory } from "../data/faq";
+import { faqCategories, faqEntries, type FAQCategory } from "../data/faq";
 
 export interface Program {
   id: string;
@@ -65,8 +65,8 @@ import EducationSection from "./sections/education-section";
 import TestScoresSection from "./sections/test-scores-section";
 import DocumentsSection from "./sections/documents-section";
 import ActivitiesSection from "./sections/activities-section";
-import { useStudentLocale } from "../i18n/context";
-import type { TranslationKey } from "../i18n/translations";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
 import type { StudentFamily, StudentEducation, StudentScore, StudentDocument, PortfolioItem } from "@/types/database";
 
 export interface SubmittedApplicationInfo {
@@ -103,7 +103,7 @@ const APP_SECTION_ORDER: Exclude<AppSection, null>[] = [
 ];
 
 export default function DashboardClient({ user, profile, family, education, scores, documents, portfolioItems, universities, submittedApplications }: Props) {
-  const { locale, setLocale, t } = useStudentLocale();
+  const { locale, setLocale, t } = useLocale();
   const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
   const [activeSection, setActiveSection] = useState<AppSection>(null);
@@ -371,7 +371,7 @@ export default function DashboardClient({ user, profile, family, education, scor
   );
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col overflow-hidden">
       {/* ── Mobile Top Bar (Menu · Logo · Help) ── */}
       <MobileTopBar
         onOpenMenu={() => setMobileMenuOpen(true)}
@@ -379,9 +379,9 @@ export default function DashboardClient({ user, profile, family, education, scor
         t={t}
       />
 
-      <div className="flex flex-1">
+      <div className="flex min-h-0 flex-1">
       {/* ── Left Sidebar (desktop only) ── */}
-      <aside className="hidden md:flex w-[280px] shrink-0 flex-col border-r border-[#e8e8e8] bg-white">
+      <aside className="hidden md:flex w-[280px] shrink-0 flex-col overflow-y-auto border-r border-[#e8e8e8] bg-white">
         <div className="border-b border-[#f0f0f0] px-6 py-5">
           <div className="flex items-center">
             <img src="/logo-lotus.png" alt="" className="mr-2 h-9 w-9 object-contain" />
@@ -455,7 +455,7 @@ export default function DashboardClient({ user, profile, family, education, scor
                   <button
                     key={section.label}
                     onClick={() => setActiveSection(section.action)}
-                    className={`mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                    className={`mb-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-[15px] font-medium transition-colors ${
                       activeSection === section.action
                         ? "bg-[#FFF3D0] text-[#1a1a1a]"
                         : "text-[#444] hover:bg-[#f5f5f5]"
@@ -575,33 +575,33 @@ export default function DashboardClient({ user, profile, family, education, scor
                       {isActive && uniExpanded && (
                         <div className="ml-3 space-y-0.5 border-l border-[#e8e8e8] pl-2 pt-1">
                           <UniSidebarItem
-                            label={locale === "th" ? "ข้อมูลมหาวิทยาลัย" : "University information"}
+                            label={t("uni.info")}
                             active={activeUniSection === "info"}
                             onClick={() => setActiveUniSection("info")}
                           />
                           <div className="px-3 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-wider text-[#999]">
-                            {locale === "th" ? "ใบสมัคร" : "Application"}
+                            {t("uni.application")}
                           </div>
                           <UniSidebarItem
-                            label={locale === "th" ? "ข้อมูลทั่วไป" : "General"}
+                            label={t("uni.general")}
                             active={activeUniSection === "general"}
                             status={uniSectionStatuses.general}
                             onClick={() => setActiveUniSection("general")}
                           />
                           <UniSidebarItem
-                            label={locale === "th" ? "สาขาวิชา" : "Academics"}
+                            label={t("uni.academics")}
                             active={activeUniSection === "academics"}
                             status={uniSectionStatuses.academics}
                             onClick={() => setActiveUniSection("academics")}
                           />
                           <UniSidebarItem
-                            label={locale === "th" ? "ข้อมูลเพิ่มเติม" : "Other requirements"}
+                            label={t("uni.otherRequirements")}
                             active={activeUniSection === "other"}
                             status={uniSectionStatuses.other}
                             onClick={() => setActiveUniSection("other")}
                           />
                           <UniSidebarItem
-                            label={locale === "th" ? "ตรวจและส่งใบสมัคร" : "Review and submit application"}
+                            label={t("uni.reviewAndSubmit")}
                             active={activeUniSection === "review"}
                             status={uniSectionStatuses.review}
                             onClick={() => setActiveUniSection("review")}
@@ -974,7 +974,7 @@ function DashboardView({ greeting, firstName, locale, setLocale, applicationExpa
                         <UniLogo uni={uni} size="sm" />
                         <div>
                           <p className="text-[15px] font-medium text-[#1a1a1a]">{uni.name}</p>
-                          <p className="text-xs text-[#888]">{uni.name_th}</p>
+                          <p className="text-sm text-[#888]">{uni.name_th}</p>
                         </div>
                       </button>
                     ))}
@@ -1127,8 +1127,8 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, uniStatu
 
   const badgeFor = (s: UniOverallStatus | undefined) => {
     if (s === "submitted") return { label: t("uni.submitted"), cls: "bg-green-50 text-green-700" };
-    if (s === "completed") return { label: locale === "th" ? "พร้อมส่ง" : "Ready to submit", cls: "bg-[#FFF3D0] text-[#8a6d17]" };
-    if (s === "in_progress") return { label: locale === "th" ? "กำลังดำเนินการ" : "In progress", cls: "bg-[#FFF3D0] text-[#8a6d17]" };
+    if (s === "completed") return { label: t("uni.completed"), cls: "bg-[#FFF3D0] text-[#8a6d17]" };
+    if (s === "in_progress") return { label: t("uni.inProgress"), cls: "bg-[#FFF3D0] text-[#8a6d17]" };
     return { label: t("uni.notStarted"), cls: "bg-[#f0f0f0] text-[#666]" };
   };
 
@@ -1206,9 +1206,7 @@ function MyUniversitiesOverview({ locale, setLocale, addedUniversities, uniStatu
   );
 }
 
-/* ══════════════════════════════════════════════
-   Shared Components
-   ══════════════════════════════════════════════ */
+/* ── Shared Components ── */
 
 function LangToggle({ locale, setLocale }: { locale: string; setLocale: (l: "en" | "th") => void }) {
   return (
@@ -1283,10 +1281,15 @@ function HelpContent({ locale, t, onClose }: { locale: string; t: TFn; onClose?:
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showChatModal, setShowChatModal] = useState(false);
 
-  const searchResults = searchFAQ(faqSearch, locale as "en" | "th");
-  const filtered = activeCategory === "all"
-    ? searchResults
-    : searchResults.filter((e) => e.category === activeCategory);
+  const filtered = faqEntries.filter((entry) => {
+    if (activeCategory !== "all" && entry.category !== activeCategory) return false;
+    
+    if (!faqSearch.trim()) return true;
+    const q = faqSearch.toLowerCase().trim();
+    const question = t(entry.questionKey).toLowerCase();
+    const answer = t(entry.answerKey).toLowerCase();
+    return question.includes(q) || answer.includes(q);
+  });
 
   return (
     <>
@@ -1319,14 +1322,14 @@ function HelpContent({ locale, t, onClose }: { locale: string; t: TFn; onClose?:
       <CategoryTabs locale={locale} activeCategory={activeCategory} setActiveCategory={setActiveCategory} t={t} />
 
       {/* FAQ list */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 md:max-h-[637px]">
+      <div className="flex-1 overflow-y-auto px-5 py-4">
         {filtered.length === 0 ? (
           <p className="py-4 text-center text-sm text-[#999]">{t("help.noResults")}</p>
         ) : (
           <div className="space-y-3">
             {filtered.map((entry) => {
-              const question = locale === "th" ? entry.question_th : entry.question_en;
-              const answer = locale === "th" ? entry.answer_th : entry.answer_en;
+              const question = t(entry.questionKey);
+              const answer = t(entry.answerKey);
               const isExpanded = expandedId === entry.id;
               return (
                 <div key={entry.id}>
@@ -1549,7 +1552,7 @@ function CategoryTabs({ locale, activeCategory, setActiveCategory, t }: {
             activeCategory === cat.key ? "bg-[#F4C430] text-[#1a1a1a]" : "text-[#666] hover:bg-[#f0f0f0]"
           }`}
         >
-          {locale === "th" ? cat.label_th : cat.label_en}
+          {t(cat.labelKey)}
         </button>
       ))}
       {hiddenCats.length > 0 && (
@@ -1575,7 +1578,7 @@ function CategoryTabs({ locale, activeCategory, setActiveCategory, t }: {
                       activeCategory === cat.key ? "bg-[#FFF3D0] text-[#1a1a1a]" : "text-[#444] hover:bg-[#f5f5f5]"
                     }`}
                   >
-                    {locale === "th" ? cat.label_th : cat.label_en}
+                    {t(cat.labelKey)}
                   </button>
                 ))}
               </div>

@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { X, Mail, Lock, Trash2, Bell, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { useStudentLocale } from "../i18n/context";
+import { useLocale } from "@/lib/i18n/context";
 
 interface Props {
   onClose: () => void;
@@ -12,7 +12,7 @@ interface Props {
 type Screen = "menu" | "email" | "password" | "prefs" | "delete";
 
 export default function AccountSettingsModal({ onClose }: Props) {
-  const { t } = useStudentLocale();
+  const { t } = useLocale();
   const [screen, setScreen] = useState<Screen>("menu");
 
   return (

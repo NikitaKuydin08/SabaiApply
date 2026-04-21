@@ -1,0 +1,70 @@
+{
+  "signup.title": {
+    "en": "Create your account",
+    "th": "สร้างบัญชีของคุณ"
+  },
+  "signup.subtitle": {
+    "en": "Start your university application journey",
+    "th": "เริ่มต้นเส้นทางการสมัครมหาวิทยาลัย"
+  },
+  "signup.email": {
+    "en": "Email Address",
+    "th": "อีเมล"
+  },
+  "signup.confirmEmail": {
+    "en": "Re-type Email Address",
+    "th": "พิมพ์อีเมลอีกครั้ง"
+  },
+  "signup.password": {
+    "en": "Password",
+    "th": "รหัสผ่าน"
+  },
+  "signup.confirmPassword": {
+    "en": "Re-type Password",
+    "th": "พิมพ์รหัสผ่านอีกครั้ง"
+  },
+  "signup.submit": {
+    "en": "Sign up",
+    "th": "สมัครสมาชิก"
+  },
+  "signup.submitting": {
+    "en": "Creating account...",
+    "th": "กำลังสร้างบัญชี..."
+  },
+  "signup.hasAccount": {
+    "en": "Already have an account?",
+    "th": "มีบัญชีอยู่แล้ว?"
+  },
+  "signup.loginLink": {
+    "en": "Log in",
+    "th": "เข้าสู่ระบบ"
+  },
+  "signup.emailsMustMatch": {
+    "en": "Emails must match",
+    "th": "อีเมลต้องตรงกัน"
+  },
+  "signup.passwordsMustMatch": {
+    "en": "Passwords must match",
+    "th": "รหัสผ่านต้องตรงกัน"
+  },
+  "signup.emailPlaceholder": {
+    "en": "you@example.com",
+    "th": "you@example.com"
+  },
+  "signup.retypePlaceholder": {
+    "en": "Re-type your email",
+    "th": "พิมพ์อีเมลอีกครั้ง"
+  },
+  "signup.errorEmailsNoMatch": {
+    "en": "Emails do not match.",
+    "th": "อีเมลไม่ตรงกัน"
+  },
+  "signup.errorPasswordNotMet": {
+    "en": "Password does not meet all requirements.",
+    "th": "รหัสผ่านไม่ตรงตามข้อกำหนด"
+  },
+  "signup.errorPasswordsNoMatch": {
+    "en": "Passwords do not match.",
+    "th": "รหัสผ่านไม่ตรงกัน"
+  }
+}

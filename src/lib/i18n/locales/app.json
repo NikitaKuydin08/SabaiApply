@@ -1,0 +1,34 @@
+{
+  "app.title": {
+    "en": "My Application",
+    "th": "ใบสมัครของฉัน"
+  },
+  "app.progress": {
+    "en": "Overall progress",
+    "th": "ความคืบหน้าโดยรวม"
+  },
+  "app.personal": {
+    "en": "Personal Information",
+    "th": "ข้อมูลส่วนตัว"
+  },
+  "app.family": {
+    "en": "Family",
+    "th": "ครอบครัว"
+  },
+  "app.education": {
+    "en": "Education",
+    "th": "การศึกษา"
+  },
+  "app.testScores": {
+    "en": "Test Scores",
+    "th": "คะแนนสอบ"
+  },
+  "app.documents": {
+    "en": "Documents",
+    "th": "เอกสาร"
+  },
+  "app.activities": {
+    "en": "Activities & Achievements",
+    "th": "กิจกรรมและผลงาน"
+  }
+}

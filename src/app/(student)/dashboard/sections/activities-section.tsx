@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabase/client";
 import type { PortfolioItem, PortfolioItemType } from "@/types/database";
 import { Plus, Trash2, ChevronDown } from "lucide-react";
 import SectionPanel from "./section-panel";
+import { useLocale } from "@/lib/i18n/context";
+import type { TranslationKey } from "@/lib/i18n/translations";
+import { tReplace } from "@/lib/i18n/translations";
 
 interface Props {
   items: PortfolioItem[];
@@ -15,17 +18,17 @@ interface Props {
   onSaved?: () => void;
 }
 
-const ITEM_TYPES: { value: PortfolioItemType; label: string }[] = [
-  { value: "project", label: "Project" },
-  { value: "activity", label: "Activity" },
-  { value: "competition", label: "Competition" },
-  { value: "camp", label: "Academic Camp" },
-  { value: "course", label: "Course / Certification" },
-  { value: "award", label: "Award / Achievement" },
-  { value: "other", label: "Other" },
+const ITEM_TYPES: PortfolioItemType[] = [
+  "project",
+  "activity",
+  "competition",
+  "camp",
+  "course",
+  "award",
+  "other",
 ];
 
-const COMPETITION_LEVELS = ["School", "Regional", "National", "International"];
+const COMPETITION_LEVELS = ["School", "Regional", "National", "International"] as const;
 
 const pillCls = (active: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -35,6 +38,7 @@ const pillCls = (active: boolean) =>
   }`;
 
 export default function ActivitiesSection({ items, studentId, onClose, inline, onSaved }: Props) {
+  const { t, locale } = useLocale();
   const router = useRouter();
   const [localItems, setLocalItems] = useState<PortfolioItem[]>(items);
   useEffect(() => { setLocalItems(items); }, [items]);
@@ -69,7 +73,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
 
   async function handleAdd() {
     if (!newTitle) {
-      setError("Title is required.");
+      setError(tReplace("form.validation.required", locale, { field: t("form.title") }));
       return;
     }
 
@@ -97,7 +101,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
         .select()
         .single();
       if (pErr || !newPortfolio) {
-        setError("Failed to create portfolio.");
+        setError(t("form.validation.portfolioFail"));
         setSaving(false);
         return;
       }
@@ -159,10 +163,28 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
   const inputCls = "w-full rounded-lg border border-[#e0e0e0] px-4 py-3 text-sm outline-none focus:border-[#F4C430] focus:ring-2 focus:ring-[#F4C430]/20";
   const labelCls = "mb-1.5 block text-sm font-medium text-[#1a1a1a]";
 
+  const ITEM_TYPE_MAP: Record<string, TranslationKey> = {
+    "project": "form.item.project",
+    "activity": "form.item.activity",
+    "competition": "form.item.competition",
+    "camp": "form.item.camp",
+    "course": "form.item.course",
+    "award": "form.item.award",
+    "other": "form.item.other",
+  };
+
+  const COMP_LEVEL_MAP: Record<string, TranslationKey> = {
+    "School": "form.level.school",
+    "Regional": "form.level.regional",
+    "National": "form.level.national",
+    "International": "form.level.international",
+  };
+
   // Group items by type
   const grouped = ITEM_TYPES.map((type) => ({
-    ...type,
-    items: localItems.filter((i) => i.item_type === type.value),
+    value: type,
+    label: t(ITEM_TYPE_MAP[type] || type as any),
+    items: localItems.filter((i) => i.item_type === type),
   })).filter((g) => g.items.length > 0);
 
   const formContent = (
@@ -174,8 +196,8 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
       {/* Empty state */}
       {localItems.length === 0 && !showAddForm && (
         <div className="rounded-lg border border-dashed border-[#e0e0e0] px-6 py-8 text-center">
-          <p className="text-sm text-[#888]">No activities or achievements added yet.</p>
-          <p className="mt-1 text-xs text-[#bbb]">Add your projects, competitions, awards, and more.</p>
+          <p className="text-sm text-[#888]">{t("form.noActivities")}</p>
+          <p className="mt-1 text-xs text-[#bbb]">{t("form.addActivityNote")}</p>
         </div>
       )}
 
@@ -197,7 +219,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
                       {item.start_date && <span>{item.start_date}</span>}
                       {item.competition_level && (
                         <span className="rounded bg-[#F4C430]/20 px-1.5 py-0.5 text-xs font-medium text-[#1a1a1a]">
-                          {item.competition_level}
+                          {t(COMP_LEVEL_MAP[item.competition_level] || item.competition_level as any)}
                         </span>
                       )}
                     </div>
@@ -216,8 +238,8 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
                 {expandedId === item.id && (
                   <div className="border-t border-[#f0f0f0] px-4 py-3">
                     {item.description && <p className="text-sm text-[#666]">{item.description}</p>}
-                    {item.result && <p className="mt-1 text-sm text-[#888]">Result: {item.result}</p>}
-                    {item.end_date && <p className="mt-1 text-xs text-[#999]">End: {item.end_date}</p>}
+                    {item.result && <p className="mt-1 text-sm text-[#888]">{t("form.resultAward")}: {item.result}</p>}
+                    {item.end_date && <p className="mt-1 text-xs text-[#999]">{t("form.endDate")}: {item.end_date}</p>}
                   </div>
                 )}
               </div>
@@ -229,41 +251,41 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
       {/* Add form */}
       {showAddForm ? (
         <div className="rounded-lg border border-[#F4C430]/40 bg-[#FFFBF0] p-4">
-          <h3 className="mb-4 text-sm font-semibold text-[#1a1a1a]">Add New Item</h3>
+          <h3 className="mb-4 text-sm font-semibold text-[#1a1a1a]">{t("form.addNewItem")}</h3>
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Type <span className="text-red-500">*</span></label>
+              <label className={labelCls}>{t("form.type")} <span className="text-red-500">*</span></label>
               <div className="flex gap-2 flex-wrap">
-                {ITEM_TYPES.map((t) => (
-                  <button key={t.value} type="button" onClick={() => setNewType(t.value)} className={pillCls(newType === t.value)}>
-                    {t.label}
+                {ITEM_TYPES.map((t_val) => (
+                  <button key={t_val} type="button" onClick={() => setNewType(t_val)} className={pillCls(newType === t_val)}>
+                    {t(ITEM_TYPE_MAP[t_val] || t_val as any)}
                   </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className={labelCls}>Title <span className="text-red-500">*</span></label>
-              <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="e.g. Science Fair Project, Volunteer Work" className={inputCls} />
+              <label className={labelCls}>{t("form.title")} <span className="text-red-500">*</span></label>
+              <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder={t("form.ph.title")} className={inputCls} />
             </div>
 
             <div>
-              <label className={labelCls}>Description</label>
-              <textarea value={newDescription} onChange={(e) => setNewDescription(e.target.value)} rows={3} placeholder="Describe your role, what you did, what you learned..." className={inputCls} />
+              <label className={labelCls}>{t("form.description")}</label>
+              <textarea value={newDescription} onChange={(e) => setNewDescription(e.target.value)} rows={3} placeholder={t("form.ph.description")} className={inputCls} />
             </div>
 
             <div>
-              <label className={labelCls}>Organizer / Institution</label>
-              <input type="text" value={newOrganizer} onChange={(e) => setNewOrganizer(e.target.value)} placeholder="e.g. KMITL, Thai Red Cross" className={inputCls} />
+              <label className={labelCls}>{t("form.organizer")}</label>
+              <input type="text" value={newOrganizer} onChange={(e) => setNewOrganizer(e.target.value)} placeholder={t("form.ph.organizer")} className={inputCls} />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelCls}>Start Date</label>
+                <label className={labelCls}>{t("form.startDate")}</label>
                 <input type="date" value={newStartDate} onChange={(e) => setNewStartDate(e.target.value)} className={inputCls} />
               </div>
               <div>
-                <label className={labelCls}>End Date</label>
+                <label className={labelCls}>{t("form.endDate")}</label>
                 <input type="date" value={newEndDate} onChange={(e) => setNewEndDate(e.target.value)} className={inputCls} />
               </div>
             </div>
@@ -271,18 +293,18 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
             {newType === "competition" && (
               <>
                 <div>
-                  <label className={labelCls}>Competition Level</label>
+                  <label className={labelCls}>{t("form.compLevel")}</label>
                   <div className="flex gap-2 flex-wrap">
                     {COMPETITION_LEVELS.map((l) => (
                       <button key={l} type="button" onClick={() => setNewCompLevel(l)} className={pillCls(newCompLevel === l)}>
-                        {l}
+                        {t(COMP_LEVEL_MAP[l] || l as any)}
                       </button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className={labelCls}>Result / Award</label>
-                  <input type="text" value={newResult} onChange={(e) => setNewResult(e.target.value)} placeholder="e.g. Gold Medal, 1st Place, Participant" className={inputCls} />
+                  <label className={labelCls}>{t("form.resultAward")}</label>
+                  <input type="text" value={newResult} onChange={(e) => setNewResult(e.target.value)} placeholder={t("form.ph.resultAward")} className={inputCls} />
                 </div>
               </>
             )}
@@ -293,13 +315,13 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
                 disabled={saving}
                 className="rounded-lg bg-[#F4C430] px-5 py-2.5 text-sm font-semibold text-[#1a1a1a] transition-colors hover:bg-[#e6b82a] disabled:opacity-50"
               >
-                {saving ? "Saving..." : "Add"}
+                {saving ? t("form.saving") : t("form.addScore")}
               </button>
               <button
                 onClick={resetForm}
                 className="rounded-lg border border-[#e0e0e0] px-5 py-2.5 text-sm font-medium text-[#666] transition-colors hover:bg-[#f5f5f5]"
               >
-                Cancel
+                {t("form.cancel")}
               </button>
             </div>
           </div>
@@ -310,7 +332,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
           className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#e0e0e0] px-4 py-3 text-sm font-medium text-[#666] transition-colors hover:border-[#F4C430] hover:text-[#1a1a1a]"
         >
           <Plus size={16} />
-          Add Activity or Achievement
+          {t("form.addActivity")}
         </button>
       )}
     </div>
@@ -333,7 +355,7 @@ export default function ActivitiesSection({ items, studentId, onClose, inline, o
   );
 
   return (
-    <SectionPanel title="Activities & Achievements" onClose={onClose}>
+    <SectionPanel title={t("form.activities")} onClose={onClose}>
       {formContent}
     </SectionPanel>
   );

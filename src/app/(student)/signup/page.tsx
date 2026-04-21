@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { useStudentLocale } from "../i18n/context";
+import { useLocale } from "@/lib/i18n/context";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { locale, setLocale, t } = useStudentLocale();
+  const { locale, setLocale, t } = useLocale();
 
   const passwordRules = useMemo(() => [
     { label: t("pw.length"), test: (p: string) => p.length >= 10 && p.length <= 32 },
